@@ -28,7 +28,7 @@ export const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-[2px] animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-150">
       <div
         className="fixed inset-0"
         onClick={onClose}
@@ -36,38 +36,38 @@ export const Modal = ({
       />
       <div
         className={cn(
-          "relative w-full bg-rail-surface border border-rail-border rounded-md shadow-xl overflow-hidden z-10 flex flex-col max-h-[90vh]",
+          "relative w-full bg-[#111827] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[90vh]",
           maxWidth
         )}
       >
         {/* Header */}
-        <div className="px-5 py-4 border-b border-rail-border flex items-start justify-between bg-[#F4F0E8]">
+        <div className="px-6 py-4.5 border-b border-slate-800 flex items-start justify-between bg-slate-900/80">
           <div>
-            <h3 className="text-base font-semibold text-rail-text tracking-tight">
+            <h3 className="text-base font-bold text-white tracking-tight">
               {title}
             </h3>
             {description && (
-              <p className="text-xs text-rail-muted mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 {description}
               </p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-rail-muted hover:text-rail-text p-1 rounded-sm hover:bg-rail-surfaceHover transition-colors ml-4"
+            className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 transition-colors ml-4"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-5 overflow-y-auto space-y-4">
+        <div className="p-6 overflow-y-auto space-y-4 text-slate-200">
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
-          <div className="px-5 py-3 border-t border-rail-border bg-[#F2EFE7] flex items-center justify-end gap-2.5">
+          <div className="px-6 py-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-end gap-3">
             {footer}
           </div>
         )}

@@ -4,27 +4,27 @@ import { cn } from '../../utils/cn';
 export const Badge = ({
   children,
   className,
-  variant = 'default', // 'default' | 'critical' | 'warning' | 'success' | 'secondary' | 'outline' | 'info'
+  variant = 'default', // 'default' | 'critical' | 'warning' | 'success' | 'secondary' | 'primary' | 'outline' | 'info'
   size = 'md',
   ...props
 }) => {
-  const base = "inline-flex items-center font-medium rounded-sm border px-2 py-0.5 tracking-tight select-none";
+  const base = "inline-flex items-center font-medium rounded-full border px-2.5 py-0.5 tracking-tight select-none";
   
   const variants = {
-    default: "bg-[#EAE4D8] text-rail-text border-rail-border",
-    critical: "bg-rail-criticalLight text-rail-critical border-rail-critical/30",
-    warning: "bg-rail-warningLight text-rail-warning border-rail-warning/30",
-    success: "bg-rail-successLight text-rail-success border-rail-success/30",
-    secondary: "bg-rail-secondaryLight text-rail-secondary border-rail-secondary/30",
-    primary: "bg-rail-primaryLight text-rail-primary border-rail-primary/30",
-    outline: "bg-transparent text-rail-text border-rail-border",
-    info: "bg-[#EBF1F5] text-[#4A6B82] border-[#4A6B82]/30",
+    default: "bg-slate-800 text-slate-200 border-slate-700",
+    critical: "bg-rose-950/70 text-rose-400 border-rose-500/40",
+    warning: "bg-amber-950/70 text-amber-400 border-amber-500/40",
+    success: "bg-emerald-950/70 text-emerald-400 border-emerald-500/40",
+    secondary: "bg-sky-950/70 text-sky-400 border-sky-500/40",
+    primary: "bg-orange-950/70 text-orange-400 border-orange-500/40",
+    outline: "bg-transparent text-slate-300 border-slate-700",
+    info: "bg-purple-950/70 text-purple-400 border-purple-500/40",
   };
 
   const sizes = {
-    sm: "text-[11px] py-0 px-1.5 leading-4",
-    md: "text-xs py-0.5 px-2 leading-4",
-    lg: "text-xs py-1 px-2.5 font-semibold",
+    sm: "text-[10px] py-0 px-2 leading-4",
+    md: "text-[11px] py-0.5 px-2.5 leading-4",
+    lg: "text-xs py-1 px-3 font-semibold",
   };
 
   return (

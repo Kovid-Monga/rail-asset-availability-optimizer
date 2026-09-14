@@ -7,27 +7,55 @@ export default {
   theme: {
     extend: {
       colors: {
+        theme: {
+          bg: 'var(--bg-app)',
+          card: 'var(--bg-card)',
+          cardSec: 'var(--bg-card-secondary)',
+          cardSubtle: 'var(--bg-card-subtle)',
+          header: 'var(--bg-header)',
+          sidebar: 'var(--bg-sidebar)',
+          sidebarCard: 'var(--bg-sidebar-card)',
+          sidebarInner: 'var(--bg-sidebar-inner)',
+          border: 'var(--border-color)',
+          borderSubtle: 'var(--border-subtle)',
+          borderStrong: 'var(--border-strong)',
+          text: 'var(--text-main)',
+          body: 'var(--text-body)',
+          muted: 'var(--text-muted)',
+          dim: 'var(--text-dim)',
+          accent: 'var(--color-accent)',
+          accentHover: 'var(--color-accent-hover)',
+          accentSubtle: 'var(--color-accent-subtle)',
+          accentText: 'var(--color-accent-text)',
+          accentBorder: 'var(--color-accent-border)',
+        },
         rail: {
-          base: '#EDE7DD',      // warm stone
-          surface: '#F7F4EC',   // slightly lighter warm neutral
-          surfaceHover: '#EFECE3',
-          surfaceActive: '#E8E3D7',
-          text: '#2B2621',      // warm charcoal
-          muted: '#6B6258',     // muted secondary text
-          border: '#D8D0C2',    // divider/border
-          borderDark: '#C4BAA7',
-          primary: '#3E5C55',   // deep slate-teal (control room)
-          primaryHover: '#324B45',
-          primaryLight: '#E8EFEA',
-          secondary: '#B5762E', // muted ochre/brass (signal lamp)
-          secondaryHover: '#986224',
-          secondaryLight: '#F7EFE3',
-          critical: '#9C4A3A',  // muted brick red (defects, hard conflicts)
-          criticalLight: '#F7EAE8',
-          warning: '#C08A2E',   // muted amber (overdue, soft constraints)
-          warningLight: '#FAF3E5',
-          success: '#5C7A5A',   // muted olive-green (scheduled, completed)
-          successLight: '#EEF3EE',
+          base: 'var(--bg-app)',
+          surface: 'var(--bg-card)',
+          surfaceElevated: 'var(--bg-card-secondary)',
+          surfaceHover: 'var(--bg-card-subtle)',
+          surfaceActive: 'var(--bg-card-subtle)',
+          text: 'var(--text-main)',
+          muted: 'var(--text-muted)',
+          faint: 'var(--text-dim)',
+          border: 'var(--border-color)',
+          borderDark: 'var(--border-strong)',
+          primary: 'var(--color-accent)',
+          primaryHover: 'var(--color-accent-hover)',
+          primaryLight: 'var(--color-accent-subtle)',
+          secondary: '#38BDF8',
+          secondaryHover: '#0EA5E9',
+          secondaryLight: '#082F49',
+          critical: '#EF4444',
+          criticalLight: '#450A0A',
+          warning: '#F59E0B',
+          warningLight: '#451A03',
+          success: '#10B981',
+          successLight: '#064E3B',
+          eng: '#38BDF8',
+          trd: '#F59E0B',
+          snt: '#A855F7',
+          admin: 'var(--color-accent)',
         }
       },
       fontFamily: {
@@ -37,6 +65,13 @@ export default {
         sm: '4px',
         md: '8px',
         lg: '12px',
+        xl: '16px',
+      },
+      boxShadow: {
+        'glow-orange': '0 0 20px -5px rgba(249, 115, 22, 0.3)',
+        'glow-emerald': '0 0 20px -5px rgba(16, 185, 129, 0.3)',
+        'glow-cyan': '0 0 20px -5px rgba(56, 189, 248, 0.3)',
+        'card-dark': '0 4px 20px -2px rgba(0, 0, 0, 0.5)',
       }
     },
   },

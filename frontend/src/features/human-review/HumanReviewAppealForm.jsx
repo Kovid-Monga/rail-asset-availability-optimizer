@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { getRequestsByDepartment, submitHumanReviewAppeal } from '../../services/requests';
 import { REQUEST_STAGES } from '../../constants/departments';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Textarea } from '../../components/ui/Input';
-import { Select } from '../../components/ui/Select';
-import { Badge } from '../../components/ui/Badge';
 import { PriorityTag } from '../../components/shared/PriorityTag';
-import { MessageSquareWarning, Upload, FileCheck, CheckCircle2, ShieldAlert, ArrowLeft } from 'lucide-react';
+import { MessageSquareWarning, Upload, CheckCircle2, ShieldAlert, ArrowLeft, FileText } from 'lucide-react';
 
 export const HumanReviewAppealForm = () => {
+  const { currentRole } = useAuth();
+  const deptKey = currentRole === 'ADMIN' ? 'ENG' : currentRole;
+
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const requestIdFromUrl = searchParams.get('id');
@@ -29,7 +31,7 @@ export const HumanReviewAppealForm = () => {
 
   useEffect(() => {
     async function load() {
-      const data = await getRequestsByDepartment('ENG');
+      const data = await getRequestsByDepartment(deptKey);
       setRequests(data);
       if (requestIdFromUrl) {
         setSelectedRequestId(requestIdFromUrl);
@@ -41,7 +43,7 @@ export const HumanReviewAppealForm = () => {
       }
     }
     load();
-  }, [requestIdFromUrl]);
+  }, [deptKey, requestIdFromUrl]);
 
   const handleRequestSelect = (id) => {
     setSelectedRequestId(id);
@@ -62,7 +64,7 @@ export const HumanReviewAppealForm = () => {
       });
       setSubmittedSuccess(true);
       setTimeout(() => {
-        navigate(`/eng/requests?id=${selectedRequestId}`);
+        navigate(`/${deptKey.toLowerCase()}/requests?id=${selectedRequestId}`);
       }, 1500);
     } catch (err) {
       alert('Error submitting human review appeal.');
@@ -74,14 +76,14 @@ export const HumanReviewAppealForm = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Top Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-rail-border">
+      <div className="flex items-center justify-between pb-3 border-b border-[#1F2937]">
         <div>
-          <h2 className="text-lg font-bold text-rail-text tracking-tight flex items-center gap-2">
-            <MessageSquareWarning className="w-5 h-5 text-rail-secondary" />
+          <h2 className="text-lg font-bold text-slate-100 tracking-tight flex items-center gap-2">
+            <MessageSquareWarning className="w-5 h-5 text-amber-400" />
             <span>Human Review Appeal Submission</span>
           </h2>
-          <p className="text-xs text-rail-muted mt-0.5">
-            Escalate automated AI scheduling decisions to Central Operations Control when field conditions deviate from digital models.
+          <p className="text-xs text-slate-400 mt-1">
+            Escalate automated AI scheduling decisions to Central Operations Control when physical track conditions deviate from digital models.
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={() => navigate(-1)} icon={ArrowLeft}>
@@ -90,39 +92,39 @@ export const HumanReviewAppealForm = () => {
       </div>
 
       {submittedSuccess && (
-        <div className="p-4 bg-rail-successLight border border-rail-success/40 text-rail-success rounded-md text-xs font-semibold flex items-center gap-2">
+        <div className="p-4 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 rounded-lg text-xs font-semibold flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5" />
-          <span>Appeal forwarded successfully to Central Admin Review Queue. Status updated to Human Review Requested.</span>
+          <span>Appeal forwarded to Central Admin Review Queue. Status updated to Human Review Requested.</span>
         </div>
       )}
 
       {/* Principle Reminder Box */}
-      <div className="p-3.5 bg-[#F4EFE6] border-l-4 border-rail-secondary rounded-sm text-xs space-y-1">
-        <span className="font-bold text-rail-text flex items-center gap-1.5">
-          <ShieldAlert className="w-4 h-4 text-rail-secondary" />
+      <div className="p-4 bg-[#111827] border-l-4 border-amber-500 rounded-lg text-xs space-y-1">
+        <span className="font-bold text-amber-400 flex items-center gap-1.5">
+          <ShieldAlert className="w-4 h-4 text-amber-400" />
           <span>Administrative Review Grounds</span>
         </span>
-        <p className="text-rail-muted leading-relaxed">
-          The AI engine schedules based on reported TMS telemetry, passenger timetable, and corridor occupancy. Human review allows department officers to submit physical field evidence not yet reflected in source databases.
+        <p className="text-slate-400 leading-relaxed">
+          The AI combinatorial engine schedules based on reported telemetry, train timetables, and corridor occupancy. Human review allows field engineers to submit physical evidence (USFD flaw charts, OHE thermal scans) not yet integrated in central databases.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-rail-muted">
+        <Card className="border-[#1F2937] bg-[#111827]">
+          <CardHeader className="bg-[#1F2937]/50 border-b border-[#1F2937]">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-300">
               1. Select Maintenance Requirement to Appeal
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="p-5 space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-rail-text mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Target Maintenance Request
               </label>
               <select
                 value={selectedRequestId}
                 onChange={(e) => handleRequestSelect(e.target.value)}
-                className="w-full bg-[#FCFAF5] text-rail-text text-xs px-3 py-2 rounded-sm border border-rail-border focus:outline-none focus:border-rail-primary font-mono"
+                className="w-full bg-[#0B0F17] text-slate-200 text-xs px-3 py-2 rounded-md border border-[#1F2937] focus:outline-none focus:border-amber-500 font-mono"
               >
                 {requests.map(r => (
                   <option key={r.id} value={r.id}>
@@ -133,19 +135,19 @@ export const HumanReviewAppealForm = () => {
             </div>
 
             {selectedRequest && (
-              <div className="p-3.5 bg-[#FAF7F0] rounded-sm border border-rail-border space-y-2 text-xs">
+              <div className="p-4 bg-[#0B0F17] rounded-lg border border-[#1F2937] space-y-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-rail-text">{selectedRequest.assetName}</span>
+                  <span className="font-bold text-slate-100">{selectedRequest.assetName}</span>
                   <PriorityTag priority={selectedRequest.declaredPriority} />
                 </div>
-                <div className="text-[11px] text-rail-muted grid grid-cols-2 gap-2">
+                <div className="text-[11px] text-slate-400 grid grid-cols-2 gap-2">
                   <span>Location: {selectedRequest.location}</span>
                   <span>Preferred: {selectedRequest.preferredWindow}</span>
                   <span>Duration: {selectedRequest.estimatedDurationMinutes}m</span>
                   <span>Current Status: {selectedRequest.status}</span>
                 </div>
                 {selectedRequest.conflictReason && (
-                  <div className="text-[11px] text-rail-critical mt-1 bg-rail-criticalLight/30 p-2 rounded-sm">
+                  <div className="text-[11px] text-red-400 mt-1 bg-red-500/10 p-2.5 rounded border border-red-500/20">
                     <strong>AI Conflict Engine Note: </strong> {selectedRequest.conflictReason}
                   </div>
                 )}
@@ -154,97 +156,90 @@ export const HumanReviewAppealForm = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-rail-muted">
-              2. Appeal Grounds & Physical Evidence
+        {/* Step 2: Grounds for Appeal */}
+        <Card className="border-[#1F2937] bg-[#111827]">
+          <CardHeader className="bg-[#1F2937]/50 border-b border-[#1F2937]">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-300">
+              2. Appeal Grounds & Field Evidence
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* PRD Specified Categories */}
+          <CardContent className="p-5 space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-rail-text mb-1">
-                Primary Reason for Appeal (PRD Specification)
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Primary Reason Category
               </label>
-              <Select
+              <select
                 value={reasonCategory}
                 onChange={(e) => setReasonCategory(e.target.value)}
-                options={[
-                  { value: 'Defect worse than source data captured', label: '1. Defect worse than source data captured' },
-                  { value: 'Deadline more important than represented', label: '2. Deadline more important than represented' },
-                  { value: 'New evidence', label: '3. New physical / ultrasonic track evidence' },
-                  { value: 'Constraint not properly represented', label: '4. Physical constraint not properly represented' }
-                ]}
-              />
+                className="w-full bg-[#0B0F17] text-slate-200 text-xs px-3 py-2 rounded-md border border-[#1F2937] focus:outline-none focus:border-amber-500"
+              >
+                <option value="Defect worse than source data captured">Defect worse than source telemetry captured (Field ultrasonic defect detected)</option>
+                <option value="Machinery breakdown / Track equipment relocation constraint">Machinery breakdown / Track equipment relocation constraint</option>
+                <option value="Safety hazard / Immediate derailment risk discovered during ultrasonic testing">Safety hazard / Immediate derailment risk discovered during inspection</option>
+                <option value="Urgent monsoon preparedness / drainage clearance">Urgent monsoon preparedness / drainage clearance</option>
+                <option value="Contractor / Track maintenance machine crew mobilization deadline">Contractor / Track maintenance machine crew mobilization deadline</option>
+              </select>
             </div>
 
             <Textarea
-              label="Detailed Written Justification"
+              label="Detailed Technical Justification"
               value={appealText}
               onChange={(e) => setAppealText(e.target.value)}
               rows={4}
-              placeholder="Detail why the automated decision requires administrative intervention. Specify track safety implications, sleeper fracture measurements, or why proposed alternative slots are unacceptable..."
+              placeholder="Detail specific physical findings, USFD peak heights, rail temperature measurements, or operational reasons why the automated slot allocation is infeasible..."
               required
             />
 
-            {/* Evidence attachment simulation */}
             <div>
-              <label className="block text-xs font-semibold text-rail-text mb-1">
-                Physical Evidence Attachment (PDF / Photo / USFD Log)
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Attached Field Evidence / Measurement Report
               </label>
-              <div className="border border-dashed border-rail-borderDark rounded-sm p-4 bg-[#FAF7F0] flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <FileCheck className="w-5 h-5 text-rail-primary" />
-                  <div>
-                    <span className="text-xs font-bold text-rail-text block">{attachedFile}</span>
-                    <span className="text-[10px] text-rail-muted">Attached from local terminal • 2.4 MB</span>
-                  </div>
+              <div className="flex items-center gap-3 p-3 bg-[#0B0F17] rounded-lg border border-[#1F2937]">
+                <FileText className="w-5 h-5 text-amber-400 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-medium text-slate-200 truncate">{attachedFile}</div>
+                  <div className="text-[10px] text-slate-500 font-mono">2.4 MB • Ultrasonic USFD Field Trace • Verified P-Way Lab</div>
                 </div>
                 <Button
                   size="sm"
                   variant="outline"
                   type="button"
-                  onClick={() => alert('Simulated document upload: USFD flaw scan attached.')}
+                  onClick={() => alert('Evidence file inspected: USFD trace confirms 14mm flaw depth.')}
+                  icon={Upload}
                 >
-                  <Upload className="w-3.5 h-3.5 mr-1" /> Re-upload
+                  Change File
                 </Button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-rail-text mb-1">
-                  Submitting Officer
-                </label>
-                <input
-                  type="text"
-                  value={officerName}
-                  onChange={(e) => setOfficerName(e.target.value)}
-                  className="w-full bg-[#FCFAF5] text-xs px-3 py-1.5 rounded-sm border border-rail-border"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-rail-text mb-1">
-                  Target Review Authority
-                </label>
-                <div className="p-2 bg-[#F2EDE2] rounded-sm border border-rail-border text-xs text-rail-text font-medium">
-                  Central Operations Control (Admin Review Queue)
-                </div>
-              </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Submitting Railway Officer
+              </label>
+              <input
+                type="text"
+                value={officerName}
+                onChange={(e) => setOfficerName(e.target.value)}
+                className="w-full bg-[#0B0F17] text-slate-200 text-xs px-3 py-2 rounded-md border border-[#1F2937] focus:outline-none focus:border-amber-500"
+                required
+              />
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between items-center">
-            <Button variant="outline" type="button" onClick={() => navigate(-1)}>
+          <CardFooter className="bg-[#0B0F17]/80 border-t border-[#1F2937] flex items-center justify-between">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => navigate(-1)}
+            >
               Cancel
             </Button>
             <Button
-              variant="secondary"
+              variant="warning"
               type="submit"
-              disabled={submitting || !appealText.trim()}
+              disabled={submitting}
               icon={MessageSquareWarning}
             >
-              {submitting ? 'Submitting Appeal...' : 'Submit Appeal to Admin Queue'}
+              {submitting ? 'Transmitting Appeal...' : 'Submit Appeal to Central Control'}
             </Button>
           </CardFooter>
         </Card>

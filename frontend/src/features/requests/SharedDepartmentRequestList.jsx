@@ -10,7 +10,7 @@ import { Modal } from '../../components/ui/Modal';
 import { PriorityTag } from '../../components/shared/PriorityTag';
 import { RequestStatusBadge } from '../../components/shared/RequestStatusBadge';
 import { StatusTimeline } from './StatusTimeline';
-import { Search, Filter, PlusCircle, Sparkles, Flame } from 'lucide-react';
+import { Search, Filter, PlusCircle, Sparkles, Flame, Eye, Layers } from 'lucide-react';
 
 export const SharedDepartmentRequestList = () => {
   const { currentRole } = useAuth();
@@ -67,16 +67,16 @@ export const SharedDepartmentRequestList = () => {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-rail-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#1F2937]">
         <div>
-          <h2 className="text-lg font-bold text-rail-text tracking-tight flex items-center gap-2">
+          <h2 className="text-lg font-bold text-slate-100 tracking-tight flex items-center gap-2">
             <span>{deptConfig.name} Maintenance Requirements & Block Registry</span>
-            <span className={`text-xs font-mono px-2 py-0.5 rounded-sm border font-semibold ${deptConfig.badgeColor}`}>
+            <span className={`text-xs font-mono px-2 py-0.5 rounded border font-semibold ${deptConfig.badgeColor}`}>
               {requests.length} Records
             </span>
           </h2>
-          <p className="text-xs text-rail-muted mt-0.5">
-            Full lifecycle tracking: Submitted requirements ➔ AI Priority Scoring ➔ Timetable Optimization ➔ Possession Schedule
+          <p className="text-xs text-slate-400 mt-1">
+            End-to-end lifecycle: Submitted requirements ➔ AI Priority Scoring ➔ Timetable Optimization ➔ Possession Schedule
           </p>
         </div>
         <Link to={`/${deptKey.toLowerCase()}/new-request`}>
@@ -87,24 +87,24 @@ export const SharedDepartmentRequestList = () => {
       </div>
 
       {/* Filter & Search Bar */}
-      <Card className="p-4 bg-rail-surface">
+      <Card className="p-4 bg-[#111827] border-[#1F2937]">
         <div className="flex flex-col sm:flex-row items-center gap-3">
           <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-rail-muted absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
-              placeholder={`Search by Request ID (e.g. ${deptConfig.prefix}-2026-...), asset name, location...`}
+              placeholder={`Search by ID (e.g. ${deptConfig.prefix}-2026-...), asset name, location...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-1.5 bg-[#FCFAF5] text-xs rounded-sm border border-rail-border focus:outline-none focus:border-rail-primary"
+              className="w-full pl-9 pr-4 py-2 bg-[#0B0F17] text-xs text-slate-200 rounded-md border border-[#1F2937] focus:outline-none focus:border-orange-500 placeholder-slate-500"
             />
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            <Filter className="w-4 h-4 text-rail-muted shrink-0" />
+            <Filter className="w-4 h-4 text-slate-400 shrink-0" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-[#FCFAF5] text-xs px-3 py-1.5 rounded-sm border border-rail-border focus:outline-none focus:border-rail-primary"
+              className="bg-[#0B0F17] text-xs text-slate-200 px-3 py-2 rounded-md border border-[#1F2937] focus:outline-none focus:border-orange-500"
             >
               <option value="ALL">All Lifecycle Stages</option>
               <option value={REQUEST_STAGES.SCHEDULED}>Scheduled</option>
@@ -133,7 +133,7 @@ export const SharedDepartmentRequestList = () => {
         <TableBody>
           {filteredRequests.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={8} className="text-center py-8 text-rail-muted text-xs">
+              <TableCell colSpan={8} className="text-center py-12 text-slate-500 text-xs">
                 No matching maintenance requirements found.
               </TableCell>
             </TableRow>
@@ -146,28 +146,28 @@ export const SharedDepartmentRequestList = () => {
               >
                 <TableCell className="font-mono font-bold text-xs">
                   <div className="flex items-center gap-1.5">
-                    <span>{req.id}</span>
+                    <span className="text-orange-400">{req.id}</span>
                     {req.isOverdue && (
-                      <span title="Overdue inspection" className="text-rail-critical">
+                      <span title="Overdue inspection" className="text-red-400">
                         <Flame className="w-3.5 h-3.5 inline" />
                       </span>
                     )}
                   </div>
                 </TableCell>
                 <TableCell>
-                  <div className="font-semibold text-rail-text">{req.assetName}</div>
-                  <div className="text-[10px] text-rail-muted">{req.location}</div>
+                  <div className="font-semibold text-slate-200">{req.assetName}</div>
+                  <div className="text-[10px] text-slate-400">{req.location}</div>
                 </TableCell>
                 <TableCell>
-                  <div className="text-rail-text font-medium">{req.maintenanceType}</div>
+                  <div className="text-slate-200 font-medium">{req.maintenanceType}</div>
                   {req.aiExplanation?.bundledDepartments && (
-                    <div className="text-[10px] text-rail-primary font-mono flex items-center gap-1 mt-0.5">
+                    <div className="text-[10px] text-emerald-400 font-mono flex items-center gap-1 mt-0.5">
                       <Sparkles className="w-2.5 h-2.5" />
                       <span>Joint: {req.aiExplanation.bundledDepartments.join(', ')}</span>
                     </div>
                   )}
                 </TableCell>
-                <TableCell className="font-mono text-xs text-rail-text">
+                <TableCell className="font-mono text-xs text-slate-300">
                   {req.estimatedDurationMinutes}m
                 </TableCell>
                 <TableCell>
@@ -178,9 +178,9 @@ export const SharedDepartmentRequestList = () => {
                 </TableCell>
                 <TableCell className="font-mono text-xs">
                   {req.score ? (
-                    <span className="font-bold text-rail-primary">{req.score}</span>
+                    <span className="font-bold text-orange-400">{req.score}</span>
                   ) : (
-                    <span className="text-rail-muted">Queued</span>
+                    <span className="text-slate-500">Queued</span>
                   )}
                 </TableCell>
                 <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
@@ -196,6 +196,7 @@ export const SharedDepartmentRequestList = () => {
                       size="sm"
                       variant="outline"
                       onClick={() => handleOpenDetail(req)}
+                      icon={Eye}
                     >
                       Lifecycle
                     </Button>
@@ -217,21 +218,21 @@ export const SharedDepartmentRequestList = () => {
           maxWidth="max-w-3xl"
           footer={
             <div className="flex items-center justify-between w-full">
-              <span className="text-[11px] font-mono text-rail-muted">
-                Source System: {activeRequestForModal.sourceSystem} • Logged at: {activeRequestForModal.statusHistory?.[0]?.timestamp}
+              <span className="text-[11px] font-mono text-slate-400">
+                Source: {activeRequestForModal.sourceSystem} • Logged: {activeRequestForModal.statusHistory?.[0]?.timestamp}
               </span>
               <div className="flex items-center gap-2">
                 {activeRequestForModal.status === REQUEST_STAGES.ALTERNATIVE_SUGGESTED && (
                   <Link to={`/${deptKey.toLowerCase()}/scheduled-work`}>
                     <Button size="sm" variant="warning">
-                      Handle Suggested Alternatives
+                      Review Alternatives
                     </Button>
                   </Link>
                 )}
                 {activeRequestForModal.status !== REQUEST_STAGES.HUMAN_REVIEW_REQUESTED && (
                   <Link to={`/${deptKey.toLowerCase()}/human-review?id=${activeRequestForModal.id}`}>
                     <Button size="sm" variant="outline">
-                      File Human Review Appeal
+                      Appeal Decision
                     </Button>
                   </Link>
                 )}
@@ -243,38 +244,38 @@ export const SharedDepartmentRequestList = () => {
           }
         >
           <div className="space-y-6">
-            <div className="p-4 bg-rail-surface border border-rail-border rounded-md">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-rail-muted mb-4">
+            <div className="p-4 bg-[#0B0F17] border border-[#1F2937] rounded-lg">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
                 Lifecycle Progression
               </h4>
               <StatusTimeline request={activeRequestForModal} />
             </div>
 
             {activeRequestForModal.aiExplanation && (
-              <div className="p-4 bg-[#F2EDE2] border border-rail-border rounded-md space-y-2.5">
-                <h4 className="text-xs font-bold text-rail-text uppercase tracking-wider flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-rail-primary" />
+              <div className="p-4 bg-[#111827] border border-orange-500/20 rounded-lg space-y-3">
+                <h4 className="text-xs font-bold text-orange-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-orange-400" />
                   <span>AI Decision & Plain-Language Explanation</span>
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <div>
-                    <span className="font-semibold text-rail-text block">Priority Drivers:</span>
-                    <ul className="text-[11px] text-rail-muted list-disc list-inside mt-1 space-y-0.5">
+                  <div className="bg-[#0B0F17] p-3 rounded border border-[#1F2937]">
+                    <span className="font-semibold text-slate-200 block mb-1">Priority Drivers:</span>
+                    <ul className="text-[11px] text-slate-400 list-disc list-inside space-y-1">
                       {activeRequestForModal.aiExplanation.priorityDrivers?.map((d, i) => (
                         <li key={i}>{d}</li>
                       ))}
                     </ul>
                   </div>
-                  <div>
-                    <span className="font-semibold text-rail-text block">Timetable & Capacity Margin:</span>
-                    <p className="text-[11px] text-rail-muted mt-1 leading-relaxed">
+                  <div className="bg-[#0B0F17] p-3 rounded border border-[#1F2937]">
+                    <span className="font-semibold text-slate-200 block mb-1">Timetable & Capacity Margin:</span>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
                       {activeRequestForModal.aiExplanation.timetableGaps}
                     </p>
                   </div>
                 </div>
                 {activeRequestForModal.aiExplanation.bundlingBenefit && (
-                  <div className="mt-2 p-2 bg-[#FAF7ED] border border-rail-secondary/30 rounded-sm text-[11px] text-rail-text">
-                    <strong className="text-rail-secondary font-semibold">Cross-Department Bundling Gain: </strong>
+                  <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded text-[11px] text-slate-200">
+                    <strong className="text-emerald-400 font-semibold">Cross-Department Bundling Benefit: </strong>
                     {activeRequestForModal.aiExplanation.bundlingBenefit}
                   </div>
                 )}

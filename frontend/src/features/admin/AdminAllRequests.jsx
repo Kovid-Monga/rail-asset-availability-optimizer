@@ -7,7 +7,7 @@ import { Button } from '../../components/ui/Button';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/ui/Table';
 import { PriorityTag } from '../../components/shared/PriorityTag';
 import { RequestStatusBadge } from '../../components/shared/RequestStatusBadge';
-import { Search, Filter, Sparkles, Layers, SlidersHorizontal, Flame } from 'lucide-react';
+import { Search, Filter, Sparkles, Layers, SlidersHorizontal, Flame, Calendar } from 'lucide-react';
 
 export const AdminAllRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -42,15 +42,15 @@ export const AdminAllRequests = () => {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-rail-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#1F2937]">
         <div>
-          <h2 className="text-lg font-bold text-rail-text tracking-tight flex items-center gap-2">
-            <span>Network Maintenance Requirements Registry</span>
-            <span className="text-xs font-mono px-2 py-0.5 bg-[#2B2621] text-white rounded-sm font-semibold">
-              Cross-Department Master View
+          <h2 className="text-lg font-bold text-slate-100 tracking-tight flex items-center gap-2">
+            <span>Network Maintenance Requirements Master Registry</span>
+            <span className="text-xs font-mono px-2 py-0.5 bg-orange-500/10 text-orange-400 border border-orange-500/30 rounded font-semibold">
+              Cross-Department View ({requests.length} Items)
             </span>
           </h2>
-          <p className="text-xs text-rail-muted mt-0.5">
+          <p className="text-xs text-slate-400 mt-1">
             Holistic visibility over Engineering, TRD, and S&T maintenance blocks, AI algorithmic prioritization, and corridor allocation.
           </p>
         </div>
@@ -68,142 +68,142 @@ export const AdminAllRequests = () => {
         </div>
       </div>
 
-      {/* Filter and Search Bar */}
-      <Card className="p-4 bg-rail-surface">
+      {/* Filter & Search Bar */}
+      <Card className="p-4 bg-[#111827] border-[#1F2937]">
         <div className="flex flex-col sm:flex-row items-center gap-3">
           <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-rail-muted absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
-              placeholder="Search across all departments by ID, asset name, corridor location..."
+              placeholder="Search across all departments by ID, asset name, or location..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-1.5 bg-[#FCFAF5] text-xs rounded-sm border border-rail-border focus:outline-none focus:border-rail-primary"
+              className="w-full pl-9 pr-4 py-2 bg-[#0B0F17] text-xs text-slate-200 rounded-md border border-[#1F2937] focus:outline-none focus:border-orange-500 placeholder-slate-500"
             />
           </div>
-
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            {/* Department Filter */}
+            <Filter className="w-4 h-4 text-slate-400 shrink-0" />
             <select
               value={deptFilter}
               onChange={(e) => setDeptFilter(e.target.value)}
-              className="bg-[#FCFAF5] text-xs px-3 py-1.5 rounded-sm border border-rail-border focus:outline-none focus:border-rail-primary"
+              className="bg-[#0B0F17] text-xs text-slate-200 px-3 py-2 rounded-md border border-[#1F2937] focus:outline-none focus:border-orange-500"
             >
               <option value="ALL">All Departments</option>
-              <option value="ENG">Engineering (Civil/Track)</option>
-              <option value="TRD">TRD (Traction / OHE)</option>
-              <option value="SNT">S&T (Signal & Telecom)</option>
+              <option value="ENG">Engineering (TMS)</option>
+              <option value="TRD">TRD (TDMS)</option>
+              <option value="SNT">S&T (SMMS)</option>
             </select>
-
-            {/* Status Filter */}
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-[#FCFAF5] text-xs px-3 py-1.5 rounded-sm border border-rail-border focus:outline-none focus:border-rail-primary"
+              className="bg-[#0B0F17] text-xs text-slate-200 px-3 py-2 rounded-md border border-[#1F2937] focus:outline-none focus:border-orange-500"
             >
-              <option value="ALL">All Statuses</option>
+              <option value="ALL">All Stages</option>
               <option value={REQUEST_STAGES.SCHEDULED}>Scheduled</option>
               <option value={REQUEST_STAGES.ALTERNATIVE_SUGGESTED}>Alternative Suggested</option>
-              <option value={REQUEST_STAGES.HUMAN_REVIEW_REQUESTED}>Human Review Requested</option>
+              <option value={REQUEST_STAGES.HUMAN_REVIEW_REQUESTED}>Human Review</option>
+              <option value={REQUEST_STAGES.APPROVED_OVERRIDDEN}>Overridden</option>
               <option value={REQUEST_STAGES.COMPLETED}>Completed</option>
             </select>
           </div>
         </div>
       </Card>
 
-      {/* Cross-Department Requests Table */}
+      {/* Cross-Department Table */}
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Request ID</TableHead>
-            <TableHead>Department & Source</TableHead>
-            <TableHead>Asset & Section</TableHead>
-            <TableHead>Maintenance Scope</TableHead>
-            <TableHead>Input Signal</TableHead>
-            <TableHead>ML Score</TableHead>
-            <TableHead>Lifecycle Status</TableHead>
-            <TableHead>Scheduled Window</TableHead>
+            <TableHead>Dept</TableHead>
+            <TableHead>Asset & Location</TableHead>
+            <TableHead>Work Scope</TableHead>
+            <TableHead>Duration</TableHead>
+            <TableHead>Priority</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>AI Score</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {filteredRequests.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={9} className="text-center py-8 text-rail-muted text-xs">
-                No matching cross-department requests found.
+              <TableCell colSpan={9} className="text-center py-12 text-slate-500 text-xs">
+                No matching maintenance requirements found.
               </TableCell>
             </TableRow>
           ) : (
-            filteredRequests.map((req) => {
-              const dept = DEPARTMENTS[req.department] || DEPARTMENTS.ENG;
-              return (
-                <TableRow key={req.id}>
-                  <TableCell className="font-mono font-bold text-xs">
-                    <div className="flex items-center gap-1.5">
-                      <span>{req.id}</span>
-                      {req.isOverdue && (
-                        <span title="Overdue inspection cycle" className="text-rail-critical">
-                          <Flame className="w-3.5 h-3.5 inline" />
-                        </span>
-                      )}
+            filteredRequests.map((req) => (
+              <TableRow key={req.id}>
+                <TableCell className="font-mono font-bold text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-orange-400">{req.id}</span>
+                    {req.isOverdue && (
+                      <span title="Overdue inspection" className="text-red-400">
+                        <Flame className="w-3.5 h-3.5 inline" />
+                      </span>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                      req.department === 'ENG'
+                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                        : req.department === 'TRD'
+                          ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                          : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
+                    }`}
+                  >
+                    {req.department}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <div className="font-semibold text-slate-200">{req.assetName}</div>
+                  <div className="text-[10px] text-slate-400">{req.location}</div>
+                </TableCell>
+                <TableCell>
+                  <div className="text-slate-200 font-medium">{req.maintenanceType}</div>
+                  {req.aiExplanation?.bundledDepartments && (
+                    <div className="text-[10px] text-emerald-400 font-mono flex items-center gap-1 mt-0.5">
+                      <Sparkles className="w-2.5 h-2.5" />
+                      <span>Joint: {req.aiExplanation.bundledDepartments.join(', ')}</span>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-sm border font-mono ${dept.badgeColor}`}>
-                      {req.department} • {dept.sourceSystem}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="font-semibold text-rail-text text-xs">{req.assetName}</div>
-                    <div className="text-[10px] text-rail-muted">{req.location}</div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-rail-text font-medium text-xs">{req.maintenanceType}</div>
-                    {req.aiExplanation?.bundledDepartments && (
-                      <div className="text-[10px] text-rail-primary font-mono flex items-center gap-1 mt-0.5">
-                        <Sparkles className="w-2.5 h-2.5" />
-                        <span>Bundled: {req.aiExplanation.bundledDepartments.join(', ')}</span>
-                      </div>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <PriorityTag priority={req.declaredPriority} />
-                  </TableCell>
-                  <TableCell className="font-mono text-xs font-bold text-rail-primary">
-                    {req.score ? `${req.score}/100` : '—'}
-                  </TableCell>
-                  <TableCell>
-                    <RequestStatusBadge status={req.status} />
-                  </TableCell>
-                  <TableCell className="font-mono text-[11px]">
-                    {req.scheduledSlot ? (
-                      <div>
-                        <span className="font-semibold text-rail-success block">{req.scheduledSlot.timeWindow}</span>
-                        <span className="text-[10px] text-rail-muted">{req.scheduledSlot.date}</span>
-                      </div>
-                    ) : (
-                      <span className="text-rail-muted">Unscheduled</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1.5">
-                      {req.status === REQUEST_STAGES.HUMAN_REVIEW_REQUESTED && (
-                        <Link to={`/admin/human-review?id=${req.id}`}>
-                          <Button size="sm" variant="secondary">
-                            Review
-                          </Button>
-                        </Link>
-                      )}
-                      <Link to={`/admin/manual-override?id=${req.id}`}>
-                        <Button size="sm" variant="outline">
-                          Override
+                  )}
+                </TableCell>
+                <TableCell className="font-mono text-xs text-slate-300">
+                  {req.estimatedDurationMinutes}m
+                </TableCell>
+                <TableCell>
+                  <PriorityTag priority={req.declaredPriority} />
+                </TableCell>
+                <TableCell>
+                  <RequestStatusBadge status={req.status} />
+                </TableCell>
+                <TableCell className="font-mono text-xs">
+                  {req.score ? (
+                    <span className="font-bold text-orange-400">{req.score}</span>
+                  ) : (
+                    <span className="text-slate-500">—</span>
+                  )}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex items-center justify-end gap-1.5">
+                    {req.status === REQUEST_STAGES.HUMAN_REVIEW_REQUESTED && (
+                      <Link to={`/admin/human-review?id=${req.id}`}>
+                        <Button size="sm" variant="warning">
+                          Review Appeal
                         </Button>
                       </Link>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })
+                    )}
+                    <Link to={`/admin/manual-override?id=${req.id}`}>
+                      <Button size="sm" variant="outline">
+                        Override
+                      </Button>
+                    </Link>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
           )}
         </TableBody>
       </Table>

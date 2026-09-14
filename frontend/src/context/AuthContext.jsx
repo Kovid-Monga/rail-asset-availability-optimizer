@@ -10,7 +10,7 @@ const ROLE_USERS = {
     designation: 'Sr. Divisional Engineer (Track / Civil)',
     departmentName: 'Engineering Department',
     sourceSystem: 'TMS (Track Management System)',
-    badgeColor: 'text-[#3E5C55] bg-[#E8EFEA] border-[#3E5C55]/30'
+    badgeColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
   },
   TRD: {
     role: 'TRD',
@@ -18,7 +18,7 @@ const ROLE_USERS = {
     designation: 'Sr. Divisional Electrical Engineer (TRD / OHE)',
     departmentName: 'Traction Distribution Department',
     sourceSystem: 'TDMS (Traction Distribution System)',
-    badgeColor: 'text-[#B5762E] bg-[#F7EFE3] border-[#B5762E]/30'
+    badgeColor: 'text-amber-400 bg-amber-500/10 border-amber-500/30'
   },
   SNT: {
     role: 'SNT',
@@ -26,7 +26,7 @@ const ROLE_USERS = {
     designation: 'Sr. Divisional Signal & Telecom Engineer',
     departmentName: 'Signal & Telecom Department',
     sourceSystem: 'SMMS (Signal Maintenance System)',
-    badgeColor: 'text-[#4A6B82] bg-[#EBF1F5] border-[#4A6B82]/30'
+    badgeColor: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30'
   },
   ADMIN: {
     role: 'ADMIN',
@@ -34,7 +34,7 @@ const ROLE_USERS = {
     designation: 'Chief Operations Manager / Train Controller',
     departmentName: 'Central Operations Control Center',
     sourceSystem: 'Integrated Operations Hub',
-    badgeColor: 'text-[#2B2621] bg-[#E5DFD4] border-[#2B2621]/30'
+    badgeColor: 'text-orange-400 bg-orange-500/10 border-orange-500/30'
   }
 };
 
@@ -42,26 +42,33 @@ export const AuthProvider = ({ children }) => {
   const [currentRole, setCurrentRole] = useState(() => {
     return localStorage.getItem('railway_active_role') || 'ENG';
   });
+  const [previewDept, setPreviewDept] = useState(null);
 
   const switchRole = (role) => {
     if (ROLE_USERS[role]) {
       setCurrentRole(role);
+      setPreviewDept(null);
       localStorage.setItem('railway_active_role', role);
     }
   };
 
-  const currentUser = ROLE_USERS[currentRole] || ROLE_USERS.ENG;
-  const currentDeptConfig = DEPARTMENTS[currentRole] || DEPARTMENTS.ENG;
+  const effectiveRole = (currentRole === 'ADMIN' && previewDept) ? previewDept : currentRole;
+  const currentUser = ROLE_USERS[effectiveRole] || ROLE_USERS.ENG;
+  const currentDeptConfig = DEPARTMENTS[effectiveRole] || DEPARTMENTS.ENG;
+  const isAdminPreviewing = currentRole === 'ADMIN' && !!previewDept;
 
   return (
     <AuthContext.Provider
       value={{
         currentRole,
+        effectiveRole,
+        previewDept,
+        setPreviewDept,
+        isAdminPreviewing,
         currentUser,
         currentDeptConfig,
         switchRole,
-        availableRoles: Object.values(ROLE_USERS),
-        isAdmin: currentRole === 'ADMIN'
+        availableRoles: Object.values(ROLE_USERS)
       }}
     >
       {children}

@@ -17,7 +17,8 @@ import {
   Sparkles,
   ShieldCheck,
   Calendar,
-  Layers
+  Layers,
+  FileText
 } from 'lucide-react';
 
 export const AdminHumanReviewQueue = () => {
@@ -92,23 +93,23 @@ export const AdminHumanReviewQueue = () => {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-rail-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#1F2937]">
         <div>
-          <h2 className="text-lg font-bold text-rail-text tracking-tight flex items-center gap-2">
-            <Layers className="w-5 h-5 text-rail-secondary" />
+          <h2 className="text-lg font-bold text-slate-100 tracking-tight flex items-center gap-2">
+            <Layers className="w-5 h-5 text-amber-400" />
             <span>Human Review Adjudication Queue</span>
-            <span className="text-xs font-mono px-2 py-0.5 bg-[#FAF2E6] text-rail-secondary rounded-sm border border-rail-secondary/30 font-semibold">
+            <span className="text-xs font-mono px-2 py-0.5 bg-amber-500/10 text-amber-400 rounded border border-amber-500/30 font-semibold">
               {requests.length} Pending Cases
             </span>
           </h2>
-          <p className="text-xs text-rail-muted mt-0.5">
-            Evaluate department appeals against algorithmic scheduling decisions, inspect submitted evidence, and grant exceptional administrative overrides.
+          <p className="text-xs text-slate-400 mt-1">
+            Evaluate departmental appeals against automated scheduling decisions, inspect submitted evidence, and grant administrative overrides.
           </p>
         </div>
       </div>
 
       {actionSuccess && (
-        <div className="p-3 bg-rail-successLight border border-rail-success/40 text-rail-success rounded-sm text-xs flex items-center gap-2 font-medium">
+        <div className="p-3 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 rounded-md text-xs flex items-center gap-2 font-semibold">
           <CheckCircle2 className="w-4 h-4" />
           <span>{actionSuccess}</span>
         </div>
@@ -117,191 +118,183 @@ export const AdminHumanReviewQueue = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 1 Col: Appeals List */}
         <div className="space-y-3">
-          <span className="text-xs font-bold text-rail-muted uppercase tracking-wider block">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
             Awaiting Adjudication
           </span>
           <div className="space-y-2">
             {requests.length === 0 ? (
-              <div className="p-4 bg-rail-surface border border-rail-border rounded-md text-xs text-rail-muted text-center">
+              <div className="p-4 bg-[#111827] border border-[#1F2937] rounded-lg text-xs text-slate-500 text-center">
                 No active human review appeals in queue.
               </div>
             ) : (
-              requests.map((req) => (
-                <div
-                  key={req.id}
-                  onClick={() => setSelectedRequest(req)}
-                  className={`p-3.5 rounded-sm border cursor-pointer transition-all ${
-                    selectedRequest?.id === req.id
-                      ? 'bg-[#FAF4E6] border-rail-secondary shadow-xs'
-                      : 'bg-rail-surface border-rail-border hover:bg-[#F9F7F1]'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-mono text-xs font-bold text-rail-text">{req.id}</span>
-                    <RequestStatusBadge status={req.status} />
+              requests.map((req) => {
+                const isSelected = selectedRequest?.id === req.id;
+                return (
+                  <div
+                    key={req.id}
+                    onClick={() => setSelectedRequest(req)}
+                    className={`p-3.5 rounded-lg border cursor-pointer transition-all ${
+                      isSelected
+                        ? 'bg-[#111827] border-amber-500/60 shadow-lg shadow-amber-500/10'
+                        : 'bg-[#111827] border-[#1F2937] hover:border-slate-600'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-xs font-bold text-orange-400">{req.id}</span>
+                      <RequestStatusBadge status={req.status} />
+                    </div>
+                    <div className="text-xs font-semibold text-slate-200 truncate">
+                      {req.maintenanceType}
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">
+                      {req.department} • {req.assetName}
+                    </div>
+                    <div className="mt-2 text-[10px] text-amber-400 font-medium truncate">
+                      Grounds: {req.appealDetails?.reasonCategory || 'Field constraint'}
+                    </div>
                   </div>
-                  <div className="text-xs font-semibold text-rail-text truncate">
-                    {req.maintenanceType}
-                  </div>
-                  <div className="text-[11px] text-rail-muted mt-0.5">
-                    {req.department} • {req.assetName}
-                  </div>
-                  <div className="mt-2 text-[10px] text-rail-secondary font-medium truncate">
-                    Grounds: {req.appealDetails?.reasonCategory || 'Field constraint'}
-                  </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
 
-        {/* Right 2 Cols: Adjudication Decision Cockpit */}
-        <div className="lg:col-span-2 space-y-6">
+        {/* Right 2 Cols: Appeal Detail & Adjudication Controls */}
+        <div className="lg:col-span-2">
           {selectedRequest ? (
-            <Card className="border-rail-secondary/60">
-              <CardHeader className="bg-[#FAF2E2]">
-                <div className="flex items-center justify-between w-full">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm font-bold text-rail-text">
-                        {selectedRequest.id}
-                      </span>
-                      <span className="text-xs font-bold px-2 py-0.5 bg-[#EAE2D2] text-rail-text rounded-sm border border-rail-border">
-                        {selectedRequest.department} Department
-                      </span>
-                      <PriorityTag priority={selectedRequest.declaredPriority} />
-                    </div>
-                    <p className="text-xs text-rail-muted mt-0.5">
-                      {selectedRequest.maintenanceType} — {selectedRequest.assetName}
-                    </p>
+            <Card className="border-[#1F2937] bg-[#111827]">
+              <CardHeader className="bg-[#1F2937]/50 border-b border-[#1F2937]">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 w-full">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-mono text-xs font-bold text-orange-400">{selectedRequest.id}</span>
+                    <RequestStatusBadge status={selectedRequest.status} />
+                    <span className="text-xs font-semibold text-slate-200">{selectedRequest.department} Department</span>
                   </div>
-                  <RequestStatusBadge status={selectedRequest.status} />
+                  <PriorityTag priority={selectedRequest.declaredPriority} />
                 </div>
               </CardHeader>
 
-              <CardContent className="p-5 space-y-5">
-                {/* 1. Department Submitted Appeal & Physical Evidence */}
-                <div className="p-4 bg-[#FAF7ED] border border-rail-secondary/40 rounded-sm space-y-2">
+              <CardContent className="p-5 space-y-4">
+                {/* Basic Requirement Overview */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#0B0F17] p-3 rounded-lg border border-[#1F2937] text-xs">
+                  <div>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">Asset</span>
+                    <span className="font-semibold text-slate-200 truncate block mt-0.5">{selectedRequest.assetName}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">Location</span>
+                    <span className="font-semibold text-slate-200 truncate block mt-0.5">{selectedRequest.location}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">Duration</span>
+                    <span className="font-semibold text-slate-200 font-mono block mt-0.5">{selectedRequest.estimatedDurationMinutes}m</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block">Preferred Window</span>
+                    <span className="font-semibold text-slate-200 truncate block mt-0.5">{selectedRequest.preferredWindow}</span>
+                  </div>
+                </div>
+
+                {/* Appeal Grounds Box */}
+                <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg space-y-2 text-xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-rail-secondary uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="font-bold text-amber-400 flex items-center gap-1.5">
                       <MessageSquareWarning className="w-4 h-4" />
-                      Department Appeal Submission
+                      Department Officer Appeal Statement
                     </span>
-                    <span className="text-[10px] font-mono text-rail-muted">
-                      Filed: {selectedRequest.appealDetails?.submittedAt || 'Recent'}
-                    </span>
-                  </div>
-                  <div className="text-xs">
-                    <span className="font-semibold text-rail-text">Grounds: </span>
-                    <span className="font-bold text-rail-critical">
-                      {selectedRequest.appealDetails?.reasonCategory || 'Field condition deviation'}
+                    <span className="text-[10px] font-mono text-slate-400">
+                      Filed: {selectedRequest.appealDetails?.appealDate || '2026-09-07'}
                     </span>
                   </div>
-                  <p className="text-xs text-rail-text/90 italic leading-relaxed bg-white p-3 rounded-sm border border-rail-border">
-                    "{selectedRequest.appealDetails?.appealText || selectedRequest.description}"
+                  <div className="text-slate-200 font-semibold">
+                    Category: {selectedRequest.appealDetails?.reasonCategory || 'Defect worse than source data captured'}
+                  </div>
+                  <p className="text-slate-300 leading-relaxed bg-[#0B0F17] p-3 rounded border border-[#1F2937]">
+                    "{selectedRequest.appealDetails?.appealText || selectedRequest.conflictReason || 'Field ultrasonic inspection reveals 14mm rail flaw requiring urgent replacement before scheduled weekend slot.'}"
                   </p>
-                  <div className="flex items-center justify-between pt-1 text-[11px] text-rail-muted">
-                    <span>Officer: {selectedRequest.appealDetails?.submittedBy || 'Department Officer'}</span>
-                    <span className="font-mono flex items-center gap-1 text-rail-primary font-semibold">
-                      <FileCheck className="w-3.5 h-3.5" />
-                      {selectedRequest.appealDetails?.evidenceAttachment || 'USFD_Inspection_Scan.pdf'}
+                  <div className="flex items-center justify-between text-[11px] pt-1">
+                    <span className="text-slate-400">
+                      Submitted by: <strong className="text-slate-200">{selectedRequest.appealDetails?.submittedBy || 'Senior Section Engineer'}</strong>
+                    </span>
+                    <span className="text-amber-400 font-mono text-[10px] flex items-center gap-1">
+                      <FileText className="w-3.5 h-3.5" />
+                      {selectedRequest.appealDetails?.evidenceAttachment || 'USFD_Flaw_Report.pdf'}
                     </span>
                   </div>
                 </div>
 
-                {/* 2. Original AI Decision & What Drove It */}
-                <div className="p-4 bg-[#F2EDE2] border border-rail-border rounded-sm space-y-2 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-rail-text uppercase tracking-wider flex items-center gap-1.5">
-                      <Sparkles className="w-4 h-4 text-rail-primary" />
-                      Original AI Optimization Engine Decision
-                    </span>
-                    <span className="font-mono text-rail-primary font-bold">
-                      Calculated Priority: {selectedRequest.score}/100
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] text-rail-muted">
+                {/* Algorithmic Decision Context */}
+                <div className="p-4 bg-[#0B0F17] border border-[#1F2937] rounded-lg text-xs space-y-2">
+                  <span className="font-bold text-orange-400 flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-orange-400" />
+                    AI Optimization Assessment
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] text-slate-400">
                     <div>
-                      <strong className="text-rail-text block mb-0.5">Algorithm Rationale:</strong>
-                      <p>{selectedRequest.conflictReason || 'Optimal slot computed in night shadow window.'}</p>
+                      <strong className="text-slate-300">Timetable Feasibility: </strong>
+                      {selectedRequest.aiExplanation?.timetableGaps || 'Dense morning passenger corridor (12004 Shatabdi & 22436 Vande Bharat).'}
                     </div>
                     <div>
-                      <strong className="text-rail-text block mb-0.5">Corridor Feasibility:</strong>
-                      <p>{selectedRequest.aiExplanation?.timetableGaps || 'High passenger train density on UP line.'}</p>
+                      <strong className="text-slate-300">Goods Freight Impact: </strong>
+                      {selectedRequest.aiExplanation?.goodsImpact || '3 container rakes held if daylight block is granted.'}
                     </div>
                   </div>
                 </div>
 
-                {/* 3. Conflicting Timetable Overlay */}
-                <div className="p-3.5 bg-rail-surface border border-rail-border rounded-sm text-xs space-y-2">
-                  <span className="font-bold text-rail-text uppercase tracking-wider block">
-                    Conflicting Timetable Overlay
-                  </span>
-                  <div className="text-[11px] text-rail-muted space-y-1">
-                    <div className="flex items-center justify-between p-1.5 bg-[#FAF7F0] rounded-sm">
-                      <span>#22436 Vande Bharat Express (06:00 - 07:18)</span>
-                      <Badge variant="primary" size="sm">Hard Constraint</Badge>
+                {/* Adjudication Controls */}
+                <div className="space-y-3 pt-2 border-t border-[#1F2937]">
+                  <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+                    Central Operations Adjudication
+                  </h4>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                        Override Schedule Slot (If Approved)
+                      </label>
+                      <input
+                        type="text"
+                        value={modifiedTimeSlot}
+                        onChange={(e) => setModifiedTimeSlot(e.target.value)}
+                        className="w-full bg-[#0B0F17] text-slate-200 text-xs px-3 py-2 rounded-md border border-[#1F2937] focus:outline-none focus:border-amber-500 font-mono"
+                      />
                     </div>
-                    <div className="flex items-center justify-between p-1.5 bg-[#FAF7F0] rounded-sm">
-                      <span>#GF-BOXN-902 Freight Rake (01:30 - 04:00)</span>
-                      <Badge variant="secondary" size="sm">Soft Constraint (Can Regulate)</Badge>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                        Controller Adjudication Remarks
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Approved under emergency track safety powers..."
+                        value={adminRemarks}
+                        onChange={(e) => setAdminRemarks(e.target.value)}
+                        className="w-full bg-[#0B0F17] text-slate-200 text-xs px-3 py-2 rounded-md border border-[#1F2937] focus:outline-none focus:border-amber-500"
+                      />
                     </div>
                   </div>
-                </div>
 
-                {/* 4. Admin Action Adjudication Controls */}
-                <div className="p-4 bg-[#FAF7F0] border border-rail-border rounded-sm space-y-3">
-                  <span className="text-xs font-bold text-rail-text uppercase tracking-wider block">
-                    Administrative Adjudication
-                  </span>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-rail-text mb-1">
-                      Designated Overridden Possession Slot
-                    </label>
-                    <input
-                      type="text"
-                      value={modifiedTimeSlot}
-                      onChange={(e) => setModifiedTimeSlot(e.target.value)}
-                      className="w-full bg-white text-xs px-3 py-1.5 rounded-sm border border-rail-border font-mono"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-rail-text mb-1">
-                      Chief Operations Controller Order & Audit Remarks
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={adminRemarks}
-                      onChange={(e) => setAdminRemarks(e.target.value)}
-                      placeholder="e.g. Approved emergency night slot. High ultrasonic defect risk outweighs 30m freight regulation."
-                      className="w-full bg-white text-xs p-2 rounded-sm border border-rail-border"
-                    />
-                  </div>
-
-                  <div className="flex flex-wrap items-center justify-end gap-2.5 pt-2">
+                  <div className="flex items-center justify-end gap-3 pt-2">
                     <Button
                       variant="outline"
                       onClick={() => handleDecision('REJECT')}
                       icon={XCircle}
                     >
-                      Reject Appeal
+                      Decline Appeal (Uphold AI Schedule)
                     </Button>
                     <Button
-                      variant="secondary"
+                      variant="warning"
                       onClick={() => handleDecision('APPROVE_OVERRIDE')}
                       icon={CheckCircle2}
                     >
-                      Approve & Grant Override Block
+                      Approve & Grant Override Window
                     </Button>
                   </div>
                 </div>
               </CardContent>
             </Card>
           ) : (
-            <div className="p-8 text-center text-rail-muted text-xs bg-rail-surface border border-rail-border rounded-md">
-              Select an appeal from the left queue to review case details.
+            <div className="p-8 bg-[#111827] border border-[#1F2937] rounded-lg text-center text-slate-500 text-xs">
+              Select an appeal from the queue to view full evidence and adjudicate.
             </div>
           )}
         </div>

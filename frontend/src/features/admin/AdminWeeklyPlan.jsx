@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
-import { CalendarDays, Clock, CheckCircle2, Sparkles, Filter } from 'lucide-react';
+import { CalendarDays, Clock, CheckCircle2, Sparkles, Filter, Layers } from 'lucide-react';
 
 export const AdminWeeklyPlan = () => {
   const [selectedSection, setSelectedSection] = useState('ALL');
@@ -102,89 +102,97 @@ export const AdminWeeklyPlan = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-rail-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#1F2937]">
         <div>
-          <h2 className="text-lg font-bold text-rail-text tracking-tight flex items-center gap-2">
-            <CalendarDays className="w-5 h-5 text-rail-primary" />
+          <h2 className="text-lg font-bold text-slate-100 tracking-tight flex items-center gap-2">
+            <CalendarDays className="w-5 h-5 text-orange-400" />
             <span>Tactical 7-Day Cross-Department Block Plan</span>
           </h2>
-          <p className="text-xs text-rail-muted mt-0.5">
+          <p className="text-xs text-slate-400 mt-1">
             Synchronized timetable matrix showing multi-department possession windows across Northern Railway divisions.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-rail-muted">Corridor: Delhi-Palwal-Mathura</span>
+          <span className="text-xs font-mono text-slate-400 bg-[#111827] px-2.5 py-1 rounded border border-[#1F2937]">
+            Corridor: Delhi–Mathura Trunk
+          </span>
         </div>
       </div>
 
       {/* Cross-Department Weekly Matrix Table */}
-      <Card>
-        <CardHeader className="bg-[#ECE5D8]">
+      <Card className="border-[#1F2937] bg-[#111827]">
+        <CardHeader className="bg-[#1F2937]/50 border-b border-[#1F2937]">
           <div className="flex items-center justify-between w-full">
-            <CardTitle>
-              <span>Weekly Scheduled Window Grid (Mon 07 Sep – Sun 13 Sep 2026)</span>
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-300">
+              Weekly Scheduled Window Grid (Mon 07 Sep – Sun 13 Sep 2026)
             </CardTitle>
-            <span className="text-xs font-mono bg-rail-success text-white px-2 py-0.5 rounded-sm font-semibold">
-              Total 590 Minutes Possession Saved via Bundling
+            <span className="text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded font-bold flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              590 Minutes Track Downtime Saved via Bundling
             </span>
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="divide-y divide-rail-border/60">
+          <div className="divide-y divide-[#1F2937]">
             {weeklySchedule.map((plan, idx) => (
-              <div key={idx} className="p-4 hover:bg-[#FAF7F0] transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="space-y-1.5 md:max-w-md">
+              <div key={idx} className="p-5 hover:bg-[#0B0F17]/60 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-2 md:max-w-md">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-xs text-rail-text">{plan.date}</span>
-                    <span className="font-mono text-xs bg-[#EAE3D5] text-rail-text px-2 py-0.5 rounded-sm border border-rail-border">
+                    <span className="font-bold text-xs text-slate-200">{plan.date}</span>
+                    <span className="font-mono text-xs bg-[#0B0F17] text-orange-400 px-2 py-0.5 rounded border border-[#1F2937]">
                       {plan.timeWindow}
                     </span>
                     {plan.savedBlockMinutes > 0 && (
-                      <span className="text-[10px] font-mono text-rail-success bg-[#EEF5F1] px-1.5 py-0.5 rounded-sm border border-rail-success/30 font-semibold flex items-center gap-1">
+                      <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-bold flex items-center gap-1">
                         <Sparkles className="w-3 h-3" />
                         +{plan.savedBlockMinutes}m saved
                       </span>
                     )}
                   </div>
-                  <div className="text-xs font-semibold text-rail-text">
+                  <div className="text-xs font-semibold text-slate-100">
                     {plan.section}
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] text-slate-500 uppercase font-mono">Departments:</span>
+                    {plan.departments.map(d => (
+                      <span
+                        key={d}
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                          d === 'ENG'
+                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                            : d === 'TRD'
+                              ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                              : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
+                        }`}
+                      >
+                        {d}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
-                {/* Participating Department Multi-Badges */}
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="text-[10px] font-mono uppercase text-rail-muted mr-1">Depts:</span>
-                  {plan.departments.includes('ENG') && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm border bg-[#E8EFEA] text-[#3E5C55] border-[#3E5C55]/30">
-                      ENG
-                    </span>
-                  )}
-                  {plan.departments.includes('TRD') && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm border bg-[#F7EFE3] text-[#B5762E] border-[#B5762E]/30">
-                      TRD
-                    </span>
-                  )}
-                  {plan.departments.includes('SNT') && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm border bg-[#EBF1F5] text-[#4A6B82] border-[#4A6B82]/30">
-                      S&T
-                    </span>
-                  )}
-                </div>
-
-                {/* Activities Breakdown */}
-                <div className="flex-1 min-w-0">
-                  <ul className="text-xs text-rail-muted space-y-0.5 list-disc list-inside">
+                <div className="flex-1 md:px-6">
+                  <ul className="text-xs text-slate-400 space-y-1 bg-[#0B0F17] p-3 rounded-lg border border-[#1F2937]">
                     {plan.activities.map((act, aIdx) => (
-                      <li key={aIdx} className="truncate">{act}</li>
+                      <li key={aIdx} className="leading-relaxed flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0" />
+                        <span className="truncate">{act}</span>
+                      </li>
                     ))}
                   </ul>
                 </div>
 
-                {/* Status */}
-                <div className="shrink-0 text-right">
-                  <Badge variant={plan.status === 'Confirmed' ? 'success' : 'secondary'}>
+                <div className="flex md:flex-col items-center md:items-end justify-between md:justify-center gap-2 shrink-0">
+                  <span className={`text-[11px] font-mono font-bold px-2.5 py-1 rounded border ${
+                    plan.status === 'Confirmed'
+                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                      : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                  }`}>
                     {plan.status}
-                  </Badge>
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-500 uppercase">
+                    {plan.blockType.replace(/_/g, ' ')}
+                  </span>
                 </div>
               </div>
             ))}

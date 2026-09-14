@@ -65,14 +65,14 @@ export const AdminCriticalOverdue = () => {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-rail-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#1F2937]">
         <div>
-          <h2 className="text-lg font-bold text-rail-critical tracking-tight flex items-center gap-2">
-            <Flame className="w-5 h-5 text-rail-critical" />
-            <span>Critical & Overdue Maintenance Triage Console</span>
+          <h2 className="text-lg font-bold text-red-400 tracking-tight flex items-center gap-2">
+            <Flame className="w-5 h-5 text-red-400" />
+            <span>Overdue Inspections & Critical Safety Deficiencies</span>
           </h2>
-          <p className="text-xs text-rail-muted mt-0.5">
-            Real-time feed of safety-critical defects and overdue inspection cycles flagged by TMS, TDMS, and SMMS databases.
+          <p className="text-xs text-slate-400 mt-1">
+            Real-time feed aggregating overdue maintenance across TMS, TDMS, and SMMS databases requiring immediate corridor intervention.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -84,40 +84,47 @@ export const AdminCriticalOverdue = () => {
         </div>
       </div>
 
-      {/* Critical Triage Cards */}
-      <div className="space-y-4">
-        {criticalItems.map((item, index) => (
-          <Card key={index} className="border-rail-critical/40 bg-[#FAF7F2]">
-            <CardHeader className="bg-[#FAF2EE]">
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-rail-text">{item.id}</span>
-                  <Badge variant="critical">{item.healthStatus}</Badge>
-                  <span className="text-xs font-bold text-rail-text">{item.name}</span>
+      {/* Critical Overdue Cards */}
+      <div className="grid grid-cols-1 gap-4">
+        {criticalItems.map((item) => (
+          <Card key={item.id} className="border-red-500/40 bg-[#111827]">
+            <CardContent className="p-5">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-mono text-xs font-bold text-red-400">{item.id}</span>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                        item.deptCode === 'ENG'
+                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                          : item.deptCode === 'TRD'
+                            ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                            : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
+                      }`}
+                    >
+                      {item.department}
+                    </span>
+                    <span className="text-xs font-bold text-red-400 bg-red-500/10 px-2 py-0.5 rounded border border-red-500/30">
+                      Status: {item.healthStatus}
+                    </span>
+                  </div>
+
+                  <div className="text-sm font-bold text-slate-100">{item.name}</div>
+                  <p className="text-xs text-slate-400">{item.defectDescription}</p>
+
+                  <div className="flex items-center gap-2 text-xs text-red-400 font-medium">
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    <span>Consequence: {item.riskLevel}</span>
+                  </div>
                 </div>
-                <span className="text-xs font-bold font-mono text-rail-critical bg-rail-criticalLight px-2 py-0.5 rounded-sm border border-rail-critical/30">
-                  OVERDUE: {item.overdueDate}
-                </span>
-              </div>
-            </CardHeader>
-            <CardContent className="p-4 space-y-3">
-              <p className="text-xs text-rail-text leading-relaxed">
-                {item.defectDescription}
-              </p>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-rail-border/60 text-xs">
-                <div className="flex items-center gap-2 text-[11px] text-rail-critical font-medium">
-                  <ShieldAlert className="w-3.5 h-3.5" />
-                  <span>Safety Hazard: {item.riskLevel}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Link to={`/admin/all-requests`}>
-                    <Button size="sm" variant="outline">
-                      Locate in Master Registry
-                    </Button>
-                  </Link>
-                  <Link to={`/admin/manual-override?assetId=${item.id}`}>
-                    <Button size="sm" variant="danger">
-                      Force Emergency Block
+
+                <div className="flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-2 shrink-0">
+                  <span className="text-[11px] font-mono text-red-400 bg-[#0B0F17] px-2.5 py-1 rounded border border-[#1F2937]">
+                    Overdue: {item.overdueDate}
+                  </span>
+                  <Link to={`/${item.deptCode.toLowerCase()}/new-request?assetId=${item.id}`}>
+                    <Button size="sm" variant="default" icon={ArrowRight}>
+                      Create Priority Block
                     </Button>
                   </Link>
                 </div>

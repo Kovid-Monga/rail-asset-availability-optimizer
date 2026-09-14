@@ -48,28 +48,28 @@ export const Sidebar = () => {
   const links = isAdmin ? adminLinks : departmentLinks;
 
   return (
-    <aside className="w-64 bg-[#F2ECE1] border-r border-rail-border flex flex-col shrink-0 h-[calc(100vh-3.5rem)] sticky top-14">
+    <aside className="w-64 bg-[#0D1424] border-r border-slate-800/80 flex flex-col shrink-0 h-[calc(100vh-3.5rem)] sticky top-14">
       {/* Department/Admin Identity banner */}
-      <div className="p-4 border-b border-rail-border bg-[#ECE4D8]">
+      <div className="p-4 border-b border-slate-800/80 bg-slate-900/60">
         <div className="flex items-center gap-2 mb-1">
           <span className={cn(
-            "text-[11px] font-bold px-2 py-0.5 rounded-sm border uppercase font-mono tracking-wider",
-            currentDeptConfig?.badgeColor || "bg-[#EAE4D8] text-rail-text"
+            "text-[11px] font-bold px-2 py-0.5 rounded border uppercase font-mono tracking-wider",
+            currentDeptConfig?.badgeColor || "bg-slate-800 text-white"
           )}>
             {currentDeptConfig?.shortCode || currentRole}
           </span>
-          <span className="text-xs font-semibold text-rail-text truncate">
+          <span className="text-xs font-semibold text-white truncate">
             {currentDeptConfig?.name || 'Department'}
           </span>
         </div>
-        <p className="text-[11px] text-rail-muted leading-tight">
+        <p className="text-[11px] text-slate-400 leading-tight">
           {isAdmin ? 'Network Optimization Hub' : `Connected to ${currentDeptConfig?.sourceSystem} Feed`}
         </p>
       </div>
 
       {/* Nav items */}
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-        <div className="text-[10px] uppercase font-mono tracking-wider text-rail-muted px-2 py-1">
+        <div className="text-[10px] uppercase font-mono tracking-wider text-slate-400 px-2 py-1">
           {isAdmin ? 'Central Control Operations' : 'Department Portal'}
         </div>
         {links.map((item) => {
@@ -80,18 +80,18 @@ export const Sidebar = () => {
               to={item.to}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center gap-2.5 px-3 py-2 rounded-sm text-xs font-medium transition-colors border select-none",
+                  "flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium transition-all select-none border",
                   isActive
-                    ? "bg-rail-primary text-[#F7F4EC] border-rail-primary shadow-xs font-semibold"
-                    : "text-rail-text border-transparent hover:bg-rail-surfaceHover hover:border-rail-border",
-                  item.isException && !isActive && "text-rail-critical hover:bg-rail-criticalLight/50"
+                    ? "bg-rail-primary text-white border-rail-primary shadow-glow-orange font-semibold"
+                    : "text-slate-300 border-transparent hover:bg-slate-800/60 hover:text-white hover:border-slate-700/50",
+                  item.isException && !isActive && "text-rose-400 hover:bg-rose-950/30 hover:border-rose-800/30"
                 )
               }
             >
-              <Icon className={cn("w-4 h-4 shrink-0", item.isException && "text-rail-critical")} />
+              <Icon className={cn("w-4 h-4 shrink-0", item.isException && "text-rose-400")} />
               <span className="truncate">{item.label}</span>
               {item.isException && (
-                <span className="ml-auto text-[9px] uppercase font-mono bg-rail-critical/20 text-rail-critical px-1 rounded-sm border border-rail-critical/30">
+                <span className="ml-auto text-[9px] uppercase font-mono bg-rose-950/60 text-rose-400 px-1 rounded border border-rose-800/40">
                   Exception
                 </span>
               )}
@@ -101,16 +101,16 @@ export const Sidebar = () => {
       </nav>
 
       {/* System footer status */}
-      <div className="p-3 border-t border-rail-border bg-[#ECE4D8] text-[11px] text-rail-muted">
+      <div className="p-3 border-t border-slate-800/80 bg-slate-900/60 text-[11px] text-slate-400">
         <div className="flex items-center justify-between mb-1">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-rail-success animate-pulse"></span>
+          <span className="flex items-center gap-1.5 text-slate-300">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             Optimization Engine
           </span>
-          <span className="font-mono text-[10px] text-rail-text">ONLINE</span>
+          <span className="font-mono text-[10px] text-emerald-400 font-semibold">ACTIVE</span>
         </div>
-        <div className="text-[10px] text-rail-muted leading-tight">
-          Prioritization Layer Active • Next Batch in 18m
+        <div className="text-[10px] text-slate-400 leading-tight">
+          Prioritization Layer Active • Rescheduling: Live
         </div>
       </div>
     </aside>

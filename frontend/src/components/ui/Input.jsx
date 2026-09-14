@@ -13,7 +13,7 @@ export const Input = React.forwardRef(({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-xs font-semibold text-rail-text mb-1 tracking-tight">
+        <label className="block text-xs font-semibold text-slate-200 mb-1.5 tracking-tight">
           {label}
         </label>
       )}
@@ -22,19 +22,19 @@ export const Input = React.forwardRef(({
         ref={ref}
         disabled={disabled}
         className={cn(
-          "w-full bg-[#FCFAF5] text-rail-text placeholder:text-rail-muted/60 text-sm px-3 py-1.5 rounded-sm border border-rail-border transition-colors",
-          "focus:outline-none focus:border-rail-primary focus:ring-1 focus:ring-rail-primary",
-          "disabled:bg-[#EBE5DA] disabled:text-rail-muted disabled:cursor-not-allowed",
-          error && "border-rail-critical focus:border-rail-critical focus:ring-rail-critical",
+          "w-full bg-slate-900/90 text-white placeholder:text-slate-500 text-sm px-3.5 py-2 rounded-lg border border-slate-700/80 transition-all",
+          "focus:outline-none focus:border-rail-primary focus:ring-2 focus:ring-rail-primary/20",
+          "disabled:bg-slate-950 disabled:text-slate-600 disabled:cursor-not-allowed",
+          error && "border-rose-500 focus:border-rose-500 focus:ring-rose-500/20",
           className
         )}
         {...props}
       />
       {helperText && !error && (
-        <p className="text-[11px] text-rail-muted mt-1 leading-snug">{helperText}</p>
+        <p className="text-[11px] text-slate-400 mt-1 leading-snug">{helperText}</p>
       )}
       {error && (
-        <p className="text-[11px] text-rail-critical mt-1 font-medium leading-snug">{error}</p>
+        <p className="text-[11px] text-rose-400 mt-1 font-medium leading-snug">{error}</p>
       )}
     </div>
   );
@@ -54,7 +54,7 @@ export const Textarea = React.forwardRef(({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-xs font-semibold text-rail-text mb-1 tracking-tight">
+        <label className="block text-xs font-semibold text-slate-200 mb-1.5 tracking-tight">
           {label}
         </label>
       )}
@@ -63,19 +63,19 @@ export const Textarea = React.forwardRef(({
         rows={rows}
         disabled={disabled}
         className={cn(
-          "w-full bg-[#FCFAF5] text-rail-text placeholder:text-rail-muted/60 text-sm px-3 py-2 rounded-sm border border-rail-border transition-colors resize-y",
-          "focus:outline-none focus:border-rail-primary focus:ring-1 focus:ring-rail-primary",
-          "disabled:bg-[#EBE5DA] disabled:text-rail-muted disabled:cursor-not-allowed",
-          error && "border-rail-critical focus:border-rail-critical focus:ring-rail-critical",
+          "w-full bg-slate-900/90 text-white placeholder:text-slate-500 text-sm px-3.5 py-2.5 rounded-lg border border-slate-700/80 transition-all resize-y",
+          "focus:outline-none focus:border-rail-primary focus:ring-2 focus:ring-rail-primary/20",
+          "disabled:bg-slate-950 disabled:text-slate-600 disabled:cursor-not-allowed",
+          error && "border-rose-500 focus:border-rose-500 focus:ring-rose-500/20",
           className
         )}
         {...props}
       />
       {helperText && !error && (
-        <p className="text-[11px] text-rail-muted mt-1 leading-snug">{helperText}</p>
+        <p className="text-[11px] text-slate-400 mt-1 leading-snug">{helperText}</p>
       )}
       {error && (
-        <p className="text-[11px] text-rail-critical mt-1 font-medium leading-snug">{error}</p>
+        <p className="text-[11px] text-rose-400 mt-1 font-medium leading-snug">{error}</p>
       )}
     </div>
   );

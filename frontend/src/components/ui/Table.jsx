@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '../../utils/cn';
 
 export const Table = ({ children, className, ...props }) => (
-  <div className="w-full overflow-x-auto border border-rail-border rounded-md bg-rail-surface">
+  <div className="w-full overflow-x-auto border border-slate-800/80 rounded-xl bg-slate-900/60 backdrop-blur-md shadow-card-dark">
     <table className={cn("w-full text-left border-collapse text-xs", className)} {...props}>
       {children}
     </table>
@@ -10,13 +10,13 @@ export const Table = ({ children, className, ...props }) => (
 );
 
 export const TableHeader = ({ children, className, ...props }) => (
-  <thead className={cn("bg-[#ECE6DA] border-b border-rail-border text-rail-muted font-semibold", className)} {...props}>
+  <thead className={cn("bg-slate-900/90 border-b border-slate-800 text-slate-400 font-semibold", className)} {...props}>
     {children}
   </thead>
 );
 
 export const TableBody = ({ children, className, ...props }) => (
-  <tbody className={cn("divide-y divide-rail-border/60", className)} {...props}>
+  <tbody className={cn("divide-y divide-slate-800/60 text-slate-200", className)} {...props}>
     {children}
   </tbody>
 );
@@ -25,8 +25,8 @@ export const TableRow = ({ children, className, isClickable = false, ...props })
   <tr
     className={cn(
       "transition-colors",
-      isClickable && "cursor-pointer hover:bg-[#EFEBE1] active:bg-[#EAE4D8]",
-      !isClickable && "hover:bg-[#F9F7F1]",
+      isClickable && "cursor-pointer hover:bg-slate-800/60 active:bg-slate-800/90",
+      !isClickable && "hover:bg-slate-800/30",
       className
     )}
     {...props}
@@ -38,7 +38,7 @@ export const TableRow = ({ children, className, isClickable = false, ...props })
 export const TableHead = ({ children, className, ...props }) => (
   <th
     className={cn(
-      "py-2.5 px-3 font-semibold text-rail-text tracking-tight uppercase text-[10px] text-rail-muted border-r border-rail-border/40 last:border-r-0",
+      "py-3 px-4 font-bold text-slate-400 tracking-wider uppercase text-[10px] sm:text-[11px]",
       className
     )}
     {...props}
@@ -50,7 +50,7 @@ export const TableHead = ({ children, className, ...props }) => (
 export const TableCell = ({ children, className, ...props }) => (
   <td
     className={cn(
-      "py-2.5 px-3 text-rail-text border-r border-rail-border/30 last:border-r-0 align-middle",
+      "py-3.5 px-4 text-slate-200 align-middle",
       className
     )}
     {...props}

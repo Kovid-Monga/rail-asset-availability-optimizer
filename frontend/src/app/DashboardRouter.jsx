@@ -4,5 +4,5 @@ import { useAuth } from '../context/AuthContext';
 
 export const DashboardRouter = () => {
   const { currentRole } = useAuth();
-  return <Navigate to={`/${currentRole.toLowerCase()}/dashboard`} replace />;
+  return <Navigate to={`/${currentRole.toLowerCase()}/overview`} replace />;
 };

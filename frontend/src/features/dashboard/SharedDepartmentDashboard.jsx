@@ -75,23 +75,23 @@ export const SharedDepartmentDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Top Banner / Department Identity */}
-      <div className="bg-[#EAE4D7] border border-rail-border p-4 rounded-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-800 border border-slate-800 p-5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-card-dark">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-bold text-base text-rail-text">
+            <span className="font-black text-lg text-white">
               {deptConfig.name} • Operational Planning Console
             </span>
-            <span className={`text-[10px] font-mono px-2 py-0.5 rounded-sm border font-semibold ${deptConfig.badgeColor}`}>
+            <span className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border font-semibold ${deptConfig.badgeColor}`}>
               {deptConfig.sourceSystem} Live Feed
             </span>
           </div>
-          <p className="text-xs text-rail-muted mt-1 max-w-3xl">
-            <strong className="text-rail-text font-semibold">Core Principle:</strong> {deptConfig.shortCode} declares physical site requirements, track possession windows, and equipment constraints. The AI Prioritization Layer and Optimization Engine automatically determine optimal block allocation and cross-department bundling.
+          <p className="text-xs text-slate-400 mt-1 max-w-3xl leading-relaxed">
+            <strong className="text-white font-semibold">Core Principle:</strong> {deptConfig.shortCode} declares physical site requirements, track possession windows, and equipment constraints. The AI Prioritization Layer and Optimization Engine automatically determine optimal block allocation and cross-department bundling.
           </p>
         </div>
         <div className="flex items-center gap-2.5 shrink-0">
           <Link to={`/${deptKey.toLowerCase()}/new-request`}>
-            <Button variant="default" icon={PlusCircle}>
+            <Button variant="default" icon={PlusCircle} className="shadow-glow-orange">
               New Maintenance Request
             </Button>
           </Link>
@@ -99,76 +99,76 @@ export const SharedDepartmentDashboard = () => {
       </div>
 
       {/* KPI Counters Grid - Exact PRD Metric Specifications */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
-        <div className="bg-rail-surface border border-rail-border p-3 rounded-md">
-          <span className="text-[10px] font-semibold text-rail-muted uppercase tracking-tight block truncate">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+        <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl shadow-card-dark">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight block truncate">
             Total Requests
           </span>
-          <div className="text-xl font-bold text-rail-text mt-1">{totalCount}</div>
-          <span className="text-[10px] text-rail-muted mt-0.5 block">{deptConfig.sourceSystem} Ingested</span>
+          <div className="text-2xl font-black text-white mt-1">{totalCount}</div>
+          <span className="text-[10px] text-slate-400 mt-0.5 block">{deptConfig.sourceSystem} Ingested</span>
         </div>
 
-        <div className="bg-rail-surface border border-rail-border p-3 rounded-md">
-          <span className="text-[10px] font-semibold text-rail-primary uppercase tracking-tight block truncate flex items-center gap-1">
+        <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl shadow-card-dark">
+          <span className="text-[10px] font-bold text-sky-400 uppercase tracking-tight block truncate flex items-center gap-1">
             <Cpu className="w-3 h-3 shrink-0" />
             ML Prioritization
           </span>
-          <div className="text-xl font-bold text-rail-primary mt-1">{underMLCount}</div>
-          <span className="text-[10px] text-rail-muted mt-0.5 block">Algorithmic scoring</span>
+          <div className="text-2xl font-black text-sky-400 mt-1">{underMLCount}</div>
+          <span className="text-[10px] text-slate-400 mt-0.5 block">Algorithmic scoring</span>
         </div>
 
-        <div className="bg-rail-surface border border-rail-border p-3 rounded-md">
-          <span className="text-[10px] font-semibold text-[#2E6B65] uppercase tracking-tight block truncate flex items-center gap-1">
+        <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl shadow-card-dark">
+          <span className="text-[10px] font-bold text-purple-400 uppercase tracking-tight block truncate flex items-center gap-1">
             <Sparkles className="w-3 h-3 shrink-0" />
             Optimization
           </span>
-          <div className="text-xl font-bold text-[#2E6B65] mt-1">{underOptCount}</div>
-          <span className="text-[10px] text-rail-muted mt-0.5 block">Timetable batch</span>
+          <div className="text-2xl font-black text-purple-400 mt-1">{underOptCount}</div>
+          <span className="text-[10px] text-slate-400 mt-0.5 block">Timetable batch</span>
         </div>
 
-        <div className="bg-rail-surface border border-rail-border p-3 rounded-md">
-          <span className="text-[10px] font-semibold text-rail-success uppercase tracking-tight block truncate flex items-center gap-1">
+        <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl shadow-card-dark">
+          <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-tight block truncate flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3 shrink-0" />
             Auto-Scheduled
           </span>
-          <div className="text-xl font-bold text-rail-success mt-1">{scheduledCount}</div>
-          <span className="text-[10px] text-rail-muted mt-0.5 block">Conflict-free</span>
+          <div className="text-2xl font-black text-emerald-400 mt-1">{scheduledCount}</div>
+          <span className="text-[10px] text-slate-400 mt-0.5 block">Conflict-free</span>
         </div>
 
-        <div className="bg-rail-surface border border-rail-border p-3 rounded-md">
-          <span className="text-[10px] font-semibold text-rail-warning uppercase tracking-tight block truncate flex items-center gap-1">
+        <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl shadow-card-dark">
+          <span className="text-[10px] font-bold text-amber-400 uppercase tracking-tight block truncate flex items-center gap-1">
             <AlertTriangle className="w-3 h-3 shrink-0" />
             Unaccommodated
           </span>
-          <div className="text-xl font-bold text-rail-warning mt-1">{cannotAccommodateCount}</div>
-          <span className="text-[10px] text-rail-muted mt-0.5 block">Alt slots available</span>
+          <div className="text-2xl font-black text-amber-400 mt-1">{cannotAccommodateCount}</div>
+          <span className="text-[10px] text-slate-400 mt-0.5 block">Alt slots available</span>
         </div>
 
-        <div className="bg-rail-surface border border-rail-border p-3 rounded-md">
-          <span className="text-[10px] font-semibold text-rail-secondary uppercase tracking-tight block truncate flex items-center gap-1">
+        <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl shadow-card-dark">
+          <span className="text-[10px] font-bold text-orange-400 uppercase tracking-tight block truncate flex items-center gap-1">
             <Layers className="w-3 h-3 shrink-0" />
             Human Review
           </span>
-          <div className="text-xl font-bold text-rail-secondary mt-1">{humanReviewCount}</div>
-          <span className="text-[10px] text-rail-muted mt-0.5 block">Under appeal</span>
+          <div className="text-2xl font-black text-orange-400 mt-1">{humanReviewCount}</div>
+          <span className="text-[10px] text-slate-400 mt-0.5 block">Under appeal</span>
         </div>
 
-        <div className="bg-rail-surface border border-rail-border p-3 rounded-md">
-          <span className="text-[10px] font-semibold text-rail-muted uppercase tracking-tight block truncate flex items-center gap-1">
+        <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl shadow-card-dark">
+          <span className="text-[10px] font-bold text-slate-300 uppercase tracking-tight block truncate flex items-center gap-1">
             <CheckCircle2 className="w-3 h-3 shrink-0" />
             Completed
           </span>
-          <div className="text-xl font-bold text-rail-text mt-1">{completedCount}</div>
-          <span className="text-[10px] text-rail-muted mt-0.5 block">Fit certified</span>
+          <div className="text-2xl font-black text-slate-100 mt-1">{completedCount}</div>
+          <span className="text-[10px] text-slate-400 mt-0.5 block">Fit certified</span>
         </div>
 
-        <div className="bg-rail-criticalLight/50 border border-rail-critical/40 p-3 rounded-md">
-          <span className="text-[10px] font-bold text-rail-critical uppercase tracking-tight block truncate flex items-center gap-1">
+        <div className="bg-rose-950/40 border border-rose-500/40 p-3.5 rounded-xl shadow-card-dark">
+          <span className="text-[10px] font-black text-rose-400 uppercase tracking-tight block truncate flex items-center gap-1">
             <Flame className="w-3 h-3 shrink-0" />
             Overdue Work
           </span>
-          <div className="text-xl font-bold text-rail-critical mt-1">{overdueCount}</div>
-          <span className="text-[10px] text-rail-critical font-medium mt-0.5 block">{deptConfig.sourceSystem} flag</span>
+          <div className="text-2xl font-black text-rose-400 mt-1">{overdueCount}</div>
+          <span className="text-[10px] text-rose-400/80 font-medium mt-0.5 block">{deptConfig.sourceSystem} flag</span>
         </div>
       </div>
 
@@ -181,20 +181,20 @@ export const SharedDepartmentDashboard = () => {
           <Card>
             <CardHeader>
               <CardTitle>
-                <span>Active {deptConfig.name} Requirements</span>
-                <span className="text-xs font-normal text-rail-muted">({requests.length} records)</span>
+                <span className="text-white">Active {deptConfig.name} Requirements</span>
+                <span className="text-xs font-normal text-slate-400">({requests.length} records)</span>
               </CardTitle>
               <Link to={`/${deptKey.toLowerCase()}/requests`} className="text-xs text-rail-primary hover:underline font-semibold flex items-center gap-1">
                 View All <ArrowRight className="w-3 h-3" />
               </Link>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="divide-y divide-rail-border/60">
+              <div className="divide-y divide-slate-800/80">
                 {requests.map((req) => (
-                  <div key={req.id} className="p-4 hover:bg-[#F9F6EE] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div key={req.id} className="p-4 hover:bg-slate-800/40 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-mono text-xs font-bold text-rail-text">
+                        <span className="font-mono text-xs font-bold text-white">
                           {req.id}
                         </span>
                         <RequestStatusBadge status={req.status} />
@@ -205,10 +205,10 @@ export const SharedDepartmentDashboard = () => {
                           </Badge>
                         )}
                       </div>
-                      <h4 className="text-sm font-semibold text-rail-text">
+                      <h4 className="text-sm font-semibold text-slate-100">
                         {req.maintenanceType} — {req.assetName}
                       </h4>
-                      <p className="text-xs text-rail-muted line-clamp-1">
+                      <p className="text-xs text-slate-400 line-clamp-1">
                         {req.location} • Preferred: {req.preferredWindow} • Duration: {req.estimatedDurationMinutes}m
                       </p>
                       {req.aiExplanation?.bundledDepartments && (
@@ -240,28 +240,28 @@ export const SharedDepartmentDashboard = () => {
           </Card>
 
           {/* Source System Overdue Alerts */}
-          <Card className="border-rail-warning/50">
-            <CardHeader className="bg-[#FAF4E6]">
-              <CardTitle className="text-rail-warning flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-rail-critical" />
+          <Card className="border-amber-500/40">
+            <CardHeader className="bg-amber-950/30 border-b border-amber-500/30">
+              <CardTitle className="text-amber-400 flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-rose-400" />
                 <span>{deptConfig.sourceSystem} Source System Alerts: Overdue Maintenance Cycles</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-3">
               {sourceAssets.filter(a => a.isOverdue || a.healthStatus === 'Critical' || a.healthStatus === 'Worn Wire' || a.healthStatus === 'High Friction').map(asset => (
-                <div key={asset.id} className="p-3 bg-[#FAF7ED] border border-rail-border rounded-sm flex items-start justify-between gap-3">
+                <div key={asset.id} className="p-3.5 bg-slate-950/70 border border-slate-800 rounded-xl flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-bold text-rail-text">{asset.id}</span>
+                      <span className="font-mono text-xs font-bold text-white">{asset.id}</span>
                       <Badge variant="critical">
                         {asset.healthStatus}
                       </Badge>
-                      <span className="text-xs font-semibold text-rail-text">{asset.name}</span>
+                      <span className="text-xs font-semibold text-slate-200">{asset.name}</span>
                     </div>
-                    <p className="text-xs text-rail-muted mt-1 leading-relaxed">
+                    <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                       {asset.defectDescription}
                     </p>
-                    <span className="text-[10px] font-mono text-rail-critical font-semibold mt-1 inline-block">
+                    <span className="text-[10px] font-mono text-rose-400 font-semibold mt-1 inline-block">
                       Flagged overdue since {asset.overdueDate || 'Current cycle'}
                     </span>
                   </div>
@@ -280,24 +280,24 @@ export const SharedDepartmentDashboard = () => {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-white">
                 <Clock className="w-4 h-4 text-rail-primary" />
                 <span>{deptConfig.shortCode} Operations Feed</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="divide-y divide-rail-border/60 max-h-[500px] overflow-y-auto">
+              <div className="divide-y divide-slate-800/80 max-h-[500px] overflow-y-auto">
                 {notifications.filter(n => n.department === deptKey || n.department === 'GLOBAL').map(notif => (
-                  <div key={notif.id} className="p-3.5 hover:bg-[#F9F7F1] transition-colors">
+                  <div key={notif.id} className="p-3.5 hover:bg-slate-800/40 transition-colors">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-bold text-rail-text">{notif.title}</span>
-                      <span className="text-[10px] font-mono text-rail-muted">{notif.timestamp}</span>
+                      <span className="text-xs font-bold text-white">{notif.title}</span>
+                      <span className="text-[10px] font-mono text-slate-400">{notif.timestamp}</span>
                     </div>
-                    <p className="text-xs text-rail-muted mt-1 leading-relaxed">
+                    <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                       {notif.message}
                     </p>
                     {notif.requestId && (
-                      <span className="inline-block mt-1 font-mono text-[10px] bg-[#ECE5D8] px-1.5 py-0.5 rounded-sm border border-rail-border text-rail-text">
+                      <span className="inline-block mt-1 font-mono text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">
                         Ref: {notif.requestId}
                       </span>
                     )}
@@ -308,15 +308,15 @@ export const SharedDepartmentDashboard = () => {
           </Card>
 
           {/* AI Decision Rules Transparency Box */}
-          <div className="p-4 bg-[#F2EDE2] border border-rail-border rounded-md text-xs space-y-2">
-            <h4 className="font-bold text-rail-text flex items-center gap-1.5">
+          <div className="p-5 bg-slate-900/80 border border-slate-800 rounded-xl text-xs space-y-2 shadow-card-dark">
+            <h4 className="font-bold text-white flex items-center gap-2">
               <Cpu className="w-4 h-4 text-rail-primary" />
               Optimization Transparency
             </h4>
-            <p className="text-rail-muted leading-relaxed">
+            <p className="text-slate-400 leading-relaxed">
               Track block scheduling uses mathematical optimization to protect non-negotiable passenger services while maximizing asset availability.
             </p>
-            <ul className="text-[11px] text-rail-muted space-y-1 list-disc list-inside">
+            <ul className="text-[11px] text-slate-300 space-y-1.5 list-disc list-inside">
               <li>High-speed passenger paths (Vande Bharat / Rajdhani) are hard constraints.</li>
               <li>Freight trains are held or re-routed via 3rd lines.</li>
               <li>Co-located work across ENG, TRD, and S&T is automatically bundled to save corridor possessions.</li>

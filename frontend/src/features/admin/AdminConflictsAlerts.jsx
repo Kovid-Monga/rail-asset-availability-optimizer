@@ -29,13 +29,13 @@ export const AdminConflictsAlerts = () => {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-rail-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#1F2937]">
         <div>
-          <h2 className="text-lg font-bold text-rail-warning tracking-tight flex items-center gap-2">
-            <AlertOctagon className="w-5 h-5 text-rail-warning" />
+          <h2 className="text-lg font-bold text-amber-400 tracking-tight flex items-center gap-2">
+            <AlertOctagon className="w-5 h-5 text-amber-400" />
             <span>Corridor Conflicts & Capacity Bottlenecks</span>
           </h2>
-          <p className="text-xs text-rail-muted mt-0.5">
+          <p className="text-xs text-slate-400 mt-1">
             Automated conflict telemetry: Requests where preferred work windows collided with passenger trains or shared machinery constraints.
           </p>
         </div>
@@ -51,59 +51,55 @@ export const AdminConflictsAlerts = () => {
       {/* Conflicts List */}
       <div className="space-y-4">
         {conflictRequests.map((req) => (
-          <Card key={req.id} className="border-rail-warning/60 bg-[#FAF7F0]">
-            <CardHeader className="bg-[#FAF3E2]">
+          <Card key={req.id} className="border-amber-500/40 bg-[#111827]">
+            <CardHeader className="bg-amber-500/10 border-b border-amber-500/20">
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-mono text-xs font-bold text-rail-text">{req.id}</span>
-                  <span className="text-xs font-bold px-1.5 py-0.5 bg-[#EAE2D2] text-rail-text rounded-sm border border-rail-border">
+                  <span className="font-mono text-xs font-bold text-orange-400">{req.id}</span>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                      req.department === 'ENG'
+                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                        : req.department === 'TRD'
+                          ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                          : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
+                    }`}
+                  >
                     {req.department}
                   </span>
-                  <span className="text-xs font-semibold text-rail-text">{req.maintenanceType}</span>
+                  <span className="text-xs font-bold text-slate-100">{req.maintenanceType}</span>
                 </div>
                 <PriorityTag priority={req.declaredPriority} />
               </div>
             </CardHeader>
-            <CardContent className="p-4 space-y-3">
-              <div className="p-3 bg-rail-criticalLight/40 border border-rail-critical/30 rounded-sm text-xs space-y-1">
-                <span className="font-bold text-rail-critical flex items-center gap-1.5">
-                  <AlertTriangle className="w-3.5 h-3.5" />
-                  Corridor Conflict: Preferred Window ({req.preferredWindow})
-                </span>
-                <p className="text-rail-text leading-relaxed">
-                  {req.conflictReason}
+            <CardContent className="p-5 space-y-3">
+              <div className="text-xs text-slate-300">
+                Asset: <strong>{req.assetName}</strong> • {req.location}
+              </div>
+
+              <div className="p-3.5 bg-red-500/10 border border-red-500/30 rounded-lg text-xs space-y-1">
+                <div className="font-bold text-red-400 flex items-center gap-1.5">
+                  <AlertTriangle className="w-4 h-4" />
+                  <span>Collision / Bottleneck Reason (Requested: {req.preferredWindow}):</span>
+                </div>
+                <p className="text-slate-300 leading-relaxed">
+                  {req.conflictReason || 'Corridor saturated during requested daylight window with high-priority passenger services.'}
                 </p>
               </div>
 
-              {/* Proposed Alternatives Status */}
-              <div>
-                <span className="text-[11px] font-bold text-rail-text uppercase tracking-wider block mb-1.5">
-                  Automated Alternatives Generated ({req.alternatives?.length || 0} Slots):
-                </span>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
-                  {(req.alternatives || []).map((alt) => (
-                    <div key={alt.id} className="p-2.5 bg-rail-surface border border-rail-border rounded-sm">
-                      <div className="font-semibold text-rail-text">{alt.timeWindow}</div>
-                      <div className="text-[10px] text-rail-muted font-mono">{alt.slotDate}</div>
-                      <div className="text-[10px] text-rail-muted mt-1">{alt.impactScore}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-2 border-t border-rail-border/60 text-xs">
-                <span className="text-[11px] text-rail-muted">
-                  Department Action: Awaiting acceptance or human review escalation
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+                <span className="text-xs font-mono text-slate-400">
+                  AI Proposed Alternatives: {req.alternatives?.length || 0} Slots Available
                 </span>
                 <div className="flex items-center gap-2">
                   <Link to={`/admin/human-review?id=${req.id}`}>
                     <Button size="sm" variant="outline">
-                      Review Appeal
+                      Inspect in Appeals Queue
                     </Button>
                   </Link>
                   <Link to={`/admin/manual-override?id=${req.id}`}>
-                    <Button size="sm" variant="danger">
-                      Resolve via Override
+                    <Button size="sm" variant="danger" icon={SlidersHorizontal}>
+                      Force Manual Slot
                     </Button>
                   </Link>
                 </div>

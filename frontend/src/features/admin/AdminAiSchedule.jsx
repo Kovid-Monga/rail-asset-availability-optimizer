@@ -8,7 +8,7 @@ import { Badge } from '../../components/ui/Badge';
 import { PriorityTag } from '../../components/shared/PriorityTag';
 import { RequestStatusBadge } from '../../components/shared/RequestStatusBadge';
 import { CorridorVisualization } from '../timetable/CorridorVisualization';
-import { Sparkles, Calendar, Clock, CheckCircle2, SlidersHorizontal, ArrowRight } from 'lucide-react';
+import { Sparkles, Calendar, Clock, CheckCircle2, SlidersHorizontal, ArrowRight, Layers } from 'lucide-react';
 
 export const AdminAiSchedule = () => {
   const [requests, setRequests] = useState([]);
@@ -25,24 +25,24 @@ export const AdminAiSchedule = () => {
   return (
     <div className="space-y-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-rail-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#1F2937]">
         <div>
-          <h2 className="text-lg font-bold text-rail-text tracking-tight flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-rail-primary" />
+          <h2 className="text-lg font-bold text-slate-100 tracking-tight flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-orange-400" />
             <span>AI-Generated Corridor Master Schedule</span>
           </h2>
-          <p className="text-xs text-rail-muted mt-0.5">
+          <p className="text-xs text-slate-400 mt-1">
             Automated multi-department block allocations computed by the combinatorial optimization engine.
           </p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 text-xs">
-            <Calendar className="w-4 h-4 text-rail-muted" />
+            <Calendar className="w-4 h-4 text-slate-400" />
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-[#FCFAF5] text-xs px-2.5 py-1 rounded-sm border border-rail-border focus:outline-none focus:border-rail-primary font-mono"
+              className="bg-[#0B0F17] text-xs text-slate-200 px-3 py-1.5 rounded-md border border-[#1F2937] focus:outline-none focus:border-orange-500 font-mono"
             />
           </div>
           <Link to="/admin/manual-override">
@@ -53,109 +53,75 @@ export const AdminAiSchedule = () => {
         </div>
       </div>
 
-      {/* Corridor Visual Diagram */}
+      {/* Corridor Visual Diagram (Interactive with KLK-SML and NDLS-MTJ) */}
       <CorridorVisualization activeBlocks={requests} />
 
       {/* Scheduled Blocks Feed with Cross-Department Co-location Breakdown */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-rail-text uppercase tracking-wider flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-rail-success" />
-            <span>Scheduled Possessions for {selectedDate} ({requests.length} Allocations)</span>
-          </h3>
-          <span className="text-xs font-mono text-rail-muted">
-            Optimization Confidence: 96.4% • 0 High-Speed Delays
-          </span>
-        </div>
+        <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+          <Clock className="w-4 h-4 text-orange-400" />
+          <span>Active Scheduled Possession Allocations ({requests.length} Slots)</span>
+        </h3>
 
         <div className="grid grid-cols-1 gap-4">
-          {requests.map((req) => {
-            const dept = DEPARTMENTS[req.department] || DEPARTMENTS.ENG;
-            return (
-              <Card key={req.id} className="overflow-hidden">
-                <CardHeader className="bg-[#F2ECE1]">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-2">
+          {requests.map((req) => (
+            <Card key={req.id} className="border-[#1F2937] bg-[#111827]">
+              <CardContent className="p-5">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="space-y-1.5">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-mono text-xs font-bold text-rail-text">{req.id}</span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-sm border font-mono ${dept.badgeColor}`}>
-                        {dept.name}
+                      <span className="font-mono text-xs font-bold text-orange-400">{req.id}</span>
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded border ${
+                          req.department === 'ENG'
+                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                            : req.department === 'TRD'
+                              ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                              : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'
+                        }`}
+                      >
+                        {req.department}
                       </span>
+                      <span className="text-sm font-bold text-slate-100">{req.maintenanceType}</span>
                       <RequestStatusBadge status={req.status} />
-                      <span className="text-xs font-bold text-rail-text">{req.maintenanceType}</span>
-                      <span className="text-xs text-rail-muted">• {req.assetName}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="text-xs font-mono bg-[#EAE3D5] text-rail-text px-2 py-0.5 rounded-sm border border-rail-border font-semibold">
-                        ML Score: {req.score}/100
-                      </div>
-                      <PriorityTag priority={req.declaredPriority} />
-                    </div>
-                  </div>
-                </CardHeader>
 
-                <CardContent className="p-4 space-y-3">
-                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-[#FAF7F0] p-3 rounded-sm border border-rail-border text-xs">
+                    <div className="text-xs text-slate-400">
+                      Asset: <strong className="text-slate-200">{req.assetName}</strong> • {req.location}
+                    </div>
+
+                    {req.aiExplanation?.bundledDepartments && (
+                      <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Joint Block with {req.aiExplanation.bundledDepartments.join(', ')}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-4 bg-[#0B0F17] p-3 rounded-lg border border-[#1F2937] shrink-0">
                     <div>
-                      <span className="text-[10px] uppercase font-mono text-rail-muted block">Possession Slot</span>
-                      <span className="font-bold text-rail-text mt-0.5 block flex items-center gap-1 font-mono">
-                        <Clock className="w-3.5 h-3.5 text-rail-primary" />
+                      <span className="text-[10px] text-slate-500 uppercase font-mono block">Possession Window</span>
+                      <span className="text-xs font-bold text-slate-200 block font-mono mt-0.5">
                         {req.scheduledSlot?.timeWindow || req.preferredWindow}
                       </span>
                     </div>
-                    <div>
-                      <span className="text-[10px] uppercase font-mono text-rail-muted block">Corridor Section</span>
-                      <span className="font-semibold text-rail-text mt-0.5 block truncate">
-                        {req.corridor} ({req.trackLine})
+                    <div className="border-l border-[#1F2937] pl-4">
+                      <span className="text-[10px] text-slate-500 uppercase font-mono block">Duration</span>
+                      <span className="text-xs font-bold text-emerald-400 block font-mono mt-0.5">
+                        {req.scheduledSlot?.durationMinutes || req.estimatedDurationMinutes}m
                       </span>
                     </div>
-                    <div>
-                      <span className="text-[10px] uppercase font-mono text-rail-muted block">Location Marker</span>
-                      <span className="font-semibold text-rail-text mt-0.5 block truncate">
-                        {req.location}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] uppercase font-mono text-rail-muted block">Duration Granted</span>
-                      <span className="font-bold text-rail-text mt-0.5 block font-mono">
-                        {req.scheduledSlot?.durationMinutes || req.estimatedDurationMinutes} Minutes
+                    <div className="border-l border-[#1F2937] pl-4">
+                      <span className="text-[10px] text-slate-500 uppercase font-mono block">AI Score</span>
+                      <span className="text-xs font-bold text-orange-400 block font-mono mt-0.5">
+                        {req.score}/100
                       </span>
                     </div>
                   </div>
-
-                  {/* Bundling and Explanation */}
-                  {req.aiExplanation && (
-                    <div className="p-3 bg-[#EEF5F1] border border-rail-success/40 rounded-sm text-xs space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-rail-success flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          Co-location & Timetable Compatibility:
-                        </span>
-                        {req.aiExplanation.bundledDepartments && (
-                          <span className="text-[10px] font-mono bg-white text-rail-primary px-2 py-0.2 rounded-sm border border-rail-primary/30 font-semibold">
-                            Bundled with: {req.aiExplanation.bundledDepartments.join(', ')}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-[11px] text-rail-text leading-relaxed">
-                        {req.aiExplanation.timetableGaps}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-between pt-1 text-xs">
-                    <span className="text-[11px] text-rail-muted font-mono">
-                      Source Asset ID: {req.assetId} • Source Telemetry: {req.sourceSystem}
-                    </span>
-                    <Link to={`/admin/manual-override?id=${req.id}`}>
-                      <Button size="sm" variant="outline">
-                        Exception Override
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </div>

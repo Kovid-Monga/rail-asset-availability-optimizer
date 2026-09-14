@@ -5,22 +5,22 @@ import { AlertCircle, ArrowUpCircle, MinusCircle, ArrowDownCircle } from 'lucide
 export const PriorityTag = ({ priority, showSignalNote = true, className }) => {
   const priorityConfig = {
     Critical: {
-      color: 'bg-rail-criticalLight text-rail-critical border-rail-critical/30',
+      color: 'bg-rose-950/70 text-rose-400 border-rose-500/40',
       icon: AlertCircle,
       label: 'Critical'
     },
     High: {
-      color: 'bg-rail-warningLight text-rail-warning border-rail-warning/30',
+      color: 'bg-amber-950/70 text-amber-400 border-amber-500/40',
       icon: ArrowUpCircle,
       label: 'High'
     },
     Normal: {
-      color: 'bg-[#EBF1F5] text-[#4A6B82] border-[#4A6B82]/30',
+      color: 'bg-sky-950/70 text-sky-400 border-sky-500/40',
       icon: MinusCircle,
       label: 'Normal'
     },
     Low: {
-      color: 'bg-[#EBE5DA] text-rail-muted border-rail-border',
+      color: 'bg-slate-800 text-slate-300 border-slate-700',
       icon: ArrowDownCircle,
       label: 'Low'
     }
@@ -33,13 +33,13 @@ export const PriorityTag = ({ priority, showSignalNote = true, className }) => {
     <div className="inline-flex flex-col items-start gap-0.5">
       <span
         title="Department-declared input signal; final scheduling order is decided by the AI/ML optimization engine."
-        className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-sm border select-none ${config.color} ${className || ''}`}
+        className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border select-none ${config.color} ${className || ''}`}
       >
         <Icon className="w-3 h-3 shrink-0" />
         <span>{config.label}</span>
         {showSignalNote && (
           <span className="text-[9px] uppercase tracking-wider opacity-75 font-mono ml-0.5">
-            [Input Signal]
+            [Signal]
           </span>
         )}
       </span>

@@ -5,46 +5,46 @@ export const RequestStatusBadge = ({ status, className }) => {
   const getBadgeStyle = (currentStatus) => {
     switch (currentStatus) {
       case REQUEST_STAGES.SUBMITTED:
-        return 'bg-[#EAE4D8] text-rail-text border-rail-border';
+        return 'bg-slate-800/90 text-slate-300 border-slate-700';
       case REQUEST_STAGES.ML_PRIORITIZATION:
-        return 'bg-rail-primaryLight text-rail-primary border-rail-primary/30 animate-pulse';
+        return 'bg-sky-950/80 text-sky-400 border-sky-500/40 animate-pulse';
       case REQUEST_STAGES.OPTIMIZATION:
-        return 'bg-[#E6EFF0] text-[#2E6B65] border-[#2E6B65]/30 animate-pulse';
+        return 'bg-purple-950/80 text-purple-400 border-purple-500/40 animate-pulse';
       case REQUEST_STAGES.SCHEDULED:
-        return 'bg-rail-successLight text-rail-success border-rail-success/40 font-semibold';
+        return 'bg-emerald-950/80 text-emerald-400 border-emerald-500/40 font-semibold shadow-glow-emerald';
       case REQUEST_STAGES.IN_PROGRESS:
-        return 'bg-[#E3EFE4] text-[#366334] border-[#366334]/40 font-semibold';
+        return 'bg-emerald-900/50 text-emerald-300 border-emerald-400/50 font-semibold';
       case REQUEST_STAGES.COMPLETED:
-        return 'bg-[#E7ECE7] text-[#486347] border-[#486347]/30';
+        return 'bg-slate-800/80 text-slate-400 border-slate-700';
       
       // Alternate path
       case REQUEST_STAGES.CANNOT_BE_ACCOMMODATED:
-        return 'bg-rail-criticalLight text-rail-critical border-rail-critical/40 font-semibold';
+        return 'bg-rose-950/80 text-rose-400 border-rose-500/50 font-semibold';
       case REQUEST_STAGES.ALTERNATIVE_SUGGESTED:
-        return 'bg-rail-warningLight text-rail-warning border-rail-warning/40 font-semibold';
+        return 'bg-amber-950/80 text-amber-400 border-amber-500/50 font-semibold';
       case REQUEST_STAGES.ACCEPTED:
-        return 'bg-rail-successLight text-rail-success border-rail-success/40 font-semibold';
+        return 'bg-emerald-950/80 text-emerald-400 border-emerald-500/40 font-semibold';
 
       // Human review path
       case REQUEST_STAGES.AI_DECISION:
-        return 'bg-[#EBF1F5] text-[#4A6B82] border-[#4A6B82]/30';
+        return 'bg-slate-800 text-slate-300 border-slate-700';
       case REQUEST_STAGES.HUMAN_REVIEW_REQUESTED:
-        return 'bg-rail-secondaryLight text-rail-secondary border-rail-secondary/40 font-semibold';
+        return 'bg-orange-950/80 text-orange-400 border-orange-500/50 font-semibold';
       case REQUEST_STAGES.ADMIN_REVIEW:
-        return 'bg-[#F2ECE1] text-[#915B1E] border-[#915B1E]/40 font-semibold';
+        return 'bg-orange-900/60 text-orange-300 border-orange-400/50 font-semibold';
       case REQUEST_STAGES.APPROVED_OVERRIDDEN:
-        return 'bg-rail-successLight text-rail-success border-rail-success/40 font-semibold';
+        return 'bg-emerald-950/80 text-emerald-400 border-emerald-500/40 font-semibold';
       case REQUEST_STAGES.REJECTED:
-        return 'bg-rail-criticalLight text-rail-critical border-rail-critical/40';
+        return 'bg-rose-950/80 text-rose-400 border-rose-500/50';
 
       default:
-        return 'bg-[#EAE4D8] text-rail-text border-rail-border';
+        return 'bg-slate-800 text-slate-300 border-slate-700';
     }
   };
 
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-sm border text-xs font-medium tracking-tight whitespace-nowrap select-none ${getBadgeStyle(status)} ${className || ''}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full border text-xs font-medium tracking-tight whitespace-nowrap select-none ${getBadgeStyle(status)} ${className || ''}`}
     >
       {status || 'Unknown'}
     </span>

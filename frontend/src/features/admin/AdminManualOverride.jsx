@@ -93,23 +93,23 @@ export const AdminManualOverride = () => {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* High Visibility Exception Path Warning Header */}
-      <div className="p-4 bg-rail-criticalLight border-2 border-rail-critical rounded-md flex items-start gap-3">
-        <ShieldAlert className="w-6 h-6 text-rail-critical shrink-0 mt-0.5" />
+      <div className="p-4 bg-red-500/10 border-2 border-red-500/40 rounded-lg flex items-start gap-3">
+        <ShieldAlert className="w-6 h-6 text-red-400 shrink-0 mt-0.5" />
         <div>
-          <h2 className="text-sm font-bold text-rail-critical uppercase tracking-wider flex items-center gap-2">
+          <h2 className="text-sm font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">
             <span>Critical Exception Path: Manual Schedule Override</span>
-            <span className="text-[10px] font-mono bg-rail-critical text-white px-1.5 py-0.2 rounded-sm font-semibold">
+            <span className="text-[10px] font-mono bg-red-500 text-white px-2 py-0.5 rounded font-bold">
               Restricted
             </span>
           </h2>
-          <p className="text-xs text-rail-text mt-1 leading-relaxed">
+          <p className="text-xs text-slate-300 mt-1 leading-relaxed">
             <strong>Warning:</strong> Manual intervention bypasses the AI combinatorial optimization engine and could create downstream passenger delays or cascade timetable conflicts. Use exclusively for safety crises, natural calamities, or VIP movement protocols.
           </p>
         </div>
       </div>
 
       {successMessage && (
-        <div className="p-3.5 bg-rail-successLight border border-rail-success/40 text-rail-success rounded-sm text-xs font-semibold flex items-center gap-2">
+        <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 rounded-md text-xs font-semibold flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5" />
           <span>{successMessage}</span>
         </div>
@@ -117,21 +117,21 @@ export const AdminManualOverride = () => {
 
       <form onSubmit={handleExecuteOverride} className="space-y-6">
         {/* Step 1: Select Target Block */}
-        <Card className="border-rail-border">
-          <CardHeader className="bg-[#FAF7F0]">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-rail-muted">
+        <Card className="border-[#1F2937] bg-[#111827]">
+          <CardHeader className="bg-[#1F2937]/50 border-b border-[#1F2937]">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-300">
               1. Select Block Possession to Override
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="p-5 space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-rail-text mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Target Maintenance Request
               </label>
               <select
                 value={selectedRequestId}
                 onChange={(e) => handleSelectRequest(e.target.value)}
-                className="w-full bg-[#FCFAF5] text-rail-text text-xs px-3 py-2 rounded-sm border border-rail-border focus:outline-none focus:border-rail-critical font-mono"
+                className="w-full bg-[#0B0F17] text-slate-200 text-xs px-3 py-2 rounded-md border border-[#1F2937] focus:outline-none focus:border-red-500 font-mono"
               >
                 {requests.map(r => (
                   <option key={r.id} value={r.id}>
@@ -142,102 +142,95 @@ export const AdminManualOverride = () => {
             </div>
 
             {selectedRequest && (
-              <div className="p-3 bg-[#FAF7F0] border border-rail-border rounded-sm text-xs space-y-1">
+              <div className="p-4 bg-[#0B0F17] border border-[#1F2937] rounded-lg text-xs space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-rail-text">{selectedRequest.assetName}</span>
+                  <span className="font-bold text-slate-100">{selectedRequest.assetName}</span>
                   <PriorityTag priority={selectedRequest.declaredPriority} />
                 </div>
-                <div className="text-[11px] text-rail-muted">
-                  Location: {selectedRequest.location} • Current Status: {selectedRequest.status}
+                <div className="text-[11px] text-slate-400 grid grid-cols-2 gap-2">
+                  <span>Location: {selectedRequest.location}</span>
+                  <span>Currently Scheduled: {selectedRequest.scheduledSlot?.timeWindow || 'Unscheduled'}</span>
+                  <span>Duration: {selectedRequest.estimatedDurationMinutes}m</span>
+                  <span>Current Status: {selectedRequest.status}</span>
                 </div>
-                {selectedRequest.scheduledSlot && (
-                  <div className="text-[11px] font-mono text-rail-primary mt-1">
-                    Current Slot: {selectedRequest.scheduledSlot.timeWindow} ({selectedRequest.scheduledSlot.date})
-                  </div>
-                )}
               </div>
             )}
           </CardContent>
         </Card>
 
         {/* Step 2: Override Parameters */}
-        <Card className="border-rail-border">
-          <CardHeader className="bg-[#FAF7F0]">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-rail-muted">
-              2. Forced Possession Parameters
+        <Card className="border-[#1F2937] bg-[#111827]">
+          <CardHeader className="bg-[#1F2937]/50 border-b border-[#1F2937]">
+            <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-300">
+              2. Override Parameters & Mandatory Audit Trail
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="p-5 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Input
-                label="Forced Slot Date"
+                label="Overridden Date"
                 type="date"
                 value={overrideDate}
                 onChange={(e) => setOverrideDate(e.target.value)}
                 required
               />
               <Input
-                label="Forced Time Window"
+                label="Overridden Time Window"
                 value={overrideTimeWindow}
                 onChange={(e) => setOverrideTimeWindow(e.target.value)}
+                placeholder="e.g. 02:00 - 04:30"
                 required
               />
               <Input
                 label="Duration (Minutes)"
                 type="number"
                 value={durationMinutes}
-                onChange={(e) => setDurationMinutes(e.target.value)}
+                onChange={(e) => setDurationMinutes(Number(e.target.value))}
+                min="30"
+                max="480"
                 required
               />
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Step 3: Mandatory Justification & Audit Authorization */}
-        <Card className="border-rail-critical/50 bg-[#FAF7F2]">
-          <CardHeader className="bg-[#FAF0ED]">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-rail-critical flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5" />
-              <span>3. Mandatory Audit Trail & Authorization</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
             <Textarea
-              label="Operational Justification (Mandatory for Safety Compliance)"
+              label="Mandatory Regulatory & Operational Justification"
               value={justification}
               onChange={(e) => setJustification(e.target.value)}
               rows={3}
-              placeholder="State precise reason for manual override: e.g., Acute rail flaw at Turnout 108A carrying immediate derailment risk; emergency OHE catenary strand snapping..."
+              placeholder="State reasons why automated AI schedule is superseded (e.g., Track fracture emergency / Chief Commissioner of Railway Safety directive)..."
               required
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
-                label="Authorizing Officer / Controller"
+                label="HQ Authorization Token / Memo No."
+                value={authorizationCode}
+                onChange={(e) => setAuthorizationCode(e.target.value)}
+                required
+              />
+              <Input
+                label="Authorizing Operating Officer"
                 value={officerName}
                 onChange={(e) => setOfficerName(e.target.value)}
                 required
               />
-              <Input
-                label="Security Authorization Code"
-                value={authorizationCode}
-                onChange={(e) => setAuthorizationCode(e.target.value)}
-                placeholder="e.g. AUTH-NR-HQ-9902"
-                required
-              />
             </div>
           </CardContent>
-          <CardFooter className="bg-[#FAF2EE] flex justify-between items-center">
-            <Button variant="outline" type="button" onClick={() => navigate(-1)}>
-              Abort Override
+          <CardFooter className="bg-[#0B0F17]/80 border-t border-[#1F2937] flex items-center justify-between">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => navigate(-1)}
+            >
+              Cancel
             </Button>
             <Button
               variant="danger"
               type="submit"
-              disabled={submitting || !justification.trim() || !authorizationCode.trim()}
-              icon={AlertTriangle}
+              disabled={submitting}
+              icon={SlidersHorizontal}
             >
-              {submitting ? 'Recording Audit & Enforcing...' : 'Execute Manual Override'}
+              {submitting ? 'Committing Override...' : 'Execute Manual Override & Record Audit Log'}
             </Button>
           </CardFooter>
         </Card>
