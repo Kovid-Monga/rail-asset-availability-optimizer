@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--canvas: #141517;
+	--surface: #1a1c1f;
+	--raised: #24272b;
+	--border: rgba(255, 255, 255, 0.11);
+	--text: #ffffff;
+	--muted: rgba(255, 255, 255, 0.62);
+	--accent: #5e9fe8;
+	--positive: #72bc8f;
+	--attention: #de9255;
+	--danger: #e97366;
+	--caution: #eac26b;
+	--grid: rgba(255, 255, 255, 0.06);
+}
+
+:root.light {
+	--canvas: #f7f7f6;
+	--surface: #ffffff;
+	--raised: #f0efed;
+	--border: #e2e1de;
+	--text: #2c2c2b;
+	--muted: #7d7a75;
+	--grid: rgba(0, 0, 0, 0.06);
+}
+
+html,
+body,
+#root {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--canvas);
+	color: var(--text);
+	font-family: ui-sans-serif, -apple-system, "Segoe UI", Inter, system-ui, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+@layer components {
+	.panel {
+		@apply rounded-[10px] border border-line bg-surface shadow-soft;
+	}
+	.label-xs {
+		@apply text-[10.5px] font-semibold uppercase tracking-[0.09em] text-muted;
+	}
+	.mono {
+		font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+		font-variant-numeric: tabular-nums;
+	}
+}
+
+/* scrollbars */
+*::-webkit-scrollbar {
+	width: 9px;
+	height: 9px;
+}
+*::-webkit-scrollbar-track {
+	background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+	background: var(--border);
+	border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+	background: var(--muted);
+}
+
+select option {
+	color: #ffffff;
+	background: #1a1c1f;
+}
+:root.light select option {
+	color: #2c2c2b;
+	background: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		transition-duration: 0.001ms !important;
+	}
+}
