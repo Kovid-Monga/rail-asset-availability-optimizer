@@ -43,7 +43,8 @@ maintenance_requests table
 CREATE TABLE IF NOT EXISTS maintenance_requests (
     need_id             SERIAL PRIMARY KEY,
     department          VARCHAR(10) NOT NULL,
-    block_section       VARCHAR(100) NOT NULL,
+    block_start         VARCHAR(100) NOT NULL,
+    block_end           VARCHAR(100) NOT NULL,
     line                VARCHAR(50),
     work_location       VARCHAR(100),
     reason_code         VARCHAR(20),
@@ -58,11 +59,10 @@ CREATE TABLE IF NOT EXISTS maintenance_requests (
 
 ### Enumerated Values
 - **Departments**: `TMS`, `TDMS`, `SMMS`
-- **Reason Codes**:
-  - `ETMW` — ENGG – Track Machine Working
-  - `EOMT` — ENGG – Material Train
-  - `ERRL` — ENGG – Renewal Rail Replacement
-  - `OTHR` — Others
+- **Department-Specific Reason Codes**:
+  - **TMS**: `ETMW`, `ERRL`, `ETMR`, `OTHR`
+  - **TDMS**: `TPWR`, `TOHE`, `TREP`, `OTHR`
+  - **SMMS**: `SSIG`, `STEL`, `SREP`, `OTHR`
 - **Asset Impact**: `High`, `Medium`, `Low`
 - **Status Lifecycle**: `DRAFT` ➔ `SUBMITTED`
 

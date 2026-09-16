@@ -4,7 +4,8 @@
 CREATE TABLE IF NOT EXISTS maintenance_requests (
     need_id             SERIAL PRIMARY KEY,
     department          VARCHAR(10) NOT NULL,
-    block_section       VARCHAR(100) NOT NULL,
+    block_start         VARCHAR(100) NOT NULL,
+    block_end           VARCHAR(100) NOT NULL,
     line                VARCHAR(50),
     work_location       VARCHAR(100),
     reason_code         VARCHAR(20),

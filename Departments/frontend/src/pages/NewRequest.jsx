@@ -1,19 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 
-const REASON_CODES = [
-  { code: 'ETMW', label: 'ETMW - ENGG – Track Machine Working' },
-  { code: 'EOMT', label: 'EOMT - ENGG – Material Train' },
-  { code: 'ERRL', label: 'ERRL - ENGG – Renewal Rail Replacement' },
-  { code: 'OTHR', label: 'OTHR - Others' },
-];
+export const DEPARTMENT_REASON_CODES = {
+  TMS: [
+    { code: 'ETMW', label: 'ETMW - Track Machine Working' },
+    { code: 'ERRL', label: 'ERRL - Renewal Rail Replacement' },
+    { code: 'ETMR', label: 'ETMR - Track Maintenance & Repair' },
+    { code: 'OTHR', label: 'OTHR - Others' },
+  ],
+  TDMS: [
+    { code: 'TPWR', label: 'TPWR - Traction Power Supply' },
+    { code: 'TOHE', label: 'TOHE - Overhead Equipment (OHE)' },
+    { code: 'TREP', label: 'TREP - Traction Repair' },
+    { code: 'OTHR', label: 'OTHR - Others' },
+  ],
+  SMMS: [
+    { code: 'SSIG', label: 'SSIG - Signal Maintenance' },
+    { code: 'STEL', label: 'STEL - Telecom Equipment' },
+    { code: 'SREP', label: 'SREP - Signal & Telecom Repair' },
+    { code: 'OTHR', label: 'OTHR - Others' },
+  ],
+};
 
 export default function NewRequest({ department, onSuccess, onCancel }) {
+  const currentReasonCodes = DEPARTMENT_REASON_CODES[department] || DEPARTMENT_REASON_CODES.TMS;
+
   const [formData, setFormData] = useState({
-    block_section: '',
+    block_start: '',
+    block_end: '',
     line: '',
     work_location: '',
-    reason_code: 'ETMW',
+    reason_code: currentReasonCodes[0].code,
     reason_description: '',
     asset_impact: 'Medium',
     duration_min: '',
@@ -23,14 +40,26 @@ export default function NewRequest({ department, onSuccess, onCancel }) {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
+  // Update reason_code when department changes
+  useEffect(() => {
+    const codes = DEPARTMENT_REASON_CODES[department] || DEPARTMENT_REASON_CODES.TMS;
+    setFormData((prev) => ({
+      ...prev,
+      reason_code: codes[0].code,
+    }));
+  }, [department]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const validateForm = () => {
-    if (!formData.block_section.trim()) {
-      return 'Block Section is required.';
+    if (!formData.block_start.trim()) {
+      return 'Block Start is required.';
+    }
+    if (!formData.block_end.trim()) {
+      return 'Block End is required.';
     }
     const durationNum = parseInt(formData.duration_min, 10);
     if (!durationNum || durationNum <= 0 || isNaN(durationNum)) {
@@ -57,7 +86,8 @@ export default function NewRequest({ department, onSuccess, onCancel }) {
     try {
       const payload = {
         department: department,
-        block_section: formData.block_section.trim(),
+        block_start: formData.block_start.trim(),
+        block_end: formData.block_end.trim(),
         line: formData.line.trim() || null,
         work_location: formData.work_location.trim() || null,
         reason_code: formData.reason_code || null,
@@ -111,18 +141,35 @@ export default function NewRequest({ department, onSuccess, onCancel }) {
               />
             </div>
 
-            {/* Block Section */}
+            {/* Block Start */}
             <div className="form-group">
-              <label className="form-label" htmlFor="block_section">
-                Block Section <span className="required">*</span>
+              <label className="form-label" htmlFor="block_start">
+                Block Start <span className="required">*</span>
               </label>
               <input
-                id="block_section"
-                name="block_section"
+                id="block_start"
+                name="block_start"
                 type="text"
                 className="form-input"
-                placeholder="e.g. Delhi - Ghaziabad"
-                value={formData.block_section}
+                placeholder="e.g. Delhi"
+                value={formData.block_start}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Block End */}
+            <div className="form-group">
+              <label className="form-label" htmlFor="block_end">
+                Block End <span className="required">*</span>
+              </label>
+              <input
+                id="block_end"
+                name="block_end"
+                type="text"
+                className="form-input"
+                placeholder="e.g. Ghaziabad"
+                value={formData.block_end}
                 onChange={handleChange}
                 required
               />
@@ -160,10 +207,10 @@ export default function NewRequest({ department, onSuccess, onCancel }) {
               />
             </div>
 
-            {/* Reason Code */}
+            {/* Reason Code (Department-specific) */}
             <div className="form-group">
               <label className="form-label" htmlFor="reason_code">
-                Reason Code <span className="required">*</span>
+                Reason Code ({department}) <span className="required">*</span>
               </label>
               <select
                 id="reason_code"
@@ -172,7 +219,7 @@ export default function NewRequest({ department, onSuccess, onCancel }) {
                 value={formData.reason_code}
                 onChange={handleChange}
               >
-                {REASON_CODES.map((rc) => (
+                {currentReasonCodes.map((rc) => (
                   <option key={rc.code} value={rc.code}>
                     {rc.label}
                   </option>

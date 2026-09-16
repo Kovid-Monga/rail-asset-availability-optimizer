@@ -7,7 +7,8 @@ class MaintenanceRequest(Base):
 
     need_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     department = Column(String(10), nullable=False, index=True)
-    block_section = Column(String(100), nullable=False)
+    block_start = Column(String(100), nullable=False)
+    block_end = Column(String(100), nullable=False)
     line = Column(String(50), nullable=True)
     work_location = Column(String(100), nullable=True)
     reason_code = Column(String(20), nullable=True)

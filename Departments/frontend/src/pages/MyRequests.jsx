@@ -90,7 +90,8 @@ export default function MyRequests({ department, onViewDetails, onNavigateNew })
               <thead>
                 <tr>
                   <th>Need ID</th>
-                  <th>Block Section</th>
+                  <th>Block Start</th>
+                  <th>Block End</th>
                   <th>Line</th>
                   <th>Reason Code</th>
                   <th>Asset Impact</th>
@@ -105,7 +106,8 @@ export default function MyRequests({ department, onViewDetails, onNavigateNew })
                 {requests.map((req) => (
                   <tr key={req.need_id}>
                     <td><strong>#{req.need_id}</strong></td>
-                    <td>{req.block_section}</td>
+                    <td>{req.block_start || '—'}</td>
+                    <td>{req.block_end || '—'}</td>
                     <td>{req.line || '—'}</td>
                     <td><code>{req.reason_code || '—'}</code></td>
                     <td>

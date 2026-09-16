@@ -89,7 +89,8 @@ def create_request(payload: MaintenanceRequestCreate, db: Session = Depends(get_
     """Create a new maintenance request (DRAFT or SUBMITTED)."""
     new_req = MaintenanceRequest(
         department=payload.department.upper(),
-        block_section=payload.block_section.strip(),
+        block_start=payload.block_start.strip(),
+        block_end=payload.block_end.strip(),
         line=payload.line.strip() if payload.line else None,
         work_location=payload.work_location.strip() if payload.work_location else None,
         reason_code=payload.reason_code,
@@ -128,9 +129,12 @@ def update_request(
     for field, value in update_data.items():
         if field == "status" and value:
             value = value.upper()
-        if isinstance(value, str) and field in ("block_section", "line", "work_location", "reason_description"):
+        if isinstance(value, str) and field in ("block_start", "block_end", "line", "work_location", "reason_description"):
             value = value.strip()
         setattr(req, field, value)
+
+    if "block_start" in update_data or "block_end" in update_data:
+        req.block_section = f"{req.block_start or ''} - {req.block_end or ''}"
 
     db.commit()
     db.refresh(req)

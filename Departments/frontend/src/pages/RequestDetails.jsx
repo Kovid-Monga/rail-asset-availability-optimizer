@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import StatusBadge from '../components/StatusBadge';
-
-const REASON_CODES = [
-  { code: 'ETMW', label: 'ETMW - ENGG – Track Machine Working' },
-  { code: 'EOMT', label: 'EOMT - ENGG – Material Train' },
-  { code: 'ERRL', label: 'ERRL - ENGG – Renewal Rail Replacement' },
-  { code: 'OTHR', label: 'OTHR - Others' },
-];
+import { DEPARTMENT_REASON_CODES } from './NewRequest';
 
 export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
   const [request, setRequest] = useState(null);
@@ -19,7 +13,8 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
 
   // Editable fields state
   const [formData, setFormData] = useState({
-    block_section: '',
+    block_start: '',
+    block_end: '',
     line: '',
     work_location: '',
     reason_code: '',
@@ -35,11 +30,13 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
     try {
       const data = await api.getRequestById(needId);
       setRequest(data);
+      const codes = DEPARTMENT_REASON_CODES[data.department] || DEPARTMENT_REASON_CODES.TMS;
       setFormData({
-        block_section: data.block_section || '',
+        block_start: data.block_start || '',
+        block_end: data.block_end || '',
         line: data.line || '',
         work_location: data.work_location || '',
-        reason_code: data.reason_code || 'ETMW',
+        reason_code: data.reason_code || codes[0].code,
         reason_description: data.reason_description || '',
         asset_impact: data.asset_impact || 'Medium',
         duration_min: data.duration_min || '',
@@ -79,8 +76,12 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
     setError(null);
     setSuccessMsg(null);
 
-    if (!formData.block_section.trim()) {
-      setError('Block Section is required.');
+    if (!formData.block_start.trim()) {
+      setError('Block Start is required.');
+      return;
+    }
+    if (!formData.block_end.trim()) {
+      setError('Block End is required.');
       return;
     }
     const durationNum = parseInt(formData.duration_min, 10);
@@ -96,7 +97,8 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
     setSaving(true);
     try {
       const payload = {
-        block_section: formData.block_section.trim(),
+        block_start: formData.block_start.trim(),
+        block_end: formData.block_end.trim(),
         line: formData.line.trim() || null,
         work_location: formData.work_location.trim() || null,
         reason_code: formData.reason_code || null,
@@ -168,6 +170,8 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
       </div>
     );
   }
+
+  const deptCodes = (request && DEPARTMENT_REASON_CODES[request.department]) || DEPARTMENT_REASON_CODES.TMS;
 
   return (
     <div>
@@ -250,13 +254,27 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
 
               <div className="form-group">
                 <label className="form-label">
-                  Block Section <span className="required">*</span>
+                  Block Start <span className="required">*</span>
                 </label>
                 <input
-                  name="block_section"
+                  name="block_start"
                   type="text"
                   className="form-input"
-                  value={formData.block_section}
+                  value={formData.block_start}
+                  onChange={handleEditChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">
+                  Block End <span className="required">*</span>
+                </label>
+                <input
+                  name="block_end"
+                  type="text"
+                  className="form-input"
+                  value={formData.block_end}
                   onChange={handleEditChange}
                   required
                 />
@@ -285,14 +303,14 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Reason Code</label>
+                <label className="form-label">Reason Code ({request.department})</label>
                 <select
                   name="reason_code"
                   className="form-select"
                   value={formData.reason_code}
                   onChange={handleEditChange}
                 >
-                  {REASON_CODES.map((rc) => (
+                  {deptCodes.map((rc) => (
                     <option key={rc.code} value={rc.code}>
                       {rc.label}
                     </option>
@@ -399,8 +417,13 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
             </div>
 
             <div className="detail-item">
-              <span className="detail-label">Block Section</span>
-              <span className="detail-value">{request.block_section}</span>
+              <span className="detail-label">Block Start</span>
+              <span className="detail-value">{request.block_start || '—'}</span>
+            </div>
+
+            <div className="detail-item">
+              <span className="detail-label">Block End</span>
+              <span className="detail-value">{request.block_end || '—'}</span>
             </div>
 
             <div className="detail-item">
