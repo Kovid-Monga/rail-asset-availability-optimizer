@@ -71,10 +71,10 @@ CREATE TABLE IF NOT EXISTS maintenance_requests (
 ## Project Structure
 
 ```
-Departments/
-├── database/
-│   └── schema.sql              # Database schema DDL
-├── backend/
+rail-asset-availability-optimizer/
+├── backend/                    # Shared FastAPI Backend Service
+│   ├── database/
+│   │   └── schema.sql          # Database schema DDL
 │   ├── requirements.txt        # Python backend dependencies
 │   ├── .env.example            # Environment template
 │   ├── .env                    # Local configuration (DATABASE_URL)
@@ -89,26 +89,27 @@ Departments/
 │       │   └── request.py      # Pydantic validation schemas
 │       └── routes/
 │           └── requests.py     # REST API route handlers
-├── frontend/
-│   ├── package.json            # React & Vite dependencies
-│   ├── vite.config.js          # Vite config
-│   ├── index.html              # HTML shell
-│   └── src/
-│       ├── main.jsx            # React root mount
-│       ├── App.jsx             # Shell, department state & routing
-│       ├── index.css           # Styling system (#D85A30 accent)
-│       ├── services/
-│       │   └── api.js          # Fetch client for backend endpoints
-│       ├── components/
-│       │   ├── Topbar.jsx      # Top navigation & Department dropdown
-│       │   ├── Sidebar.jsx     # Sidebar navigation
-│       │   └── StatusBadge.jsx # DRAFT / SUBMITTED pill badges
-│       └── pages/
-│           ├── Dashboard.jsx   # Metrics cards & recent requests
-│           ├── MyRequests.jsx  # Department-filtered table
-│           ├── NewRequest.jsx  # Form with Save Draft & Submit
-│           └── RequestDetails.jsx # Read/Edit & Submit view
-└── README.md
+└── Departments/
+    ├── frontend/               # Department Portal UI
+    │   ├── package.json        # React & Vite dependencies
+    │   ├── vite.config.js      # Vite config
+    │   ├── index.html          # HTML shell
+    │   └── src/
+    │       ├── main.jsx        # React root mount
+    │       ├── App.jsx         # Shell, department state & routing
+    │       ├── index.css       # Styling system (#D85A30 accent)
+    │       ├── services/
+    │       │   └── api.js      # Fetch client for backend endpoints
+    │       ├── components/
+    │       │   ├── Topbar.jsx  # Top navigation & Department dropdown
+    │       │   ├── Sidebar.jsx # Sidebar navigation
+    │       │   └── StatusBadge.jsx # DRAFT / SUBMITTED pill badges
+    │       └── pages/
+    │           ├── Dashboard.jsx   # Metrics cards & recent requests
+    │           ├── MyRequests.jsx  # Department-filtered table
+    │           ├── NewRequest.jsx  # Form with Save Draft & Submit
+    │           └── RequestDetails.jsx # Read/Edit & Submit view
+    └── README.md
 ```
 
 ---
@@ -117,7 +118,7 @@ Departments/
 
 ### 1. PostgreSQL Configuration
 Ensure your PostgreSQL server is running and the database `BDMS` exists.
-In `Departments/backend/.env`, set your connection URL:
+In `backend/.env`, set your connection URL:
 ```env
 DATABASE_URL=postgresql://postgres:<YOUR_PASSWORD>@localhost:5432/BDMS
 PORT=8000
@@ -125,7 +126,7 @@ HOST=127.0.0.1
 ```
 
 ### 2. Backend Setup (FastAPI)
-Open a terminal in `Departments/backend`:
+Open a terminal in `backend`:
 ```powershell
 # Create and activate virtual environment (optional but recommended)
 python -m venv venv
