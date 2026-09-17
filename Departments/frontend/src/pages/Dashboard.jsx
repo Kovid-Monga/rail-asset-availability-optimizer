@@ -57,32 +57,89 @@ export default function Dashboard({ department, onViewDetails, onNavigateNew }) 
         </div>
       )}
 
-      {/* KPI Stats Cards */}
+      {/* Hero Banner Card */}
+      <div className="hero-card">
+        <div className="hero-card-scrim">
+          <div className="hero-content">
+            <h3 className="hero-title">Indian Railways</h3>
+            <p className="hero-subtitle">Connecting People, Powering Progress</p>
+            <div className="hero-tricolor-accent" aria-hidden="true" />
+          </div>
+        </div>
+        <div className="hero-tricolor-bottom" aria-hidden="true" />
+      </div>
+
+      {/* KPI Stats Cards - Horizontal layout with 48px circular badges */}
       <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-title">Total Requests</div>
-          <div className="stat-value primary">{loading ? '...' : stats.total_requests}</div>
+          <div className="stat-icon-badge stat-icon-blue" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <line x1="8" y1="8" x2="16" y2="8" />
+              <line x1="8" y1="12" x2="16" y2="12" />
+              <line x1="8" y1="16" x2="13" y2="16" />
+            </svg>
+          </div>
+          <div className="stat-body">
+            <div className="stat-title">Total Requests</div>
+            <div className="stat-value primary">{loading ? '...' : stats.total_requests}</div>
+          </div>
         </div>
+
         <div className="stat-card">
-          <div className="stat-title">Draft Requests</div>
-          <div className="stat-value draft">{loading ? '...' : stats.draft_requests}</div>
+          <div className="stat-icon-badge stat-icon-purple" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+          </div>
+          <div className="stat-body">
+            <div className="stat-title">Draft Requests</div>
+            <div className="stat-value draft">{loading ? '...' : stats.draft_requests}</div>
+          </div>
         </div>
+
         <div className="stat-card">
-          <div className="stat-title">Submitted Requests</div>
-          <div className="stat-value submitted">{loading ? '...' : stats.submitted_requests}</div>
+          <div className="stat-icon-badge stat-icon-green" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <div className="stat-body">
+            <div className="stat-title">Submitted Requests</div>
+            <div className="stat-value submitted">{loading ? '...' : stats.submitted_requests}</div>
+          </div>
         </div>
       </div>
 
       {/* Recent Requests Table */}
       <div className="table-card">
         <div className="table-header-bar">
-          <h3 className="table-title">Recent Requests</h3>
+          <div className="table-title-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gov-navy)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <h3 className="table-title">Recent Requests</h3>
+          </div>
         </div>
         <div className="table-responsive">
           {loading ? (
             <div className="empty-state">Loading maintenance requests...</div>
           ) : recentRequests.length === 0 ? (
-            <div className="empty-state">No requests found for {department}. Create a new request to get started.</div>
+            <div className="empty-state">
+              <div className="empty-state-icon" aria-hidden="true">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#A0AEC0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="4" y="3" width="16" height="15" rx="3" />
+                  <path d="M4 11h16" />
+                  <circle cx="8" cy="15" r="1" />
+                  <circle cx="16" cy="15" r="1" />
+                  <path d="M2 19l3-1" />
+                  <path d="M22 19l-3-1" />
+                </svg>
+              </div>
+              <p>No requests found for {department}. Create a new request to get started.</p>
+            </div>
           ) : (
             <table className="simple-table">
               <thead>
