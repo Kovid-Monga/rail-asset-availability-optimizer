@@ -28,8 +28,8 @@ export function MaintenanceTasks() {
 				title="Maintenance tasks"
 				subtitle={
 					caps.seeAllTasks
-						? "Needs aggregated from TMS, SMMS and TDMS, each scored by the priority model on the backend."
-						: `Showing work assigned to ${CREW_TEAM}. Open a task for its priority explanation.`
+						? "Submitted maintenance requests from TMS, SMMS and TDMS via Department Portal."
+						: `Showing work assigned to ${CREW_TEAM}.`
 				}
 				action={
 					<div className="flex items-center gap-1.5">
@@ -55,7 +55,11 @@ export function MaintenanceTasks() {
 				<AsyncBoundary
 					state={tasks}
 					loadingMessage="Loading maintenance tasks…"
-					emptyMessage="No tasks match this filter."
+					emptyMessage={
+						filter === "All"
+							? "No submitted maintenance requests found."
+							: "No tasks classified under this priority. Priority model is under construction."
+					}
 					isEmpty={() => visible.length === 0}
 				>
 					{() => (

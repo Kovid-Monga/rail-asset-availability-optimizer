@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import {
 	AlertTriangle,
@@ -16,6 +16,8 @@ import {
 	TrendingUp,
 	Wrench,
 } from "lucide-react"
+import { api } from "@/api"
+import type { BackendBlockSchedule, BackendOverviewStats, MaintenanceTask } from "@/types"
 import { cx } from "@/utils/display"
 
 interface ScheduleBlockItem {
@@ -30,204 +32,97 @@ interface ScheduleBlockItem {
 	status: "AI Recommended" | "Approved" | "Pending Review" | "Pending Approval" | "In Progress" | "Conflict"
 }
 
-const DAY_BLOCKS_DATA: ScheduleBlockItem[] = [
-	{
-		id: "BLK-07",
-		section: "A - B",
-		startTime: "10:00",
-		endTime: "12:00",
-		startMinutes: 10 * 60,
-		durationMinutes: 120,
-		tasks: "MT-102 + MT-108",
-		workType: "Track Maintenance",
-		status: "AI Recommended",
-	},
-	{
-		id: "BLK-09",
-		section: "B - C",
-		startTime: "08:00",
-		endTime: "11:00",
-		startMinutes: 8 * 60,
-		durationMinutes: 180,
-		tasks: "MT-121 + MT-124",
-		workType: "OHE Work",
-		status: "Approved",
-	},
-	{
-		id: "BLK-11",
-		section: "C - D",
-		startTime: "13:00",
-		endTime: "14:30",
-		startMinutes: 13 * 60,
-		durationMinutes: 90,
-		tasks: "MT-115",
-		workType: "Signal Maintenance",
-		status: "Pending Review",
-	},
-	{
-		id: "BLK-13",
-		section: "D - E",
-		startTime: "15:30",
-		endTime: "17:30",
-		startMinutes: 15 * 60 + 30,
-		durationMinutes: 120,
-		tasks: "MT-134 + MT-138",
-		workType: "Track Renewal",
-		status: "Approved",
-	},
-	{
-		id: "BLK-16",
-		section: "E - F",
-		startTime: "09:00",
-		endTime: "11:00",
-		startMinutes: 9 * 60,
-		durationMinutes: 120,
-		tasks: "MT-141",
-		workType: "Bridge Inspection",
-		status: "In Progress",
-	},
-	{
-		id: "BLK-18",
-		section: "E - F",
-		startTime: "11:30",
-		endTime: "12:30",
-		startMinutes: 11 * 60 + 30,
-		durationMinutes: 60,
-		tasks: "MT-145",
-		workType: "Track Maintenance",
-		status: "Pending Approval",
-	},
-	{
-		id: "BLK-20",
-		section: "F - G",
-		startTime: "16:00",
-		endTime: "18:30",
-		startMinutes: 16 * 60,
-		durationMinutes: 150,
-		tasks: "MT-150 + MT-153",
-		workType: "Track Maintenance",
-		status: "Approved",
-	},
-]
-
 const SECTIONS = ["A - B", "B - C", "C - D", "D - E", "E - F", "F - G"]
 const TIMELINE_START = 6 * 60 // 06:00
 const TIMELINE_END = 21 * 60 // 21:00
 const TIMELINE_SPAN = TIMELINE_END - TIMELINE_START
 const TIME_TICKS = ["06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"]
 
-interface WeekBlock {
-	id: string
-	day: number
-	section: string
-	workType: string
-	status: "AI Recommended" | "Approved" | "Pending Review" | "Pending Approval" | "In Progress"
-	time: string
-}
+import {
+	WEEK_DAYS,
+	buildWeekTimelineItems,
+	buildMonthDaysData,
+	getDisplaySections,
+	normalizeSection,
+} from "@/data/timetableData"
 
-const WEEK_DAYS = [
-	{ name: "MON", date: 14 },
-	{ name: "TUE", date: 15 },
-	{ name: "WED", date: 16 },
-	{ name: "THU", date: 17 },
-	{ name: "FRI", date: 18 },
-	{ name: "SAT", date: 19 },
-	{ name: "SUN", date: 20 },
-]
-
-const WEEK_BLOCKS_DATA: WeekBlock[] = [
-	// A-B
-	{ id: "BLK-01", day: 14, section: "A - B", workType: "Track Maintenance", status: "AI Recommended", time: "10:00 - 12:00" },
-	{ id: "BLK-07", day: 17, section: "A - B", workType: "Track Maintenance", status: "Approved", time: "10:00 - 12:00" },
-	// B-C
-	{ id: "BLK-04", day: 15, section: "B - C", workType: "OHE Work", status: "Approved", time: "08:30 - 11:30" },
-	{ id: "BLK-09", day: 18, section: "B - C", workType: "OHE Work", status: "Approved", time: "08:00 - 11:00" },
-	// C-D
-	{ id: "BLK-06", day: 16, section: "C - D", workType: "Signal Maintenance", status: "Pending Review", time: "13:00 - 15:00" },
-	{ id: "BLK-11", day: 19, section: "C - D", workType: "Signal Maintenance", status: "Approved", time: "13:00 - 14:30" },
-	// D-E
-	{ id: "BLK-02", day: 14, section: "D - E", workType: "Track Renewal", status: "Approved", time: "14:00 - 16:30" },
-	{ id: "BLK-13", day: 18, section: "D - E", workType: "Track Renewal", status: "Approved", time: "15:30 - 17:30" },
-	// E-F
-	{ id: "BLK-03", day: 15, section: "E - F", workType: "Bridge Inspection", status: "In Progress", time: "09:30 - 11:30" },
-	{ id: "BLK-16", day: 17, section: "E - F", workType: "Bridge Inspection", status: "In Progress", time: "09:00 - 11:00" },
-	// F-G
-	{ id: "BLK-20", day: 18, section: "F - G", workType: "Track Maintenance", status: "Approved", time: "16:00 - 18:30" },
-	{ id: "BLK-22", day: 20, section: "F - G", workType: "Track Maintenance", status: "Pending Approval", time: "15:00 - 17:30" },
-]
-
-interface MonthDay {
-	day: number
-	isCurrentMonth: boolean
-	blocksCount: number
-	blocks?: string[]
-	isSelected?: boolean
-}
-
-const MONTH_DAYS_DATA: MonthDay[] = [
-	// Week 1
-	{ day: 31, isCurrentMonth: false, blocksCount: 0 },
-	{ day: 1, isCurrentMonth: true, blocksCount: 2, blocks: ["BLK-01", "BLK-02"] },
-	{ day: 2, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 3, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 4, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 5, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 6, isCurrentMonth: true, blocksCount: 0 },
-	// Week 2
-	{ day: 7, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 8, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 9, isCurrentMonth: true, blocksCount: 1, blocks: ["BLK-05"] },
-	{ day: 10, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 11, isCurrentMonth: true, blocksCount: 3, blocks: ["BLK-08", "BLK-09", "BLK-10"] },
-	{ day: 12, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 13, isCurrentMonth: true, blocksCount: 0 },
-	// Week 3
-	{ day: 14, isCurrentMonth: true, blocksCount: 2, blocks: ["BLK-01", "BLK-02"], isSelected: true },
-	{ day: 15, isCurrentMonth: true, blocksCount: 1, blocks: ["BLK-04"] },
-	{ day: 16, isCurrentMonth: true, blocksCount: 3, blocks: ["BLK-03", "BLK-06", "BLK-07"] },
-	{ day: 17, isCurrentMonth: true, blocksCount: 4, blocks: ["BLK-07", "BLK-12", "BLK-16", "BLK-18"] },
-	{ day: 18, isCurrentMonth: true, blocksCount: 2, blocks: ["BLK-09", "BLK-13"] },
-	{ day: 19, isCurrentMonth: true, blocksCount: 1, blocks: ["BLK-11"] },
-	{ day: 20, isCurrentMonth: true, blocksCount: 0 },
-	// Week 4
-	{ day: 21, isCurrentMonth: true, blocksCount: 1, blocks: ["BLK-19"] },
-	{ day: 22, isCurrentMonth: true, blocksCount: 2, blocks: ["BLK-20", "BLK-21"] },
-	{ day: 23, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 24, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 25, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 26, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 27, isCurrentMonth: true, blocksCount: 0 },
-	// Week 5
-	{ day: 28, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 29, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 30, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 1, isCurrentMonth: false, blocksCount: 0 },
-	{ day: 2, isCurrentMonth: false, blocksCount: 0 },
-	{ day: 3, isCurrentMonth: false, blocksCount: 0 },
-	{ day: 4, isCurrentMonth: false, blocksCount: 0 },
-]
 
 export function Dashboard() {
 	const [viewMode, setViewMode] = useState<"Day" | "Week" | "Month">("Day")
 	const [selectedBlock, setSelectedBlock] = useState<string | null>(null)
 	const [selectedMonthDay, setSelectedMonthDay] = useState<number | null>(14)
 
-	const getBlockStyle = (status: string, id?: string) => {
+	const [stats, setStats] = useState<BackendOverviewStats>({
+		total_blocks: 0,
+		approved: 0,
+		pending_approval: 0,
+		conflicts: 0,
+		submitted_requests: 0,
+	})
+	const [blocks, setBlocks] = useState<BackendBlockSchedule[]>([])
+	const [tasks, setTasks] = useState<MaintenanceTask[]>([])
+
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				if (api.getOverviewStats) {
+					const s = await api.getOverviewStats()
+					setStats(s)
+				}
+				if (api.getRawBlocks) {
+					const b = await api.getRawBlocks()
+					setBlocks(b)
+				}
+				const t = await api.getTasks()
+				setTasks(t)
+			} catch (err) {
+				console.error("Failed to load dashboard overview data:", err)
+			}
+		}
+		loadData()
+	}, [])
+
+	const dayBlocks = useMemo(() => {
+		return blocks.map((b) => {
+			const [sH, sM] = b.start_time.split(":").map(Number)
+			const [eH, eM] = b.end_time.split(":").map(Number)
+			const startMinutes = sH * 60 + sM
+			const endMinutes = eH * 60 + eM
+			const durationMinutes = endMinutes - startMinutes
+			return {
+				id: b.block_id,
+				section: b.section,
+				startTime: b.start_time,
+				endTime: b.end_time,
+				startMinutes,
+				durationMinutes,
+				tasks: b.tasks.join(" + "),
+				workType: b.work_type || "Maintenance",
+				status: (b.status === "APPROVED" ? "Approved" : "Pending Approval") as ScheduleBlockItem["status"],
+			}
+		})
+	}, [blocks])
+
+	const displaySections = useMemo(() => {
+		return getDisplaySections(blocks, tasks)
+	}, [blocks, tasks])
+
+	const weekTimelineItems = useMemo(() => {
+		return buildWeekTimelineItems(blocks, tasks)
+	}, [blocks, tasks])
+
+	const monthDaysData = useMemo(() => {
+		return buildMonthDaysData(blocks, tasks)
+	}, [blocks, tasks])
+
+	const getBlockStyle = (status: string, _id?: string) => {
 		switch (status) {
-			case "AI Recommended":
-				return "bg-[#D8E6FD] border-[#8CB3F8] text-[#1E3A8A]"
 			case "Approved":
-				if (id === "BLK-09" || id === "BLK-04") return "bg-[#D2F4D3] border-[#70D478] text-[#115E20]"
-				if (id === "BLK-13" || id === "BLK-02") return "bg-[#DCE7FD] border-[#93B8FB] text-[#1E40AF]"
-				return "bg-[#E6DDF8] border-[#B799EC] text-[#581C87]"
-			case "Pending Review":
-				return "bg-[#FEEBC8] border-[#FBD38D] text-[#975A16]"
+				return "bg-[#D2F4D3] border-[#70D478] text-[#115E20]"
 			case "Pending Approval":
 				return "bg-[#FED7D7]/90 border-[#FEB2B2] text-[#9B2C2C] border-dashed border-2"
-			case "In Progress":
-				return "bg-[#D6F5EE] border-[#7AE2CE] text-[#0D6E57]"
 			default:
-				return "bg-blue-100 border-blue-300 text-blue-900"
+				return "bg-[#D8E6FD] border-[#8CB3F8] text-[#1E3A8A]"
 		}
 	}
 
@@ -317,10 +212,10 @@ export function Dashboard() {
 							{viewMode === "Day" ? "Total Blocks" : viewMode === "Week" ? "Week Blocks" : "Month Blocks"}
 						</p>
 						<p className="text-[26px] font-bold text-[#172B3A] leading-tight font-heading">
-							{viewMode === "Day" ? "7" : viewMode === "Week" ? "12" : "22"}
+							{stats.total_blocks}
 						</p>
 						<p className="flex items-center gap-1 text-[11.5px] font-semibold text-emerald-600 mt-0.5">
-							<TrendingUp size={12} /> +2 from last period
+							<TrendingUp size={12} /> Live division data
 						</p>
 					</div>
 				</div>
@@ -333,10 +228,10 @@ export function Dashboard() {
 					<div>
 						<p className="text-[12.5px] font-medium text-[#5A6D80]">Approved</p>
 						<p className="text-[26px] font-bold text-[#172B3A] leading-tight font-heading">
-							{viewMode === "Day" ? "4" : viewMode === "Week" ? "7" : "14"}
+							{stats.approved}
 						</p>
 						<p className="text-[11.5px] text-[#5A6D80] mt-0.5">
-							{viewMode === "Day" ? "57% of total" : viewMode === "Week" ? "58% of total" : "64% of total"}
+							{stats.total_blocks > 0 ? `${Math.round((stats.approved / stats.total_blocks) * 100)}% of total` : "0% of total"}
 						</p>
 					</div>
 				</div>
@@ -349,7 +244,7 @@ export function Dashboard() {
 					<div>
 						<p className="text-[12.5px] font-medium text-[#5A6D80]">Pending Approval</p>
 						<p className="text-[26px] font-bold text-[#172B3A] leading-tight font-heading">
-							{viewMode === "Day" ? "2" : viewMode === "Week" ? "4" : "6"}
+							{stats.pending_approval}
 						</p>
 						<p className="text-[11.5px] text-[#5A6D80] mt-0.5">Awaiting review</p>
 					</div>
@@ -363,9 +258,11 @@ export function Dashboard() {
 					<div>
 						<p className="text-[12.5px] font-medium text-[#5A6D80]">Conflicts</p>
 						<p className="text-[26px] font-bold text-[#172B3A] leading-tight font-heading">
-							{viewMode === "Day" ? "1" : viewMode === "Week" ? "1" : "2"}
+							{stats.conflicts}
 						</p>
-						<p className="text-[11.5px] font-semibold text-red-600 mt-0.5">Requires attention</p>
+						<p className={cx("text-[11.5px] font-semibold mt-0.5", stats.conflicts > 0 ? "text-red-600" : "text-emerald-600")}>
+							{stats.conflicts > 0 ? "Requires attention" : "No conflicts detected"}
+						</p>
 					</div>
 				</div>
 			</div>
@@ -447,7 +344,8 @@ export function Dashboard() {
 								</div>
 
 								{SECTIONS.map((sec) => {
-									const secBlocks = DAY_BLOCKS_DATA.filter((b) => b.section === sec)
+									const secClean = sec.replace(/\s+/g, "")
+									const secBlocks = dayBlocks.filter((b) => b.section.replace(/\s+/g, "") === secClean)
 									return (
 										<div key={sec} className="relative flex items-center h-[52px]">
 											<div className="w-24 shrink-0 font-bold text-[13px] text-[#172B3A] pl-1 font-heading">
@@ -527,8 +425,8 @@ export function Dashboard() {
 
 							{/* Week Section Rows */}
 							<div className="divide-y divide-slate-100 mt-1">
-								{SECTIONS.map((sec) => {
-									const secClean = sec.replace(/\s+/g, "")
+								{displaySections.map((sec) => {
+									const secClean = normalizeSection(sec)
 									return (
 										<div key={sec} className="grid grid-cols-[100px_repeat(7,1fr)] gap-2 py-3 items-center min-h-[64px]">
 											{/* Section Label */}
@@ -538,28 +436,32 @@ export function Dashboard() {
 
 											{/* Days 14 to 20 */}
 											{WEEK_DAYS.map((d) => {
-												const block = WEEK_BLOCKS_DATA.find(
-													(b) => b.day === d.date && b.section.replace(/\s+/g, "") === secClean,
+												const item = weekTimelineItems.find(
+													(b) => b.day === d.date && normalizeSection(b.section) === secClean,
 												)
 
 												return (
 													<div key={d.date} className="min-h-[46px] flex items-center justify-center">
-														{block ? (
+														{item ? (
 															<div
-																onClick={() => setSelectedBlock(selectedBlock === block.id ? null : block.id)}
+																onClick={() => setSelectedBlock(selectedBlock === item.id ? null : item.id)}
 																className={cx(
 																	"w-full rounded-lg px-2.5 py-1.5 flex flex-col justify-center cursor-pointer transition-all shadow-xs border text-left",
-																	getBlockStyle(block.status, block.id),
-																	selectedBlock === block.id && "ring-2 ring-[#0F2A5C] shadow-md scale-[1.02]",
+																	item.type === "block"
+																		? getBlockStyle(item.status, item.id)
+																		: "bg-[#FEF3C7] border-[#FCD34D] text-[#92400E]",
+																	selectedBlock === item.id && "ring-2 ring-[#0F2A5C] shadow-md scale-[1.02]",
 																)}
-																title={`${block.id} (${block.time}): ${block.workType}`}
+																title={`${item.type === "block" ? "Block" : "Request"} ${item.id} (${item.time}): ${item.title}`}
 															>
 																<div className="flex items-center justify-between gap-1 leading-tight">
-																	<span className="font-mono font-bold text-[11.5px]">{block.id}</span>
-																	<span className="text-[9.5px] opacity-75">{d.name}</span>
+																	<span className="font-mono font-bold text-[11.5px]">{item.id}</span>
+																	<span className="text-[9.5px] opacity-75">
+																		{item.type === "request" ? item.department : d.name}
+																	</span>
 																</div>
 																<p className="text-[10px] font-medium truncate mt-0.5 opacity-90">
-																	{block.workType}
+																	{item.type === "request" ? `${item.duration} · Req` : item.workType}
 																</p>
 															</div>
 														) : (
@@ -596,7 +498,7 @@ export function Dashboard() {
 
 						{/* 5-Week Calendar Grid */}
 						<div className="grid grid-cols-7 gap-2 mt-2">
-							{MONTH_DAYS_DATA.map((item, idx) => {
+							{monthDaysData.map((item, idx) => {
 								const isSelected = selectedMonthDay === item.day && item.isCurrentMonth
 								return (
 									<div
@@ -627,7 +529,7 @@ export function Dashboard() {
 											)}
 										</div>
 
-										{/* Scheduled Blocks Badge */}
+										{/* Scheduled Blocks & Requests Badge */}
 										<div>
 											{item.blocksCount > 0 ? (
 												<div
@@ -638,7 +540,7 @@ export function Dashboard() {
 															: "bg-[#E8EFF5] text-[#1B4E8C] border border-[#CBD8E5]",
 													)}
 												>
-													{item.blocksCount} {item.blocksCount === 1 ? "block" : "blocks"}
+													{item.blocksCount} {item.blocksCount === 1 ? (item.items?.[0]?.type === "request" ? "request" : "block") : "items"}
 												</div>
 											) : (
 												<div className="h-4" />
@@ -650,26 +552,48 @@ export function Dashboard() {
 						</div>
 
 						{/* Month Selected Day Summary Bar */}
-						{selectedMonthDay && (
-							<div className="mt-4 p-3 rounded-lg bg-[#F8FAFC] border border-[#DDE3EA] flex items-center justify-between text-[12.5px]">
-								<div className="flex items-center gap-2">
-									<Calendar size={15} className="text-[#1B4E8C]" />
-									<span className="font-semibold text-[#172B3A]">
-										September {selectedMonthDay}, 2026:
-									</span>
-									<span className="text-[#5A6D80]">
-										{MONTH_DAYS_DATA.find((d) => d.day === selectedMonthDay && d.isCurrentMonth)?.blocksCount || 0} maintenance blocks planned
-									</span>
+						{selectedMonthDay && (() => {
+							const currentDayObj = monthDaysData.find((d) => d.day === selectedMonthDay && d.isCurrentMonth)
+							const count = currentDayObj?.blocksCount || 0
+							return (
+								<div className="mt-4 p-3 rounded-lg bg-[#F8FAFC] border border-[#DDE3EA] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[12.5px]">
+									<div className="flex flex-wrap items-center gap-2">
+										<Calendar size={15} className="text-[#1B4E8C]" />
+										<span className="font-semibold text-[#172B3A]">
+											September {selectedMonthDay}, 2026:
+										</span>
+										<span className="text-[#5A6D80]">
+											{count} maintenance {count === 1 ? "item" : "items"} planned
+										</span>
+										{currentDayObj?.items && currentDayObj.items.length > 0 && (
+											<div className="flex flex-wrap gap-1.5 ml-2">
+												{currentDayObj.items.map((it) => (
+													<span
+														key={it.id}
+														className={cx(
+															"rounded px-2 py-0.5 text-[11px] font-medium border",
+															it.type === "request"
+																? "bg-amber-50 border-amber-200 text-amber-800"
+																: "bg-blue-50 border-blue-200 text-blue-800",
+														)}
+														title={it.detail}
+													>
+														{it.id} ({it.detail})
+													</span>
+												))}
+											</div>
+										)}
+									</div>
+									<button
+										type="button"
+										onClick={() => setViewMode("Day")}
+										className="text-[12px] font-bold text-[#1B4E8C] hover:underline shrink-0"
+									>
+										Switch to Day View →
+									</button>
 								</div>
-								<button
-									type="button"
-									onClick={() => setViewMode("Day")}
-									className="text-[12px] font-bold text-[#1B4E8C] hover:underline"
-								>
-									Switch to Day View →
-								</button>
-							</div>
-						)}
+							)
+						})()}
 					</div>
 				)}
 
@@ -707,38 +631,38 @@ export function Dashboard() {
 								<Sparkles size={18} className="text-[#1B4E8C]" />
 								<h3 className="font-bold text-[15px] text-[#172B3A] font-heading">AI Decision Support</h3>
 							</div>
-							<span className="inline-flex items-center rounded-full bg-[#E8EFF5] px-2.5 py-0.5 text-[11px] font-semibold text-[#1B4E8C] border border-[#CBD8E5]">
-								94% Confidence
+							<span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold text-amber-700 border border-amber-200">
+								Under Construction
 							</span>
 						</div>
 
 						<div className="mt-4 p-4 rounded-xl bg-[#E8EFF5]/50 border border-[#CBD8E5]">
 							<p className="text-[12px] font-bold text-[#1B4E8C] uppercase tracking-wider">
-								Recommendation · Planner Approval Required
+								Recommendation Engine Standby
 							</p>
 							<h4 className="text-[15px] font-bold text-[#172B3A] mt-1 font-heading">
-								Combine 3 maintenance tasks into Block A-B
+								Optimization Models in Training
 							</h4>
 							<p className="text-[12.5px] text-[#5A6D80] mt-1.5 leading-relaxed">
-								Tasks MT-102 (Track), MT-108 (OHE), and MT-117 (Signal) can be bundled together between 10:30–12:15, reducing track possession time by 45 minutes.
+								Automated bundling and decision support models are currently under construction. When ready, recommendations will appear here automatically.
 							</p>
 
 							<div className="mt-3 flex flex-wrap gap-2 text-[11.5px] text-[#172B3A] font-medium">
 								<span className="rounded-md bg-white px-2.5 py-1 border border-[#DDE3EA]">
-									✓ Reduced downtime
+									✓ Real-time telemetry
 								</span>
 								<span className="rounded-md bg-white px-2.5 py-1 border border-[#DDE3EA]">
-									✓ Better resource utilization
+									✓ Conflict detection
 								</span>
 								<span className="rounded-md bg-white px-2.5 py-1 border border-[#DDE3EA]">
-									✓ Improved punctuality
+									✓ Live schedule validation
 								</span>
 							</div>
 						</div>
 					</div>
 
 					<div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-						<span className="text-[12px] text-[#5A6D80]">Advisory engine active</span>
+						<span className="text-[12px] text-[#5A6D80]">Advisory engine standby</span>
 						<Link
 							to="/recommendations"
 							className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1B4E8C] hover:text-[#0F2A5C] transition-colors"
@@ -756,43 +680,38 @@ export function Dashboard() {
 								<Wrench size={18} className="text-[#1B4E8C]" />
 								<h3 className="font-bold text-[15px] text-[#172B3A] font-heading">Priority Maintenance Tasks</h3>
 							</div>
-							<span className="text-[12px] text-[#5A6D80] font-medium">12 Pending</span>
+							<span className="text-[12px] text-[#5A6D80] font-medium">{tasks.length} Registered</span>
 						</div>
 
 						<div className="mt-3 space-y-2.5">
-							{[
-								{ id: "MT-102", dept: "TMS", title: "Rail fracture ultrasound testing", sec: "A-B", prio: "Critical", score: 94 },
-								{ id: "MT-121", dept: "TDMS", title: "Cantilever insulator replacement", sec: "B-C", prio: "High", score: 88 },
-								{ id: "MT-115", dept: "SMMS", title: "Point machine interlocking recalibration", sec: "C-D", prio: "Urgent", score: 82 },
-							].map((item) => (
-								<div
-									key={item.id}
-									className="flex items-center justify-between p-3 rounded-lg border border-[#DDE3EA] bg-[#F8FAFC] hover:bg-white transition-colors"
-								>
-									<div className="flex items-center gap-3">
-										<span className="font-mono text-[12px] font-bold text-[#172B3A]">{item.id}</span>
-										<span className="rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-700">
-											{item.dept}
-										</span>
-										<span className="text-[12.5px] text-[#172B3A] truncate max-w-[200px] sm:max-w-[280px]">
-											{item.title}
+							{tasks.length === 0 ? (
+								<p className="text-[12.5px] text-[#5A6D80] py-4 text-center">No maintenance requests registered.</p>
+							) : (
+								tasks.slice(0, 3).map((item) => (
+									<div
+										key={item.task_id}
+										className="flex items-center justify-between p-3 rounded-lg border border-[#DDE3EA] bg-[#F8FAFC] hover:bg-white transition-colors"
+									>
+										<div className="flex items-center gap-3">
+											<span className="font-mono text-[12px] font-bold text-[#172B3A]">{item.task_id}</span>
+											<span className="rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-700">
+												{item.department}
+											</span>
+											<span className="text-[12.5px] text-[#172B3A] truncate max-w-[200px] sm:max-w-[280px]">
+												{item.reason_description}
+											</span>
+										</div>
+										<span className="rounded-full px-2 py-0.5 text-[11px] font-semibold shrink-0 bg-slate-100 text-slate-700 border border-slate-200">
+											Pending AI Priority
 										</span>
 									</div>
-									<span
-										className={cx(
-											"rounded-full px-2 py-0.5 text-[11px] font-bold shrink-0",
-											item.prio === "Critical" ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-800",
-										)}
-									>
-										{item.prio} ({item.score})
-									</span>
-								</div>
-							))}
+								))
+							)}
 						</div>
 					</div>
 
 					<div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-						<span className="text-[12px] text-[#5A6D80]">Sorted by priority scoring model</span>
+						<span className="text-[12px] text-[#5A6D80]">Priority scoring model in development</span>
 						<Link
 							to="/tasks"
 							className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1B4E8C] hover:text-[#0F2A5C] transition-colors"

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { ArrowDown, ArrowUp, Check, ChevronRight, Clock, Cpu, FileText } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { api } from "@/api"
 import type { AIRecommendation as Rec } from "@/types"
 import { Button } from "./ui"
 import { cx, pct } from "@/utils/display"
@@ -29,14 +30,37 @@ export function AIRecommendationCard({
 		if (r.block_section) {
 			focusSection(r.block_section)
 		}
+		const blockId = r.recommendation_id.startsWith("REC-")
+			? r.recommendation_id.replace(/^REC-/, "BLK-")
+			: `BLK-${r.recommendation_id}`
 		try {
-			if (onApply) {
-				await onApply(r.recommendation_id)
+			if (api.createProposal) {
+				const parts = r.block_section.split("-")
+				await api.createProposal({
+					block_id: blockId,
+					block_date: new Date().toISOString().slice(0, 10),
+					section_start: parts[0]?.trim() || "A",
+					section_end: parts[1]?.trim() || "B",
+					line: "UP Main",
+					start_time: r.recommended_window.start,
+					end_time: r.recommended_window.end,
+					task_ids: r.task_ids.map((id) => parseInt(id.replace(/^MT-/, ""), 10)).filter(Boolean),
+				})
 			}
 		} catch (err) {
-			console.error("Error scheduling recommendation block:", err)
+			console.log("Proposal persistence note:", err)
 		} finally {
-			navigate("/schedule")
+			navigate("/schedule", {
+				state: {
+					proposal: {
+						block_id: blockId,
+						section: r.block_section,
+						startTime: r.recommended_window.start,
+						endTime: r.recommended_window.end,
+						tasks: r.task_ids,
+					},
+				},
+			})
 		}
 	}
 

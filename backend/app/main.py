@@ -4,7 +4,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database.connection import engine, Base
+# Import models so Base.metadata knows about them
+import app.models.request
+import app.models.block
+
 from app.routes.requests import router as requests_router
+from app.routes.blocks import router as blocks_router
+from app.routes.overview import router as overview_router
+from app.routes.ai import router as ai_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,13 +24,13 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(
-    title="BDMS Department Portal API",
-    description="Backend API for TMS, TDMS, and SMMS Maintenance Request Management",
+    title="Rail Asset & Block Schedule Central API",
+    description="Backend API for Maintenance Requests, Block Schedules, and AI Decision Support",
     version="1.0.0",
     lifespan=lifespan
 )
 
-# Configure CORS for React frontend
+# Configure CORS strictly for the active local frontend ports
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -31,7 +38,6 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "*"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -40,12 +46,14 @@ app.add_middleware(
 
 # Register routes
 app.include_router(requests_router)
+app.include_router(blocks_router)
+app.include_router(overview_router)
+app.include_router(ai_router)
 
 @app.get("/", tags=["Root"])
 def root():
     return {
-        "system": "BDMS Department Portal API",
-        "departments": ["TMS", "TDMS", "SMMS"],
+        "system": "Rail Asset & Block Schedule Central API",
         "status": "online"
     }
 

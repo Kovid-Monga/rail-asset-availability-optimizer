@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useLocation } from "react-router-dom"
 import {
 	AlertCircle,
 	AlertTriangle,
@@ -18,6 +19,15 @@ import {
 	X,
 	XCircle,
 } from "lucide-react"
+import { api } from "@/api"
+import type { MaintenanceTask } from "@/types"
+import {
+	WEEK_DAYS,
+	buildWeekTimelineItems,
+	buildMonthDaysData,
+	getDisplaySections,
+	normalizeSection,
+} from "@/data/timetableData"
 import { cx } from "@/utils/display"
 
 interface ScheduleBlockItem {
@@ -32,7 +42,7 @@ interface ScheduleBlockItem {
 	durationMinutes: number
 	tasks: string[]
 	workType: string
-	status: "Approved" | "AI Proposed" | "Pending Approval" | "Conflict"
+	status: "Approved" | "Pending Approval" | "Rejected"
 }
 
 const INITIAL_BLOCKS: ScheduleBlockItem[] = [
@@ -48,7 +58,7 @@ const INITIAL_BLOCKS: ScheduleBlockItem[] = [
 		durationMinutes: 120,
 		tasks: ["MT-102", "MT-108"],
 		workType: "Track Maintenance",
-		status: "AI Proposed",
+		status: "Pending Approval",
 	},
 	{
 		id: "BLK-09",
@@ -90,7 +100,7 @@ const INITIAL_BLOCKS: ScheduleBlockItem[] = [
 		durationMinutes: 120,
 		tasks: ["MT-134", "MT-138"],
 		workType: "Track Renewal",
-		status: "AI Proposed",
+		status: "Pending Approval",
 	},
 	{
 		id: "BLK-16",
@@ -118,7 +128,7 @@ const INITIAL_BLOCKS: ScheduleBlockItem[] = [
 		durationMinutes: 60,
 		tasks: ["MT-146"],
 		workType: "Track Maintenance",
-		status: "Conflict",
+		status: "Pending Approval",
 	},
 	{
 		id: "BLK-20",
@@ -132,7 +142,7 @@ const INITIAL_BLOCKS: ScheduleBlockItem[] = [
 		durationMinutes: 150,
 		tasks: ["MT-150", "MT-153"],
 		workType: "Track Maintenance",
-		status: "AI Proposed",
+		status: "Pending Approval",
 	},
 ]
 
@@ -150,76 +160,80 @@ const TIMELINE_END = 21 * 60 // 21:00
 const TIMELINE_SPAN = TIMELINE_END - TIMELINE_START
 const TIME_TICKS = ["06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"]
 
-const WEEK_DAYS = [
-	{ name: "MON", date: 14 },
-	{ name: "TUE", date: 15 },
-	{ name: "WED", date: 16 },
-	{ name: "THU", date: 17 },
-	{ name: "FRI", date: 18 },
-	{ name: "SAT", date: 19 },
-	{ name: "SUN", date: 20 },
-]
-
-const WEEK_BLOCKS_DATA = [
-	{ id: "BLK-01", day: 14, section: "A - B", workType: "Track Maintenance", status: "AI Proposed", time: "10:00 - 12:00" },
-	{ id: "BLK-07", day: 17, section: "A - B", workType: "Track Maintenance", status: "Approved", time: "10:00 - 12:00" },
-	{ id: "BLK-04", day: 15, section: "B - C", workType: "OHE Work", status: "Approved", time: "08:30 - 11:30" },
-	{ id: "BLK-09", day: 18, section: "B - C", workType: "OHE Work", status: "Approved", time: "08:00 - 11:00" },
-	{ id: "BLK-06", day: 16, section: "C - D", workType: "Signal Maintenance", status: "Pending Approval", time: "13:00 - 15:00" },
-	{ id: "BLK-11", day: 19, section: "C - D", workType: "Signal Maintenance", status: "Approved", time: "13:00 - 14:30" },
-	{ id: "BLK-02", day: 14, section: "D - E", workType: "Track Renewal", status: "Approved", time: "14:00 - 16:30" },
-	{ id: "BLK-13", day: 18, section: "D - E", workType: "Track Renewal", status: "Approved", time: "15:30 - 17:30" },
-	{ id: "BLK-03", day: 15, section: "E - F", workType: "Bridge Inspection", status: "Approved", time: "09:30 - 11:30" },
-	{ id: "BLK-16", day: 17, section: "E - F", workType: "Bridge Inspection", status: "Approved", time: "09:00 - 11:00" },
-	{ id: "BLK-20", day: 18, section: "F - G", workType: "Track Maintenance", status: "Approved", time: "16:00 - 18:30" },
-	{ id: "BLK-22", day: 20, section: "F - G", workType: "Track Maintenance", status: "Pending Approval", time: "15:00 - 17:30" },
-]
-
-const MONTH_DAYS_DATA = [
-	{ day: 31, isCurrentMonth: false, blocksCount: 0 },
-	{ day: 1, isCurrentMonth: true, blocksCount: 2 },
-	{ day: 2, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 3, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 4, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 5, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 6, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 7, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 8, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 9, isCurrentMonth: true, blocksCount: 1 },
-	{ day: 10, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 11, isCurrentMonth: true, blocksCount: 3 },
-	{ day: 12, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 13, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 14, isCurrentMonth: true, blocksCount: 2 },
-	{ day: 15, isCurrentMonth: true, blocksCount: 1 },
-	{ day: 16, isCurrentMonth: true, blocksCount: 3 },
-	{ day: 17, isCurrentMonth: true, blocksCount: 4 },
-	{ day: 18, isCurrentMonth: true, blocksCount: 2 },
-	{ day: 19, isCurrentMonth: true, blocksCount: 1 },
-	{ day: 20, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 21, isCurrentMonth: true, blocksCount: 1 },
-	{ day: 22, isCurrentMonth: true, blocksCount: 2 },
-	{ day: 23, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 24, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 25, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 26, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 27, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 28, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 29, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 30, isCurrentMonth: true, blocksCount: 0 },
-	{ day: 1, isCurrentMonth: false, blocksCount: 0 },
-	{ day: 2, isCurrentMonth: false, blocksCount: 0 },
-	{ day: 3, isCurrentMonth: false, blocksCount: 0 },
-	{ day: 4, isCurrentMonth: false, blocksCount: 0 },
-]
-
 export function BlockSchedule() {
-	const [blocks, setBlocks] = useState<ScheduleBlockItem[]>(INITIAL_BLOCKS)
-	const [selectedBlockId, setSelectedBlockId] = useState<string>("BLK-07")
-	const [isEditPanelOpen, setIsEditPanelOpen] = useState<boolean>(true)
+	const location = useLocation()
+	const proposalState = location.state?.proposal as
+		| { block_id: string; section: string; startTime: string; endTime: string; tasks: string[] }
+		| undefined
+
+	const [blocks, setBlocks] = useState<ScheduleBlockItem[]>([])
+	const [tasks, setTasks] = useState<MaintenanceTask[]>([])
+	const [loading, setLoading] = useState<boolean>(true)
+	const [selectedBlockId, setSelectedBlockId] = useState<string>("")
+	const [isEditPanelOpen, setIsEditPanelOpen] = useState<boolean>(false)
 	const [viewMode, setViewMode] = useState<"Day" | "Week" | "Month">("Day")
 	const [searchQuery, setSearchQuery] = useState<string>("")
 	const [bannerMessage, setBannerMessage] = useState<string | null>(null)
+	const [conflictStatus, setConflictStatus] = useState<"none" | "conflict">("none")
+	const [conflictMessage, setConflictMessage] = useState<string | null>(null)
+	const [initialProposal, setInitialProposal] = useState<{
+		section: string
+		line: string
+		startTime: string
+		endTime: string
+	} | null>(null)
+
+	// Fetch real block schedules from PostgreSQL backend
+	const loadBlocks = async () => {
+		try {
+			setLoading(true)
+			const raw = api.getRawBlocks ? await api.getRawBlocks() : []
+			const rawTasks = api.getTasks ? await api.getTasks() : []
+			setTasks(rawTasks)
+			if (raw && raw.length > 0) {
+				const mapped: ScheduleBlockItem[] = raw.map((b) => {
+					const [sH, sM] = b.start_time.split(":").map(Number)
+					const [eH, eM] = b.end_time.split(":").map(Number)
+					const startMinutes = sH * 60 + sM
+					const endMinutes = eH * 60 + eM
+					const durationMinutes = endMinutes - startMinutes
+
+					let statusLabel: "Approved" | "Pending Approval" | "Rejected" = "Pending Approval"
+					if (b.status === "APPROVED") statusLabel = "Approved"
+					else if (b.status === "REJECTED") statusLabel = "Rejected"
+
+					return {
+						id: b.block_id,
+						section: b.section,
+						line: b.line,
+						date: b.block_date,
+						startTime: b.start_time,
+						endTime: b.end_time,
+						duration: b.duration || `${Math.floor(durationMinutes / 60)} h ${durationMinutes % 60} min`,
+						startMinutes,
+						durationMinutes,
+						tasks: b.tasks,
+						workType: b.work_type || "Maintenance",
+						status: statusLabel,
+					}
+				})
+				setBlocks(mapped)
+				if (!selectedBlockId && mapped.length > 0) {
+					setSelectedBlockId(mapped[0].id)
+				}
+			} else {
+				setBlocks([])
+			}
+		} catch (err) {
+			console.error("Failed to load blocks:", err)
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	useEffect(() => {
+		loadBlocks()
+	}, [])
 
 	// Currently inspected block in the edit panel
 	const selectedBlock = useMemo(() => {
@@ -227,11 +241,30 @@ export function BlockSchedule() {
 	}, [blocks, selectedBlockId])
 
 	// Edit form state
-	const [editSection, setEditSection] = useState<string>(selectedBlock.section)
-	const [editLine, setEditLine] = useState<string>(selectedBlock.line)
-	const [editStartTime, setEditStartTime] = useState<string>(selectedBlock.startTime)
-	const [editEndTime, setEditEndTime] = useState<string>(selectedBlock.endTime)
-	const [conflictStatus, setConflictStatus] = useState<"none" | "conflict">("none")
+	const [editSection, setEditSection] = useState<string>(selectedBlock?.section || "A - B")
+	const [editLine, setEditLine] = useState<string>(selectedBlock?.line || "UP Main")
+	const [editStartTime, setEditStartTime] = useState<string>(selectedBlock?.startTime || "10:00")
+	const [editEndTime, setEditEndTime] = useState<string>(selectedBlock?.endTime || "12:00")
+
+	// Hand off proposal from AI Recommendations page
+	useEffect(() => {
+		if (proposalState) {
+			setSelectedBlockId(proposalState.block_id)
+			setIsEditPanelOpen(true)
+			setEditSection(proposalState.section)
+			setEditLine("UP Main")
+			setEditStartTime(proposalState.startTime)
+			setEditEndTime(proposalState.endTime)
+			setInitialProposal({
+				section: proposalState.section,
+				line: "UP Main",
+				startTime: proposalState.startTime,
+				endTime: proposalState.endTime,
+			})
+			setBannerMessage(`Proposal ${proposalState.block_id} loaded into Edit Panel as PENDING_APPROVAL.`)
+			setTimeout(() => setBannerMessage(null), 4000)
+		}
+	}, [proposalState])
 
 	// Update edit fields when selected block changes
 	const handleSelectBlock = (id: string) => {
@@ -243,64 +276,129 @@ export function BlockSchedule() {
 			setEditLine(b.line)
 			setEditStartTime(b.startTime)
 			setEditEndTime(b.endTime)
-			setConflictStatus(b.status === "Conflict" ? "conflict" : "none")
+			setConflictStatus("none")
+			setConflictMessage(null)
 		}
 	}
 
-	const handleSaveChanges = () => {
-		setBlocks((prev) =>
-			prev.map((b) => {
-				if (b.id === selectedBlockId) {
-					return {
-						...b,
-						section: editSection,
-						line: editLine,
-						startTime: editStartTime,
-						endTime: editEndTime,
-						status: conflictStatus === "conflict" ? "Conflict" : b.status,
-					}
-				}
-				return b
-			}),
-		)
-		setBannerMessage(`Changes saved for block ${selectedBlockId}.`)
-		setTimeout(() => setBannerMessage(null), 3000)
+	// Dynamic duration display derived live from edit start & end time
+	const calculatedDuration = useMemo(() => {
+		try {
+			const [sH, sM] = editStartTime.split(":").map(Number)
+			const [eH, eM] = editEndTime.split(":").map(Number)
+			if (isNaN(sH) || isNaN(sM) || isNaN(eH) || isNaN(eM)) return selectedBlock?.duration || "--"
+			const diff = eH * 60 + eM - (sH * 60 + sM)
+			if (diff <= 0) return "Invalid time range"
+			const h = Math.floor(diff / 60)
+			const m = diff % 60
+			return h > 0 ? `${h} h ${m} min` : `${m} min`
+		} catch {
+			return selectedBlock?.duration || "--"
+		}
+	}, [editStartTime, editEndTime, selectedBlock])
+
+	const handleCheckConflicts = async () => {
+		if (!selectedBlock?.id) return
+		try {
+			if (api.checkBlockConflicts) {
+				const res = await api.checkBlockConflicts(selectedBlock.id)
+				setConflictStatus(res.has_conflict ? "conflict" : "none")
+				setConflictMessage(res.message)
+			}
+		} catch (err: any) {
+			setConflictStatus("conflict")
+			setConflictMessage(err.message || "Failed to check conflicts")
+		}
 	}
 
-	const handleApprove = () => {
-		setBlocks((prev) =>
-			prev.map((b) => (b.id === selectedBlockId ? { ...b, status: "Approved" } : b)),
-		)
-		setBannerMessage(`Block ${selectedBlockId} has been Approved.`)
-		setTimeout(() => setBannerMessage(null), 3000)
+	const handleSaveChanges = async () => {
+		if (!selectedBlock?.id) return
+		const parts = editSection.split("-")
+		const secStart = parts[0]?.trim() || "A"
+		const secEnd = parts[1]?.trim() || "B"
+		try {
+			if (api.updateBlockSchedule) {
+				await api.updateBlockSchedule(selectedBlock.id, {
+					section_start: secStart,
+					section_end: secEnd,
+					line: editLine,
+					start_time: editStartTime,
+					end_time: editEndTime,
+				})
+			}
+			setBannerMessage(`Changes saved for block ${selectedBlock.id}. Status remains PENDING_APPROVAL.`)
+			setTimeout(() => setBannerMessage(null), 3500)
+			await loadBlocks()
+		} catch (err: any) {
+			setBannerMessage(`Error saving changes: ${err.message}`)
+		}
 	}
 
-	const handleReject = () => {
-		setBlocks((prev) =>
-			prev.map((b) => (b.id === selectedBlockId ? { ...b, status: "Conflict" } : b)),
-		)
-		setBannerMessage(`Block ${selectedBlockId} has been marked for review / rejection.`)
-		setTimeout(() => setBannerMessage(null), 3000)
+	const handleApprove = async () => {
+		if (!selectedBlock?.id) return
+		try {
+			if (api.approveBlockSchedule) {
+				await api.approveBlockSchedule(selectedBlock.id)
+			}
+			setBannerMessage(`Block ${selectedBlock.id} has been Approved.`)
+			setTimeout(() => setBannerMessage(null), 3500)
+			setConflictStatus("none")
+			setConflictMessage(null)
+			await loadBlocks()
+		} catch (err: any) {
+			// Fresh conflict validation rejected approval (HTTP 409 Conflict)
+			setConflictStatus("conflict")
+			setConflictMessage(err.message || "Approval rejected due to scheduling conflict.")
+			setBannerMessage(`Cannot approve block ${selectedBlock.id}: Conflict detected.`)
+		}
+	}
+
+	const handleReject = async () => {
+		if (!selectedBlock?.id) return
+		try {
+			if (api.rejectBlockSchedule) {
+				await api.rejectBlockSchedule(selectedBlock.id)
+			}
+			setBannerMessage(`Block ${selectedBlock.id} has been Rejected.`)
+			setTimeout(() => setBannerMessage(null), 3500)
+			await loadBlocks()
+		} catch (err: any) {
+			setBannerMessage(`Error rejecting block: ${err.message}`)
+		}
 	}
 
 	const handleReset = () => {
-		const initial = INITIAL_BLOCKS.find((b) => b.id === selectedBlockId)
-		if (initial) {
-			setEditSection(initial.section)
-			setEditLine(initial.line)
-			setEditStartTime(initial.startTime)
-			setEditEndTime(initial.endTime)
+		if (initialProposal) {
+			setEditSection(initialProposal.section)
+			setEditLine(initialProposal.line)
+			setEditStartTime(initialProposal.startTime)
+			setEditEndTime(initialProposal.endTime)
 			setConflictStatus("none")
-			setBlocks((prev) => prev.map((b) => (b.id === selectedBlockId ? { ...initial } : b)))
-			setBannerMessage(`Reset ${selectedBlockId} to AI proposal parameters.`)
+			setConflictMessage(null)
+			setBannerMessage(`Reset ${selectedBlock?.id} to AI proposal parameters.`)
+			setTimeout(() => setBannerMessage(null), 3000)
+		} else {
+			setBannerMessage("No initial AI proposal parameters available for this block.")
 			setTimeout(() => setBannerMessage(null), 3000)
 		}
 	}
 
 	const handleGenerateAISchedule = () => {
-		setBannerMessage("AI Schedule Optimization Engine executed successfully: 7 blocks aligned.")
+		setBannerMessage("AI Schedule Optimization Engine is under construction. No fake proposals generated.")
 		setTimeout(() => setBannerMessage(null), 4000)
 	}
+
+	const displaySections = useMemo(() => {
+		return getDisplaySections(blocks, tasks)
+	}, [blocks, tasks])
+
+	const weekTimelineItems = useMemo(() => {
+		return buildWeekTimelineItems(blocks, tasks)
+	}, [blocks, tasks])
+
+	const monthDaysData = useMemo(() => {
+		return buildMonthDaysData(blocks, tasks)
+	}, [blocks, tasks])
 
 	const filteredBlocks = useMemo(() => {
 		if (!searchQuery.trim()) return blocks
@@ -317,31 +415,24 @@ export function BlockSchedule() {
 
 	const getBlockPillStyle = (block: ScheduleBlockItem) => {
 		switch (block.status) {
-			case "AI Proposed":
-				if (block.id === "BLK-20") {
-					return "bg-[#F3E8FF] border-[#D8B4FE] text-[#6B21A8]" // Purple pill for BLK-20
-				}
-				return "bg-[#DBEAFE] border-[#93C5FD] text-[#1E40AF]" // Blue pill
 			case "Approved":
 				return "bg-[#DCFCE7] border-[#86EFAC] text-[#166534]" // Green pill
 			case "Pending Approval":
 				return "bg-[#FEF3C7] border-[#FCD34D] text-[#92400E]" // Amber pill
-			case "Conflict":
-				return "bg-[#FEE2E2] border-[#FCA5A5] text-[#991B1B]" // Red pill
+			case "Rejected":
+				return "bg-slate-100 border-slate-300 text-slate-500 line-through opacity-70"
 			default:
-				return "bg-blue-100 border-blue-300 text-blue-900"
+				return "bg-[#EFF6FF] border-[#BFDBFE] text-[#1E40AF]"
 		}
 	}
 
 	const getStatusTagBadge = (status: ScheduleBlockItem["status"]) => {
 		switch (status) {
-			case "AI Proposed":
-				return "bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE]"
 			case "Approved":
 				return "bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]"
 			case "Pending Approval":
 				return "bg-[#FFFBEB] text-[#D97706] border border-[#FDE68A]"
-			case "Conflict":
+			case "Rejected":
 				return "bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]"
 			default:
 				return "bg-slate-100 text-slate-700"
@@ -570,21 +661,30 @@ export function BlockSchedule() {
 										))}
 									</div>
 									<div className="divide-y divide-slate-100 mt-1">
-										{SECTIONS_CONFIG.map((sec) => (
-											<div key={sec.name} className="grid grid-cols-[100px_repeat(7,1fr)] gap-2 py-2.5 items-center">
-												<div className="font-bold text-[12.5px] text-[#172B3A] pl-2 font-heading">{sec.name}</div>
+										{displaySections.map((secName) => (
+											<div key={secName} className="grid grid-cols-[100px_repeat(7,1fr)] gap-2 py-2.5 items-center">
+												<div className="font-bold text-[12.5px] text-[#172B3A] pl-2 font-heading">{secName}</div>
 												{WEEK_DAYS.map((d) => {
-													const block = WEEK_BLOCKS_DATA.find(
-														(b) => b.day === d.date && b.section === sec.name,
+													const item = weekTimelineItems.find(
+														(b) => b.day === d.date && normalizeSection(b.section) === normalizeSection(secName),
 													)
 													return (
 														<div key={d.date} className="min-h-[38px] flex items-center justify-center">
-															{block ? (
+															{item ? (
 																<div
-																	onClick={() => handleSelectBlock(block.id)}
-																	className="w-full rounded-md px-1.5 py-1 text-center bg-[#DBEAFE] text-[#1E40AF] border border-[#93C5FD] font-mono text-[11px] font-bold cursor-pointer hover:shadow-xs transition-all"
+																	onClick={() => {
+																		if (item.type === "block") handleSelectBlock(item.id)
+																		else setBannerMessage(`Request ${item.id} (${item.department}): ${item.title} [${item.duration}]`)
+																	}}
+																	className={cx(
+																		"w-full rounded-md px-1.5 py-1 text-center font-mono text-[11px] font-bold cursor-pointer hover:shadow-xs transition-all",
+																		item.type === "block"
+																			? "bg-[#DBEAFE] text-[#1E40AF] border border-[#93C5FD]"
+																			: "bg-[#FEF3C7] text-[#92400E] border border-[#FCD34D]",
+																	)}
+																	title={`${item.type === "block" ? "Block" : "Request"} ${item.id}: ${item.title} (${item.duration})`}
 																>
-																	{block.id}
+																	{item.id}
 																</div>
 															) : (
 																<span className="text-slate-300 text-[11px]">—</span>
@@ -612,7 +712,7 @@ export function BlockSchedule() {
 									<div>SUN</div>
 								</div>
 								<div className="grid grid-cols-7 gap-2 mt-2">
-									{MONTH_DAYS_DATA.map((item, idx) => (
+									{monthDaysData.map((item, idx) => (
 										<div
 											key={idx}
 											onClick={() => item.isCurrentMonth && setViewMode("Day")}
@@ -628,7 +728,7 @@ export function BlockSchedule() {
 											<span className="text-[12px] font-mono font-bold text-[#172B3A]">{item.day}</span>
 											{item.blocksCount > 0 ? (
 												<span className="rounded bg-[#E8EFF5] text-[#1B4E8C] text-[10px] font-bold px-1 py-0.5 text-center">
-													{item.blocksCount} {item.blocksCount === 1 ? "block" : "blocks"}
+													{item.blocksCount} {item.blocksCount === 1 ? (item.items?.[0]?.type === "request" ? "req" : "block") : "items"}
 												</span>
 											) : (
 												<div />
@@ -678,7 +778,14 @@ export function BlockSchedule() {
 									</tr>
 								</thead>
 								<tbody className="divide-y divide-slate-100 text-[#172B3A]">
-									{filteredBlocks.map((b) => {
+									{filteredBlocks.length === 0 ? (
+										<tr>
+											<td colSpan={8} className="py-8 text-center text-slate-400 text-[13px]">
+												No block schedules found for this date.
+											</td>
+										</tr>
+									) : (
+										filteredBlocks.map((b) => {
 										const isSelected = selectedBlockId === b.id
 										return (
 											<tr
@@ -729,7 +836,7 @@ export function BlockSchedule() {
 												</td>
 											</tr>
 										)
-									})}
+									}))}
 								</tbody>
 							</table>
 						</div>
@@ -759,16 +866,16 @@ export function BlockSchedule() {
 										<Calendar size={18} />
 									</div>
 									<span className="text-[18px] font-bold font-mono text-[#172B3A]">
-										{selectedBlock.id}
+										{selectedBlock?.id || "—"}
 									</span>
 								</div>
 								<span
 									className={cx(
 										"rounded-full px-3 py-1 text-[11.5px] font-semibold",
-										getStatusTagBadge(selectedBlock.status),
+										getStatusTagBadge(selectedBlock?.status || "Pending Approval"),
 									)}
 								>
-									{selectedBlock.status}
+									{selectedBlock?.status || "Pending Approval"}
 								</span>
 							</div>
 
@@ -824,7 +931,7 @@ export function BlockSchedule() {
 										<input
 											type="text"
 											readOnly
-											value={selectedBlock.date}
+											value={selectedBlock?.date || ""}
 											className="w-full rounded-lg border border-[#DDE3EA] bg-[#F8FAFC] pl-8 pr-3 py-2 text-[#172B3A] font-medium outline-none cursor-default"
 										/>
 										<Calendar size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#2563EB]" />
@@ -872,7 +979,7 @@ export function BlockSchedule() {
 									<input
 										type="text"
 										readOnly
-										value={selectedBlock.duration}
+										value={calculatedDuration}
 										className="w-full rounded-lg border border-[#DDE3EA] bg-[#F8FAFC] px-3 py-2 text-[#5A6D80] font-medium outline-none cursor-default"
 									/>
 								</div>
@@ -881,7 +988,7 @@ export function BlockSchedule() {
 								<div>
 									<div className="flex items-center justify-between mb-1.5">
 										<label className="block text-[11.5px] font-semibold text-[#5A6D80]">
-											Included Tasks ({selectedBlock.tasks.length})
+											Included Tasks ({selectedBlock ? selectedBlock.tasks.length : 0})
 										</label>
 										<button
 											type="button"
@@ -891,7 +998,7 @@ export function BlockSchedule() {
 										</button>
 									</div>
 									<div className="flex flex-wrap gap-2">
-										{selectedBlock.tasks.map((task) => (
+										{selectedBlock && selectedBlock.tasks.map((task) => (
 											<span
 												key={task}
 												className="rounded-md bg-[#EFF6FF] border border-[#BFDBFE] px-2.5 py-1 text-[11.5px] font-mono font-bold text-[#1E40AF]"
@@ -905,7 +1012,7 @@ export function BlockSchedule() {
 								{/* Check for Conflicts Button */}
 								<button
 									type="button"
-									onClick={() => setConflictStatus("none")}
+									onClick={handleCheckConflicts}
 									className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#BFDBFE] bg-white py-2 text-[12.5px] font-semibold text-[#2563EB] shadow-2xs hover:bg-[#EFF6FF] transition-colors"
 								>
 									<Search size={14} />
@@ -918,7 +1025,9 @@ export function BlockSchedule() {
 										<CheckCircle2 size={18} className="text-[#059669] shrink-0 mt-0.5" />
 										<div className="leading-tight">
 											<p className="font-bold text-[12.5px] text-[#065F46]">No conflicts detected</p>
-											<p className="text-[11.5px] text-[#047857] mt-0.5">This time slot is available.</p>
+											<p className="text-[11.5px] text-[#047857] mt-0.5">
+												{conflictMessage || "This time slot is available."}
+											</p>
 										</div>
 									</div>
 								) : (
@@ -926,7 +1035,9 @@ export function BlockSchedule() {
 										<AlertCircle size={18} className="text-[#DC2626] shrink-0 mt-0.5" />
 										<div className="leading-tight">
 											<p className="font-bold text-[12.5px] text-[#991B1B]">Conflict Detected</p>
-											<p className="text-[11.5px] text-[#B91C1C] mt-0.5">Overlaps with scheduled inspection train.</p>
+											<p className="text-[11.5px] text-[#B91C1C] mt-0.5">
+												{conflictMessage || "Schedule overlaps with another block."}
+											</p>
 										</div>
 									</div>
 								)}

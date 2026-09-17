@@ -3,14 +3,30 @@ import { BLOCK_STATUS_STYLE, DEPARTMENT_STYLE, PRIORITY_STYLE, cx } from "@/util
 
 /** Priority is never computed here — this renders the model's category. */
 export function PriorityBadge({
-	priority,
+	priority = "Normal",
 	score,
 	size = "sm",
 }: {
-	priority: PriorityCategory
+	priority?: PriorityCategory
 	score?: number
 	size?: "sm" | "lg"
 }) {
+	if (!score || score <= 0) {
+		return (
+			<span
+				className={cx(
+					"inline-flex shrink-0 items-center gap-1.5 rounded-md border font-semibold tracking-wide border-slate-200 bg-slate-100 text-slate-600",
+					size === "lg" ? "px-3 py-1.5 text-[13px]" : "px-2 py-0.5 text-[11px]",
+				)}
+			>
+				<span aria-hidden className="text-[9px] leading-none">
+					⏳
+				</span>
+				Pending AI classification
+			</span>
+		)
+	}
+
 	const s = PRIORITY_STYLE[priority]
 	return (
 		<span

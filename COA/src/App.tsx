@@ -39,6 +39,7 @@ function Shell() {
 						<Route path="/" element={<Dashboard />} />
 						<Route path="/tasks" element={guard("/tasks", <MaintenanceTasks />)} />
 						<Route path="/schedule" element={guard("/schedule", <BlockSchedule />)} />
+						<Route path="/block-schedule" element={<Navigate to="/schedule" replace />} />
 						<Route path="/recommendations" element={guard("/recommendations", <AIRecommendations />)} />
 						<Route path="/reports" element={guard("/reports", <Reports />)} />
 						<Route path="/settings" element={<Settings />} />

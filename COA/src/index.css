@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 :root {
 	--canvas: #F4F6F9;
@@ -68,20 +68,25 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: 'DM Sans', sans-serif;
 }
 
-@layer components {
-	.panel {
-		@apply rounded-[10px] border border-line bg-surface shadow-soft;
-	}
-	.label-xs {
-		@apply text-[10.5px] font-semibold uppercase tracking-[0.09em] text-muted;
-	}
-	.mono {
-		font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
-		font-variant-numeric: tabular-nums;
-	}
-	.font-gov {
-		font-family: "Noto Serif", Georgia, serif;
-	}
+.panel {
+	border-radius: 10px;
+	border: 1px solid var(--border);
+	background: var(--surface);
+	box-shadow: 0 1px 3px rgba(22, 35, 58, 0.08), 0 4px 14px rgba(22, 35, 58, 0.06);
+}
+.label-xs {
+	font-size: 10.5px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.09em;
+	color: var(--text-muted);
+}
+.mono {
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+	font-variant-numeric: tabular-nums;
+}
+.font-gov {
+	font-family: "Noto Serif", Georgia, serif;
 }
 
 /* scrollbars */

@@ -31,7 +31,7 @@ export function AIRecommendations() {
 				<AsyncBoundary
 					state={recommendations}
 					loadingMessage="Connecting to optimization engine…"
-					emptyMessage="No recommendations are pending."
+					emptyMessage="No AI recommendations available"
 					isEmpty={(r) => r.length === 0}
 				>
 					{(recs) => (

@@ -15,6 +15,9 @@ import { mockApi } from "./mockApi"
 import type {
 	AIRecommendation,
 	ApprovalRequest,
+	BackendBlockSchedule,
+	BackendConflictCheck,
+	BackendOverviewStats,
 	DashboardResponse,
 	Incident,
 	MaintenanceTask,
@@ -38,6 +41,16 @@ export interface RailApi {
 	approveBlock(input: ApprovalRequest): Promise<{ ok: boolean; block_id: string }>
 	overrideBlock(input: OverrideRequest): Promise<{ ok: boolean; block_id: string }>
 	applyRecommendation(id: string): Promise<{ ok: boolean; recommendation_id: string }>
+
+	// Real database Block Schedules & Overview APIs
+	getRawBlocks?(date?: string): Promise<BackendBlockSchedule[]>
+	getRawBlock?(id: string): Promise<BackendBlockSchedule>
+	updateBlockSchedule?(id: string, payload: any): Promise<BackendBlockSchedule>
+	checkBlockConflicts?(id: string): Promise<BackendConflictCheck>
+	approveBlockSchedule?(id: string): Promise<BackendBlockSchedule>
+	rejectBlockSchedule?(id: string): Promise<BackendBlockSchedule>
+	createProposal?(payload: any): Promise<BackendBlockSchedule>
+	getOverviewStats?(): Promise<BackendOverviewStats>
 }
 
 export const api: RailApi = DATA_SOURCE === "live" ? liveApi : mockApi

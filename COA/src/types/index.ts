@@ -298,3 +298,54 @@ export interface AsyncState<T> {
 	lastUpdated: string | undefined
 	refetch: () => void
 }
+
+/* ------------------------- backend integration --------------------------- */
+
+export interface BackendMaintenanceRequest {
+	need_id: number
+	department: string
+	block_start: string
+	block_end: string
+	line?: string | null
+	work_location?: string | null
+	reason_code?: string | null
+	reason_description?: string | null
+	asset_impact?: Level | null
+	duration_min: number
+	due_date: string
+	status: string
+	created_at?: string
+}
+
+export interface BackendBlockSchedule {
+	block_id: string
+	block_date: string
+	section_start: string
+	section_end: string
+	section: string
+	line: string
+	start_time: string
+	end_time: string
+	duration_min: number
+	duration: string
+	status: "PENDING_APPROVAL" | "APPROVED" | "REJECTED"
+	tasks: string[]
+	work_type?: string | null
+	created_at?: string | null
+	updated_at?: string | null
+}
+
+export interface BackendOverviewStats {
+	total_blocks: number
+	approved: number
+	pending_approval: number
+	conflicts: number
+	submitted_requests: number
+}
+
+export interface BackendConflictCheck {
+	has_conflict: boolean
+	message: string
+	conflicting_block_id?: string | null
+}
+
