@@ -20,6 +20,11 @@ export default {
 				accentSoft: "var(--accent-soft)",
 				saffron: "var(--saffron)",
 			},
+			fontFamily: {
+				sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+				heading: ["DM Sans", "sans-serif"],
+				gov: ["Noto Serif", "Georgia", "serif"],
+			},
 			borderColor: { DEFAULT: "var(--border)" },
 			boxShadow: { soft: "0 1px 3px rgba(22,35,58,0.08), 0 4px 14px rgba(22,35,58,0.06)" },
 			keyframes: {

@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { ArrowDown, ArrowUp, Check, ChevronRight, Clock, Cpu, FileText } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 import type { AIRecommendation as Rec } from "@/types"
 import { Button } from "./ui"
 import { cx, pct } from "@/utils/display"
+import { useApp } from "@/store/AppContext"
 
 export function AIRecommendationCard({
 	recommendation,
@@ -13,13 +15,30 @@ export function AIRecommendationCard({
 }: {
 	recommendation: Rec
 	canApprove: boolean
-	onApply?: (id: string) => void
+	onApply?: (id: string) => void | Promise<void>
 	onSelectTask?: (id: string) => void
 	applying?: boolean
 }) {
 	const [showWhy, setShowWhy] = useState(false)
+	const navigate = useNavigate()
+	const { focusSection } = useApp()
 	const r = recommendation
 	const applied = r.status === "APPROVED"
+
+	const handleScheduleBlock = async () => {
+		if (r.block_section) {
+			focusSection(r.block_section)
+		}
+		try {
+			if (onApply) {
+				await onApply(r.recommendation_id)
+			}
+		} catch (err) {
+			console.error("Error scheduling recommendation block:", err)
+		} finally {
+			navigate("/schedule")
+		}
+	}
 
 	return (
 		<article className="overflow-hidden rounded-xl border border-line bg-surface shadow-soft">
@@ -102,18 +121,30 @@ export function AIRecommendationCard({
 					<ChevronRight size={13} className={cx("transition-transform", showWhy && "rotate-90")} />
 				</Button>
 				{applied ? (
-					<span className="inline-flex items-center gap-1.5 rounded-lg border border-[#1E7D45]/45 bg-[#1E7D45]/10 px-3 py-2 text-[12.5px] font-medium text-[#1E7D45]">
-						<Check size={13} /> Applied by planner
-					</span>
+					<div className="flex items-center gap-2">
+						<span className="inline-flex items-center gap-1.5 rounded-lg border border-[#1E7D45]/45 bg-[#1E7D45]/10 px-3 py-2 text-[12.5px] font-medium text-[#1E7D45]">
+							<Check size={13} /> Scheduled by planner
+						</span>
+						<Button
+							size="sm"
+							variant="ghost"
+							onClick={() => {
+								if (r.block_section) focusSection(r.block_section)
+								navigate("/schedule")
+							}}
+						>
+							View in schedule
+						</Button>
+					</div>
 				) : (
 					<Button
 						size="sm"
 						variant="primary"
 						disabled={!canApprove || applying}
-						title={canApprove ? undefined : "Only a supervisor can apply recommendations"}
-						onClick={() => onApply?.(r.recommendation_id)}
+						title={canApprove ? undefined : "Only a supervisor can schedule blocks"}
+						onClick={handleScheduleBlock}
 					>
-						{applying ? "Applying…" : "Apply recommendation"}
+						{applying ? "Scheduling…" : "Schedule block"}
 					</Button>
 				)}
 				<span className="ml-auto text-[11px] text-muted">

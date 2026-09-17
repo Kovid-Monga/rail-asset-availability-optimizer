@@ -3,26 +3,26 @@
 @tailwind utilities;
 
 :root {
-	--canvas: #EEF4FC;
+	--canvas: #F4F6F9;
 	--surface: #FFFFFF;
-	--raised: #F3F8FD;
-	--border: #DCE7F5;
-	--text: #16233A;
-	--text-muted: #5B6B80;
+	--raised: #F8FAFC;
+	--border: #DDE3EA;
+	--text: #172B3A;
+	--text-muted: #5A6D80;
 
 	--gov-navy: #0F2A5C;
 	--gov-navy-2: #16407A;
-	--accent: #1D4ED8;
-	--accent-soft: #E3ECFB;
+	--accent: #1B4E8C;
+	--accent-soft: #E8EFF5;
 	--saffron: #F5821F;
 
-	--positive: #1E7D45;
-	--attention: #C2610F;
-	--danger: #C0392B;
-	--caution: #A9790B;
+	--positive: #1B7A43;
+	--attention: #B88632;
+	--danger: #C94C4C;
+	--caution: #B88632;
 
-	--grid: rgba(22, 35, 58, 0.08);
-	--chart-axis: rgba(22, 35, 58, 0.45);
+	--grid: rgba(23, 43, 58, 0.08);
+	--chart-axis: rgba(23, 43, 58, 0.45);
 }
 
 :root.dark {
@@ -58,10 +58,14 @@ body {
 	margin: 0;
 	background: var(--canvas);
 	color: var(--text);
-	font-family: "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
 	line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'DM Sans', sans-serif;
 }
 
 @layer components {

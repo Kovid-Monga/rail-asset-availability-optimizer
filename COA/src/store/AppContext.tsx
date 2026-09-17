@@ -66,12 +66,12 @@ export function useApp(): AppState {
 	return ctx
 }
 
-/** Which sidebar destinations each role can see. */
+/** Which sidebar destinations each role can see (limited strictly to the 6 navbar items). */
 export const ROLE_NAV: Record<Role, string[]> = {
-	Supervisor: ["/", "/tasks", "/schedule", "/map", "/gantt", "/recommendations", "/what-if", "/incidents", "/reports", "/settings"],
-	"Maintenance Crew": ["/", "/tasks", "/map", "/incidents", "/settings"],
-	Auditor: ["/", "/tasks", "/map", "/incidents", "/reports", "/settings"],
-	Management: ["/", "/schedule", "/map", "/reports", "/what-if", "/settings"],
+	Supervisor: ["/", "/tasks", "/recommendations", "/schedule", "/reports", "/settings"],
+	"Maintenance Crew": ["/", "/tasks", "/schedule", "/reports", "/settings"],
+	Auditor: ["/", "/tasks", "/schedule", "/reports", "/settings"],
+	Management: ["/", "/tasks", "/recommendations", "/schedule", "/reports", "/settings"],
 }
 
 export const ROLE_CAPABILITIES: Record<
