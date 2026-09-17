@@ -109,7 +109,7 @@ export function WhatIfSimulation() {
 						<div className="space-y-4">
 							<div className="grid gap-3 sm:grid-cols-4">
 								{[
-									{ label: "Affected tasks", value: String(result.affected_tasks.length) },
+									{ label: "Affected tasks", value: String(result.affected_tasks) },
 									{
 										label: "Delay change",
 										value: `${result.estimated_delay_delta_min > 0 ? "+" : ""}${result.estimated_delay_delta_min} min`,

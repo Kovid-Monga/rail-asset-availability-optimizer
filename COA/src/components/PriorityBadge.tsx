@@ -51,7 +51,7 @@ export function BlockStatusBadge({ status }: { status: BlockStatus }) {
 export function DepartmentChip({ department, withSystem }: { department: Department; withSystem?: boolean }) {
 	const d = DEPARTMENT_STYLE[department]
 	return (
-		<span className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-line bg-white/[0.03] px-2 py-0.5 text-[11px]">
+		<span className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-line bg-raised px-2 py-0.5 text-[11px]">
 			<span aria-hidden className="h-2 w-2 rounded-[2px]" style={{ background: d.hex }} />
 			<span className="font-medium">{department}</span>
 			{withSystem ? <span className="mono text-muted">{d.system}</span> : null}

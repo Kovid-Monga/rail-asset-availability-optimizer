@@ -1,5 +1,5 @@
 /* Shared primitives: panel, section header, button, field, async states. */
-import type { ReactNode } from "react"
+import { isValidElement, type ComponentType, type ReactNode } from "react"
 import { AlertTriangle, Inbox, Loader2, RefreshCw } from "lucide-react"
 import { cx } from "@/utils/display"
 
@@ -20,17 +20,35 @@ export function SectionHeader({
 	subtitle,
 	action,
 	eyebrow,
+	icon: Icon,
 }: {
 	title: string
 	subtitle?: string
 	action?: ReactNode
 	eyebrow?: string
+	icon?: ComponentType<{ size?: number | string; className?: string }> | ReactNode
 }) {
 	return (
 		<header className="mb-4 flex flex-wrap items-start justify-between gap-3">
 			<div>
-				{eyebrow ? <p className="label-xs mb-1">{eyebrow}</p> : null}
-				<h2 className="text-[17px] font-semibold tracking-tight">{title}</h2>
+				{eyebrow ? (
+					<div className="mb-1.5 flex items-center gap-1.5">
+						{Icon ? (
+							<span className="flex h-5 w-5 items-center justify-center rounded bg-accentSoft text-accent">
+								{isValidElement(Icon) ? (
+									Icon
+								) : (
+									(() => {
+										const IconComp = Icon as ComponentType<{ size?: number | string; className?: string }>
+										return <IconComp size={12} />
+									})()
+								)}
+							</span>
+						) : null}
+						<p className="label-xs leading-none uppercase tracking-wider">{eyebrow}</p>
+					</div>
+				) : null}
+				<h2 className="text-[17px] font-bold tracking-tight text-ink">{title}</h2>
 				{subtitle ? <p className="mt-1 max-w-[70ch] text-sm text-muted">{subtitle}</p> : null}
 			</div>
 			{action}
@@ -70,10 +88,10 @@ export function Button({
 	className?: string
 }) {
 	const variants: Record<string, string> = {
-		primary: "bg-[#2f6fb8] text-white hover:bg-[#3a7cc7] border-transparent",
-		ghost: "bg-white/[0.04] text-ink hover:bg-white/[0.09] border-line",
-		danger: "bg-[#E97366]/12 text-[#E97366] hover:bg-[#E97366]/20 border-[#E97366]/35",
-		positive: "bg-[#72BC8F]/14 text-[#72BC8F] hover:bg-[#72BC8F]/22 border-[#72BC8F]/35",
+		primary: "bg-accent text-white hover:bg-govNavy border-transparent",
+		ghost: "bg-raised text-ink hover:bg-accentSoft border-line",
+		danger: "bg-[#C0392B]/10 text-[#C0392B] hover:bg-[#C0392B]/15 border-[#C0392B]/45",
+		positive: "bg-[#1E7D45]/10 text-[#1E7D45] hover:bg-[#1E7D45]/15 border-[#1E7D45]/45",
 	}
 	return (
 		<button
@@ -116,7 +134,7 @@ export function LoadingState({ message = "Loading…" }: { message?: string }) {
 export function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
 	return (
 		<div className="flex min-h-[180px] flex-col items-center justify-center gap-3 px-6 text-center">
-			<AlertTriangle size={20} className="text-[#E97366]" />
+			<AlertTriangle size={20} className="text-[#C0392B]" />
 			<p className="max-w-[52ch] text-sm">{message}</p>
 			{onRetry ? (
 				<Button size="sm" onClick={onRetry}>

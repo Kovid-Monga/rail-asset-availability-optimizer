@@ -77,7 +77,7 @@ export function GanttChart({
 							onMouseLeave={() => onFocusSection?.(null)}
 							className={cx(
 								"flex items-center border-b border-line pr-3 text-right",
-								focusedSection === s && "bg-white/[0.03]",
+								focusedSection === s && "bg-raised",
 							)}
 						>
 							<div className="w-full">
@@ -104,7 +104,7 @@ export function GanttChart({
 					{nowMinutes !== undefined && nowMinutes > DAY_START && nowMinutes < DAY_END ? (
 						<span
 							aria-hidden
-							className="absolute top-0 z-20 h-full w-px bg-[#E97366]/70"
+							className="absolute top-0 z-20 h-full w-px bg-[#C0392B]/70"
 							style={{ left: `${((nowMinutes - DAY_START) / SPAN) * 100}%` }}
 						/>
 					) : null}
@@ -115,7 +115,7 @@ export function GanttChart({
 							style={{ height: ROW_H }}
 							onMouseEnter={() => onFocusSection?.(s)}
 							onMouseLeave={() => onFocusSection?.(null)}
-							className={cx("relative border-b border-line", focusedSection === s && "bg-white/[0.03]")}
+							className={cx("relative border-b border-line", focusedSection === s && "bg-raised")}
 						>
 							{blocks
 								.filter((b) => b.block_section === s)
@@ -132,7 +132,7 @@ export function GanttChart({
 											className={cx(
 												"group absolute top-2 flex h-[46px] animate-fadeUp flex-col justify-center overflow-hidden rounded-lg border px-2.5 text-left transition-all",
 												style.bg,
-												selected ? "z-10 ring-2 ring-white/25" : "hover:brightness-110",
+												selected ? "z-10 ring-2 ring-govNavy/25" : "hover:brightness-110",
 											)}
 											style={{
 												left: `${left(b.start_time)}%`,

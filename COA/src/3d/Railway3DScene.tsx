@@ -10,7 +10,7 @@ import { OrbitControls } from "@react-three/drei"
 import type { Mesh } from "three"
 import type { NetworkResponse } from "@/types"
 
-const TRAFFIC_HEX = { High: "#E97366", Medium: "#DE9255", Low: "#72BC8F" } as const
+const TRAFFIC_HEX = { High: "#C0392B", Medium: "#C2610F", Low: "#1E7D45" } as const
 const SPAN = 18 // world units across the corridor
 
 function Train({ speed = 0.08 }: { speed?: number }) {
@@ -23,7 +23,7 @@ function Train({ speed = 0.08 }: { speed?: number }) {
 	return (
 		<mesh ref={ref} position={[-SPAN / 2, 0.42, 0]} castShadow>
 			<boxGeometry args={[1.5, 0.5, 0.6]} />
-			<meshStandardMaterial color="#5E9FE8" emissive="#5E9FE8" emissiveIntensity={0.35} />
+			<meshStandardMaterial color="#1D4ED8" emissive="#1D4ED8" emissiveIntensity={0.35} />
 		</mesh>
 	)
 }
@@ -38,7 +38,7 @@ function ActiveBlock({ x, width }: { x: number; width: number }) {
 	return (
 		<mesh ref={ref} position={[x, 0.6, 0]}>
 			<boxGeometry args={[width, 1.2, 1.6]} />
-			<meshStandardMaterial color="#4FB9C9" transparent opacity={0.3} />
+			<meshStandardMaterial color="#0E7C86" transparent opacity={0.3} />
 		</mesh>
 	)
 }

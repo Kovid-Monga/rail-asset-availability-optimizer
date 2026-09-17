@@ -78,7 +78,7 @@ export function GanttPlanner() {
 												<button
 													type="button"
 													onClick={() => selectTask(t!.task_id)}
-													className="flex w-full items-center gap-2.5 rounded-lg border border-line bg-white/[0.02] px-3 py-2 text-left text-[12.5px] hover:bg-white/[0.06]"
+													className="flex w-full items-center gap-2.5 rounded-lg border border-line bg-raised px-3 py-2 text-left text-[12.5px] hover:bg-accentSoft"
 												>
 													<span className="mono font-semibold">{t!.task_id}</span>
 													<DepartmentChip department={t!.department} />

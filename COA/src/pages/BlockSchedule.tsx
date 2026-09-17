@@ -58,8 +58,8 @@ export function BlockSchedule() {
 												className={cx(
 													"w-full rounded-lg border px-3.5 py-3 text-left transition-colors",
 													selected?.block_id === b.block_id
-														? "border-[#5E9FE8]/55 bg-[#5E9FE8]/[0.07]"
-														: "border-line hover:bg-white/[0.04]",
+														? "border-accent bg-accentSoft font-medium"
+														: "border-line hover:bg-accentSoft",
 												)}
 											>
 												<div className="flex items-center justify-between gap-2">

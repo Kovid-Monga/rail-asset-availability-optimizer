@@ -24,7 +24,7 @@ export function TaskCard({
 			onMouseLeave={() => onHoverSection?.(null)}
 			className={cx(
 				"w-full rounded-[10px] border bg-surface px-4 py-3.5 text-left transition-all",
-				selected ? "border-[#5E9FE8]/60 ring-1 ring-[#5E9FE8]/25" : "border-line hover:border-white/20",
+				selected ? "border-accent ring-1 ring-accent/25" : "border-line hover:border-accent/40",
 				dimmed && "opacity-45",
 			)}
 		>

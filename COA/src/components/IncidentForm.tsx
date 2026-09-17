@@ -40,13 +40,13 @@ export function IncidentStages({ stage }: { stage: Incident["stage"] }) {
 						<span
 							className={cx(
 								"inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[11px]",
-								done ? "border-[#5E9FE8]/45 bg-[#5E9FE8]/12 text-accent" : "border-line text-muted",
+								done ? "border-accent/45 bg-accentSoft text-accent" : "border-line text-muted",
 							)}
 						>
 							{done ? <Check size={10} /> : <span className="h-1.5 w-1.5 rounded-full bg-current opacity-60" />}
 							{STAGE_LABEL[s]}
 						</span>
-						{i < STAGES.length - 1 ? <span aria-hidden className="h-px w-3 bg-white/15" /> : null}
+						{i < STAGES.length - 1 ? <span aria-hidden className="h-px w-3 bg-line" /> : null}
 					</li>
 				)
 			})}
@@ -70,7 +70,7 @@ export function IncidentForm({
 	const [photoName, setPhotoName] = useState("")
 
 	const inputClass =
-		"mt-1 w-full rounded-lg border border-line bg-canvas px-3 py-2 text-[13px] outline-none focus:border-white/30"
+		"mt-1 w-full rounded-lg border border-line bg-canvas px-3 py-2 text-[13px] outline-none focus:border-accent"
 	const valid = description.trim().length > 3 && location.trim().length > 0
 
 	return (
@@ -132,7 +132,7 @@ export function IncidentForm({
 				</label>
 			</div>
 
-			<label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-line px-3 py-2.5 text-[12.5px] text-muted hover:border-white/25">
+			<label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-line px-3 py-2.5 text-[12.5px] text-muted hover:border-accent">
 				<Paperclip size={14} />
 				{photoName || "Attach a photo (optional)"}
 				<input

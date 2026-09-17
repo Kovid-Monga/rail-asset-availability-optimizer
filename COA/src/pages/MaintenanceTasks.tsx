@@ -41,7 +41,7 @@ export function MaintenanceTasks() {
 								onClick={() => setFilter(f)}
 								className={cx(
 									"h-8 rounded-lg border px-2.5 text-[12px] transition-colors",
-									filter === f ? "border-white/25 bg-white/[0.09]" : "border-line text-muted hover:text-ink",
+									filter === f ? "border-accent bg-accentSoft font-medium text-govNavy" : "border-line text-muted hover:bg-accentSoft hover:text-ink",
 								)}
 							>
 								{f}

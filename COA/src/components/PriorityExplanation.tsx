@@ -39,7 +39,7 @@ export function PriorityExplanation({ explanation }: { explanation: Explanation 
 								<span className="text-ink">{f.score}</span>/{f.max}
 							</span>
 						</div>
-						<div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
+						<div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-accentSoft">
 							<div
 								className="h-full animate-grow rounded-full"
 								style={{ width: `${(f.score / f.max) * 100}%`, background: hex, transformOrigin: "left" }}
@@ -49,7 +49,7 @@ export function PriorityExplanation({ explanation }: { explanation: Explanation 
 				))}
 			</ul>
 
-			<div className="mt-4 rounded-lg border border-line bg-white/[0.03] p-3.5">
+			<div className="mt-4 rounded-lg border border-line bg-raised p-3.5">
 				<p className="label-xs mb-1.5 flex items-center gap-1.5">
 					<Info size={12} /> Why this task was prioritized
 				</p>

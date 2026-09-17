@@ -1,8 +1,20 @@
 import { useMemo } from "react"
 import { Link } from "react-router-dom"
-import { ArrowUpRight, Layers } from "lucide-react"
+import { ArrowUpRight, Layers, Sparkles } from "lucide-react"
 import { AsyncBoundary, Panel, SectionHeader } from "@/components/ui"
 import { KPIGrid } from "@/components/KPIGrid"
+
+function TrackIcon({ size = 12 }: { size?: number | string }) {
+	return (
+		<svg viewBox="0 0 16 16" width={size} height={size} className="fill-none stroke-current" strokeWidth="1.8">
+			<line x1="4" y1="2" x2="4" y2="14" />
+			<line x1="12" y1="2" x2="12" y2="14" />
+			<line x1="4" y1="5" x2="12" y2="5" />
+			<line x1="4" y1="8.5" x2="12" y2="8.5" />
+			<line x1="4" y1="12" x2="12" y2="12" />
+		</svg>
+	)
+}
 import { NetworkMap } from "@/components/NetworkMap"
 import { GanttChart } from "@/components/GanttChart"
 import { AIRecommendationCard } from "@/components/AIRecommendation"
@@ -44,6 +56,7 @@ export function Dashboard() {
 			<div className="grid gap-6 xl:grid-cols-[1.55fr_1fr]">
 				<Panel>
 					<SectionHeader
+						icon={TrackIcon}
 						eyebrow="Corridor"
 						title="Network & block planning"
 						subtitle="Traffic density, active blocks and live train positions across the division."
@@ -60,7 +73,11 @@ export function Dashboard() {
 
 				<div className="space-y-6">
 					<Panel>
-						<SectionHeader eyebrow="Decision support" title="AI recommendations & alerts" />
+						<SectionHeader
+							icon={Sparkles}
+							eyebrow="Decision support"
+							title="AI recommendations & alerts"
+						/>
 						<AsyncBoundary
 							state={recommendations}
 							loadingMessage="Requesting recommendations…"

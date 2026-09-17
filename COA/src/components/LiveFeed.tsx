@@ -4,9 +4,9 @@ import { SectionHeader } from "./ui"
 import { formatClock } from "@/utils/display"
 
 const SEVERITY = {
-	info: { hex: "#5E9FE8", label: "INFO" },
-	warn: { hex: "#DE9255", label: "WARN" },
-	critical: { hex: "#E97366", label: "CRIT" },
+	info: { hex: "#2A5CAA", label: "INFO" },
+	warn: { hex: "#C2610F", label: "WARN" },
+	critical: { hex: "#C0392B", label: "CRIT" },
 } as const
 
 export function LiveFeed({ events, enabled }: { events: LiveEvent[]; enabled: boolean }) {
@@ -20,7 +20,7 @@ export function LiveFeed({ events, enabled }: { events: LiveEvent[]; enabled: bo
 						<span
 							aria-hidden
 							className="h-1.5 w-1.5 animate-pulseDot rounded-full"
-							style={{ background: enabled ? "#72BC8F" : "#8b8b8b" }}
+							style={{ background: enabled ? "#1E7D45" : "#5B6B80" }}
 						/>
 						{enabled ? "streaming" : "idle"}
 					</span>
@@ -38,7 +38,7 @@ export function LiveFeed({ events, enabled }: { events: LiveEvent[]; enabled: bo
 						return (
 							<li
 								key={e.id}
-								className="animate-fadeUp rounded-lg border border-line bg-white/[0.02] px-3 py-2"
+								className="animate-fadeUp rounded-lg border border-line bg-raised px-3 py-2"
 								style={{ borderLeft: `2px solid ${s.hex}` }}
 							>
 								<div className="flex items-center justify-between gap-2">

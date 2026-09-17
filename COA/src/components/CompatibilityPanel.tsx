@@ -26,7 +26,7 @@ export function CompatibilityPanel({
 
 			<div className="flex items-center gap-2 text-[13px]">
 				{compatible.length ? (
-					<Link2 size={14} className="text-[#72BC8F]" />
+					<Link2 size={14} className="text-[#1E7D45]" />
 				) : (
 					<Link2Off size={14} className="text-muted" />
 				)}
@@ -45,7 +45,7 @@ export function CompatibilityPanel({
 							<button
 								type="button"
 								onClick={() => onSelectTask?.(t.task_id)}
-								className="flex w-full items-center gap-2.5 rounded-lg border border-line bg-white/[0.02] px-3 py-2 text-left text-[12.5px] transition-colors hover:bg-white/[0.06]"
+								className="flex w-full items-center gap-2.5 rounded-lg border border-line bg-raised px-3 py-2 text-left text-[12.5px] transition-colors hover:bg-accentSoft"
 							>
 								<span className="mono font-semibold">{t.task_id}</span>
 								<DepartmentChip department={t.department} />

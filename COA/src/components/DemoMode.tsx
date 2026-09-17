@@ -129,7 +129,7 @@ export function DemoMode() {
 
 	return (
 		<div className="pointer-events-none fixed inset-x-0 bottom-5 z-50 flex justify-center px-4">
-			<div className="panel pointer-events-auto flex w-full max-w-[680px] items-start gap-4 border-[#5E9FE8]/40 bg-raised/95 px-4 py-3.5 shadow-soft backdrop-blur">
+			<div className="panel pointer-events-auto flex w-full max-w-[680px] items-start gap-4 border-accent/40 bg-raised/95 px-4 py-3.5 shadow-soft backdrop-blur">
 				<div className="min-w-0 flex-1">
 					<div className="flex items-center gap-2">
 						<span className="label-xs text-accent">Guided demo</span>
@@ -139,7 +139,7 @@ export function DemoMode() {
 					</div>
 					<p className="mt-1 text-[13.5px] font-semibold tracking-tight">{step.title}</p>
 					<p className="mt-0.5 text-[12.5px] leading-snug text-muted">{step.body}</p>
-					<div className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-white/10">
+					<div className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-line">
 						<div
 							className="h-full rounded-full bg-accent transition-all duration-300"
 							style={{ width: `${((i + 1) / STEPS.length) * 100}%` }}

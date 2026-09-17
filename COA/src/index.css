@@ -3,28 +3,49 @@
 @tailwind utilities;
 
 :root {
+	--canvas: #EEF4FC;
+	--surface: #FFFFFF;
+	--raised: #F3F8FD;
+	--border: #DCE7F5;
+	--text: #16233A;
+	--text-muted: #5B6B80;
+
+	--gov-navy: #0F2A5C;
+	--gov-navy-2: #16407A;
+	--accent: #1D4ED8;
+	--accent-soft: #E3ECFB;
+	--saffron: #F5821F;
+
+	--positive: #1E7D45;
+	--attention: #C2610F;
+	--danger: #C0392B;
+	--caution: #A9790B;
+
+	--grid: rgba(22, 35, 58, 0.08);
+	--chart-axis: rgba(22, 35, 58, 0.45);
+}
+
+:root.dark {
 	--canvas: #141517;
 	--surface: #1a1c1f;
 	--raised: #24272b;
 	--border: rgba(255, 255, 255, 0.11);
 	--text: #ffffff;
-	--muted: rgba(255, 255, 255, 0.62);
+	--text-muted: rgba(255, 255, 255, 0.62);
+
+	--gov-navy: #16305C;
+	--gov-navy-2: #1B3A6B;
 	--accent: #5e9fe8;
+	--accent-soft: rgba(94, 159, 232, 0.15);
+	--saffron: #f5821f;
+
 	--positive: #72bc8f;
 	--attention: #de9255;
 	--danger: #e97366;
 	--caution: #eac26b;
-	--grid: rgba(255, 255, 255, 0.06);
-}
 
-:root.light {
-	--canvas: #f7f7f6;
-	--surface: #ffffff;
-	--raised: #f0efed;
-	--border: #e2e1de;
-	--text: #2c2c2b;
-	--muted: #7d7a75;
-	--grid: rgba(0, 0, 0, 0.06);
+	--grid: rgba(255, 255, 255, 0.06);
+	--chart-axis: rgba(255, 255, 255, 0.35);
 }
 
 html,
@@ -37,7 +58,7 @@ body {
 	margin: 0;
 	background: var(--canvas);
 	color: var(--text);
-	font-family: ui-sans-serif, -apple-system, "Segoe UI", Inter, system-ui, sans-serif;
+	font-family: "Noto Sans", ui-sans-serif, system-ui, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
 	line-height: 1.5;
@@ -54,6 +75,9 @@ body {
 		font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
 		font-variant-numeric: tabular-nums;
 	}
+	.font-gov {
+		font-family: "Noto Serif", Georgia, serif;
+	}
 }
 
 /* scrollbars */
@@ -69,16 +93,16 @@ body {
 	border-radius: 999px;
 }
 *::-webkit-scrollbar-thumb:hover {
-	background: var(--muted);
+	background: var(--text-muted);
 }
 
 select option {
+	color: #16233A;
+	background: #ffffff;
+}
+:root.dark select option {
 	color: #ffffff;
 	background: #1a1c1f;
-}
-:root.light select option {
-	color: #2c2c2b;
-	background: #ffffff;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { API_BASE_URL, isMockMode } from "@/api"
 import { ENDPOINTS } from "@/api/endpoints"
 import { Panel, PageHeader, SectionHeader } from "@/components/ui"
@@ -10,6 +11,20 @@ const ROLES: Role[] = ["Supervisor", "Maintenance Crew", "Auditor", "Management"
 export function Settings() {
 	const { role, setRole } = useApp()
 	const caps = ROLE_CAPABILITIES[role]
+
+	type ThemeChoice = "light" | "dark" | "system"
+	const [theme, setThemeState] = useState<ThemeChoice>(
+		() => (localStorage.getItem("theme") as ThemeChoice | null) ?? "light",
+	)
+
+	function setTheme(choice: ThemeChoice) {
+		setThemeState(choice)
+		localStorage.setItem("theme", choice)
+		const isDark =
+			choice === "dark" ||
+			(choice === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+		document.documentElement.classList.toggle("dark", isDark)
+	}
 
 	return (
 		<div className="space-y-6">
@@ -33,7 +48,7 @@ export function Settings() {
 								onClick={() => setRole(r)}
 								className={cx(
 									"rounded-lg border px-3.5 py-3 text-left text-[13px] transition-colors",
-									role === r ? "border-[#5E9FE8]/55 bg-[#5E9FE8]/[0.08]" : "border-line hover:bg-white/[0.05]",
+									role === r ? "border-accent bg-accentSoft font-medium text-govNavy" : "border-line hover:bg-accentSoft",
 								)}
 							>
 								{r}
@@ -79,6 +94,38 @@ export function Settings() {
 						<li>POST {ENDPOINTS.override}</li>
 						<li>POST {ENDPOINTS.applyRecommendation(":id")}</li>
 					</ul>
+				</Panel>
+
+				<Panel>
+					<SectionHeader
+						eyebrow="Appearance"
+						title="Night shift mode"
+						subtitle="Applies immediately and persists across sessions. Night shift dims the interface for low-light environments."
+					/>
+					<div className="grid gap-2 sm:grid-cols-3">
+						{(
+							[
+								{ value: "light", label: "Light", desc: "Default portal theme" },
+								{ value: "dark", label: "Night Shift", desc: "Low-light dark palette" },
+								{ value: "system", label: "System", desc: "Follows OS preference" },
+							] as const
+						).map(({ value, label, desc }) => (
+							<button
+								key={value}
+								type="button"
+								onClick={() => setTheme(value)}
+								className={cx(
+									"rounded-lg border px-3.5 py-3 text-left text-[13px] transition-colors",
+									theme === value
+										? "border-accent bg-accentSoft font-medium text-govNavy"
+										: "border-line hover:bg-accentSoft",
+								)}
+							>
+								<span className="block font-medium">{label}</span>
+								<span className="block text-[11.5px] text-muted">{desc}</span>
+							</button>
+						))}
+					</div>
 				</Panel>
 			</div>
 		</div>

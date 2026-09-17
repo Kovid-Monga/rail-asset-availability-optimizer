@@ -81,11 +81,19 @@ export function TaskDetailDrawer({
 						<Field label="Assigned team" value={task.assigned_team ?? "Unassigned"} />
 					</div>
 
-					<div className="h-px bg-[var(--border)]" />
-					<PriorityExplanation explanation={task.priority_explanation} />
+					{task.priority_explanation ? (
+						<>
+							<div className="h-px bg-line" />
+							<PriorityExplanation explanation={task.priority_explanation} />
+						</>
+					) : null}
 
-					<div className="h-px bg-[var(--border)]" />
-					<CompatibilityPanel compatibility={task.compatibility} tasks={tasks} onSelectTask={onSelectTask} />
+					{task.compatibility ? (
+						<>
+							<div className="h-px bg-line" />
+							<CompatibilityPanel compatibility={task.compatibility} tasks={tasks} onSelectTask={onSelectTask} />
+						</>
+					) : null}
 				</div>
 
 				<footer className="border-t border-line px-5 py-3 text-[11.5px] text-muted">

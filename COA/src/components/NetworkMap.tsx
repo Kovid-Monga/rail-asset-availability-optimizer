@@ -4,11 +4,11 @@
  * train positions. Purely a renderer of GET /api/network.
  * ========================================================================== */
 
-import { TrainFront } from "lucide-react"
+import { TrainFront, Wrench } from "lucide-react"
 import type { NetworkResponse } from "@/types"
 import { cx, pct } from "@/utils/display"
 
-const TRAFFIC_HEX = { High: "#E97366", Medium: "#DE9255", Low: "#72BC8F" } as const
+const TRAFFIC_HEX = { High: "#C0392B", Medium: "#C2610F", Low: "#1E7D45" } as const
 
 export function NetworkMap({
 	network,
@@ -28,7 +28,28 @@ export function NetworkMap({
 	const stationOf = (id: string) => network.stations.find((s) => s.id === id)
 
 	return (
-		<div>
+		<div className="relative overflow-hidden">
+			{/* Faint train watermark illustration at the bottom right */}
+			<div
+				aria-hidden
+				className="pointer-events-none absolute -bottom-2 -right-4 h-28 w-80 opacity-[0.08] dark:opacity-[0.04] overflow-hidden"
+			>
+				<svg viewBox="0 0 300 100" className="h-full w-full stroke-govNavy fill-none" strokeWidth="1.2">
+					<path d="M0 80 L300 80" />
+					<path d="M0 88 L300 88" />
+					<line x1="20" y1="78" x2="20" y2="90" />
+					<line x1="60" y1="78" x2="60" y2="90" />
+					<line x1="100" y1="78" x2="100" y2="90" />
+					<line x1="140" y1="78" x2="140" y2="90" />
+					<line x1="180" y1="78" x2="180" y2="90" />
+					<line x1="220" y1="78" x2="220" y2="90" />
+					<line x1="260" y1="78" x2="260" y2="90" />
+					{/* Train shape */}
+					<path d="M50 78 C 80 75, 140 45, 200 40 L 260 50 L 250 65 L 290 70 L 270 78 Z" fill="currentColor" fillOpacity="0.1" />
+					<path d="M150 50 L 190 48 L 180 56 L 150 58 Z" fill="currentColor" fillOpacity="0.25" />
+				</svg>
+			</div>
+
 			<svg
 				viewBox={`0 0 ${W} ${H}`}
 				style={{ height, width: "100%" }}
@@ -65,7 +86,7 @@ export function NetworkMap({
 								y1={py(a.y)}
 								x2={px(b.x)}
 								y2={py(b.y)}
-								stroke="rgba(255,255,255,0.10)"
+								stroke="var(--border)"
 								strokeWidth={focused ? 16 : 13}
 								strokeLinecap="round"
 							/>
@@ -89,9 +110,9 @@ export function NetworkMap({
 									width={52}
 									height={15}
 									rx={4}
-									fill="#4FB9C9"
+									fill="#0E7C86"
 									fillOpacity={0.22}
-									stroke="#4FB9C9"
+									stroke="#0E7C86"
 									strokeOpacity={0.6}
 								/>
 							) : null}
@@ -101,21 +122,20 @@ export function NetworkMap({
 									y={(py(a.y) + py(b.y)) / 2 - 15}
 									textAnchor="middle"
 									fontSize={9}
-									fill="#4FB9C9"
+									fill="#0E7C86"
 								>
 									BLOCK LIVE
 								</text>
 							) : null}
-							{/* section label */}
-							<text
-								x={(px(a.x) + px(b.x)) / 2}
-								y={(py(a.y) + py(b.y)) / 2 + 30}
-								textAnchor="middle"
-								fontSize={10}
-								fill="rgba(255,255,255,0.62)"
-							>
-								{sec.id} · {sec.open_tasks} open · {pct(sec.asset_availability)}
-							</text>
+							{/* status pill marker below segment */}
+							<rect
+								x={(px(a.x) + px(b.x)) / 2 - 9}
+								y={(py(a.y) + py(b.y)) / 2 + 16}
+								width={18}
+								height={9}
+								rx={2.5}
+								fill={TRAFFIC_HEX[sec.traffic]}
+							/>
 						</g>
 					)
 				})}
@@ -123,11 +143,15 @@ export function NetworkMap({
 				{/* stations */}
 				{network.stations.map((s) => (
 					<g key={s.id}>
-						<circle cx={px(s.x)} cy={py(s.y)} r={7} fill="#1a1c1f" stroke="rgba(255,255,255,0.55)" strokeWidth={2} />
-						<text x={px(s.x)} y={py(s.y) - 16} textAnchor="middle" fontSize={11} fill="#fff">
-							{s.id}
-						</text>
-						<text x={px(s.x)} y={py(s.y) - 28} textAnchor="middle" fontSize={9} fill="rgba(255,255,255,0.45)">
+						<circle cx={px(s.x)} cy={py(s.y)} r={6.5} fill="#FFFFFF" stroke="#1D4ED8" strokeWidth={2.5} />
+						<text
+							x={px(s.x)}
+							y={py(s.y) - 16}
+							textAnchor="middle"
+							fontSize={11.5}
+							fontWeight="600"
+							fill="var(--text)"
+						>
 							{s.name}
 						</text>
 					</g>
@@ -137,11 +161,11 @@ export function NetworkMap({
 				{network.trains.map((t, i) => {
 					const x = px(t.progress)
 					const y = py(0.5) + (t.direction === "UP" ? -20 : 20) + i * 2
-					const hex = t.delay_min > 5 ? "#E97366" : t.delay_min > 0 ? "#DE9255" : "#72BC8F"
+					const hex = t.delay_min > 5 ? "#C0392B" : t.delay_min > 0 ? "#C2610F" : "#1E7D45"
 					return (
 						<g key={t.train_no}>
 							<rect x={x - 12} y={y - 6} width={24} height={12} rx={3} fill={hex} fillOpacity={0.9} />
-							<text x={x} y={y - 11} textAnchor="middle" fontSize={9} fill="rgba(255,255,255,0.75)">
+							<text x={x} y={y - 11} textAnchor="middle" fontSize={9} fill="var(--text-muted)">
 								{t.train_no} {t.delay_min > 0 ? `+${t.delay_min}` : "RT"}
 							</text>
 						</g>
@@ -149,17 +173,19 @@ export function NetworkMap({
 				})}
 			</svg>
 
-			<div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-muted">
-				{(Object.keys(TRAFFIC_HEX) as Array<keyof typeof TRAFFIC_HEX>).map((k) => (
-					<span key={k} className="inline-flex items-center gap-1.5">
-						<span className="h-[3px] w-5 rounded-full" style={{ background: TRAFFIC_HEX[k] }} /> {k} traffic
-					</span>
-				))}
+			{/* Legend */}
+			<div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[11.5px] font-medium text-muted">
 				<span className="inline-flex items-center gap-1.5">
-					<span className="h-2.5 w-2.5 rounded-sm border border-[#4FB9C9]/60 bg-[#4FB9C9]/25" /> Active block
+					<span className="h-2 w-2 rounded-full bg-[#1E7D45]" /> Normal
 				</span>
-				<span className={cx("inline-flex items-center gap-1.5")}>
-					<TrainFront size={12} /> Train (late shown in amber / red)
+				<span className="inline-flex items-center gap-1.5">
+					<span className="h-2 w-2 rounded-full bg-[#C2610F]" /> Block
+				</span>
+				<span className="inline-flex items-center gap-1.5">
+					<span className="h-2 w-2 rounded-full bg-[#C0392B]" /> Delay
+				</span>
+				<span className="inline-flex items-center gap-1.5">
+					<Wrench size={12} className="text-accent" /> Maintenance
 				</span>
 			</div>
 		</div>

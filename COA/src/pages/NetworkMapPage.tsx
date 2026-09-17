@@ -70,7 +70,7 @@ export function NetworkMapPage() {
 											key={s.id}
 											onMouseEnter={() => focusSection(s.id)}
 											onMouseLeave={() => focusSection(null)}
-											className={focusedSection === s.id ? "bg-white/[0.05]" : ""}
+											className={focusedSection === s.id ? "bg-accentSoft" : ""}
 										>
 											<td className="mono py-1.5">{s.id}</td>
 											<td className="py-1.5 text-muted">{s.line}</td>

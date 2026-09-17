@@ -13,14 +13,14 @@ import {
 } from "recharts"
 import type { TrendPoint } from "@/types"
 
-const axis = { stroke: "rgba(255,255,255,0.35)", fontSize: 11 }
+const axis = { stroke: "var(--chart-axis)", fontSize: 11 }
 
 const tooltipStyle = {
-	background: "#24272b",
-	border: "1px solid rgba(255,255,255,0.12)",
+	background: "var(--surface)",
+	border: "1px solid var(--border)",
 	borderRadius: 8,
 	fontSize: 12,
-	color: "#fff",
+	color: "var(--text)",
 }
 
 /** Answers: is our planning reducing train delay over the week? */
@@ -30,15 +30,15 @@ export function DelayTrendChart({ data }: { data: TrendPoint[] }) {
 			<AreaChart data={data} margin={{ top: 6, right: 6, bottom: 0, left: -18 }}>
 				<defs>
 					<linearGradient id="delayFill" x1="0" y1="0" x2="0" y2="1">
-						<stop offset="0%" stopColor="#5E9FE8" stopOpacity={0.35} />
-						<stop offset="100%" stopColor="#5E9FE8" stopOpacity={0} />
+						<stop offset="0%" stopColor="#1D4ED8" stopOpacity={0.35} />
+						<stop offset="100%" stopColor="#1D4ED8" stopOpacity={0} />
 					</linearGradient>
 				</defs>
-				<CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
+				<CartesianGrid stroke="var(--grid)" vertical={false} />
 				<XAxis dataKey="label" tick={axis} axisLine={false} tickLine={false} />
 				<YAxis tick={axis} axisLine={false} tickLine={false} width={44} unit="m" />
 				<Tooltip contentStyle={tooltipStyle} formatter={(v) => [`${v} min`, "Est. delay"]} />
-				<Area type="monotone" dataKey="value" stroke="#5E9FE8" strokeWidth={2} fill="url(#delayFill)" />
+				<Area type="monotone" dataKey="value" stroke="#1D4ED8" strokeWidth={2} fill="url(#delayFill)" />
 			</AreaChart>
 		</ResponsiveContainer>
 	)
@@ -49,11 +49,11 @@ export function AvailabilityChart({ data }: { data: TrendPoint[] }) {
 	return (
 		<ResponsiveContainer width="100%" height={170}>
 			<LineChart data={data} margin={{ top: 6, right: 6, bottom: 0, left: -18 }}>
-				<CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
+				<CartesianGrid stroke="var(--grid)" vertical={false} />
 				<XAxis dataKey="label" tick={axis} axisLine={false} tickLine={false} />
 				<YAxis tick={axis} axisLine={false} tickLine={false} width={44} domain={[88, 96]} unit="%" />
 				<Tooltip contentStyle={tooltipStyle} formatter={(v) => [`${v}%`, "Availability"]} />
-				<Line type="monotone" dataKey="value" stroke="#72BC8F" strokeWidth={2} dot={{ r: 2.5 }} />
+				<Line type="monotone" dataKey="value" stroke="#1E7D45" strokeWidth={2} dot={{ r: 2.5 }} />
 			</LineChart>
 		</ResponsiveContainer>
 	)
@@ -64,12 +64,12 @@ export function BacklogChart({ data }: { data: TrendPoint[] }) {
 	return (
 		<ResponsiveContainer width="100%" height={170}>
 			<BarChart data={data} margin={{ top: 6, right: 6, bottom: 0, left: -18 }}>
-				<CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
+				<CartesianGrid stroke="var(--grid)" vertical={false} />
 				<XAxis dataKey="label" tick={axis} axisLine={false} tickLine={false} />
 				<YAxis tick={axis} axisLine={false} tickLine={false} width={44} allowDecimals={false} />
 				<Tooltip contentStyle={tooltipStyle} />
-				<Bar dataKey="value" name="Open tasks" fill="#5E9FE8" radius={[4, 4, 0, 0]} barSize={26} />
-				<Bar dataKey="secondary" name="Critical" fill="#E97366" radius={[4, 4, 0, 0]} barSize={26} />
+				<Bar dataKey="value" name="Open tasks" fill="#1D4ED8" radius={[4, 4, 0, 0]} barSize={26} />
+				<Bar dataKey="secondary" name="Critical" fill="#C0392B" radius={[4, 4, 0, 0]} barSize={26} />
 			</BarChart>
 		</ResponsiveContainer>
 	)

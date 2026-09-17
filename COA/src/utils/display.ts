@@ -12,43 +12,43 @@ export const PRIORITY_STYLE: Record<
 	PriorityCategory,
 	{ text: string; bg: string; border: string; hex: string; icon: string; label: string }
 > = {
-	Critical: { text: "text-[#E97366]", bg: "bg-[#E97366]/12", border: "border-[#E97366]/40", hex: "#E97366", icon: "◆", label: "CRITICAL" },
-	Urgent: { text: "text-[#DE9255]", bg: "bg-[#DE9255]/12", border: "border-[#DE9255]/40", hex: "#DE9255", icon: "▲", label: "URGENT" },
-	Moderate: { text: "text-[#EAC26B]", bg: "bg-[#EAC26B]/12", border: "border-[#EAC26B]/40", hex: "#EAC26B", icon: "■", label: "MODERATE" },
-	Normal: { text: "text-[#72BC8F]", bg: "bg-[#72BC8F]/12", border: "border-[#72BC8F]/40", hex: "#72BC8F", icon: "●", label: "NORMAL" },
+	Critical: { text: "text-[#C0392B]", bg: "bg-[#C0392B]/10", border: "border-[#C0392B]/45", hex: "#C0392B", icon: "◆", label: "CRITICAL" },
+	Urgent: { text: "text-[#C2610F]", bg: "bg-[#C2610F]/10", border: "border-[#C2610F]/45", hex: "#C2610F", icon: "▲", label: "URGENT" },
+	Moderate: { text: "text-[#A9790B]", bg: "bg-[#A9790B]/10", border: "border-[#A9790B]/45", hex: "#A9790B", icon: "■", label: "MODERATE" },
+	Normal: { text: "text-[#1E7D45]", bg: "bg-[#1E7D45]/10", border: "border-[#1E7D45]/45", hex: "#1E7D45", icon: "●", label: "NORMAL" },
 }
 
 export const BLOCK_STATUS_STYLE: Record<
 	BlockStatus,
 	{ label: string; text: string; bg: string; border: string; hex: string }
 > = {
-	AI_RECOMMENDED: { label: "AI Recommended", text: "text-[#5E9FE8]", bg: "bg-[#5E9FE8]/12", border: "border-[#5E9FE8]/45", hex: "#5E9FE8" },
-	PENDING_REVIEW: { label: "Pending Review", text: "text-[#EAC26B]", bg: "bg-[#EAC26B]/12", border: "border-[#EAC26B]/45", hex: "#EAC26B" },
-	APPROVED: { label: "Approved", text: "text-[#72BC8F]", bg: "bg-[#72BC8F]/12", border: "border-[#72BC8F]/45", hex: "#72BC8F" },
-	CONFLICT: { label: "Conflict", text: "text-[#E97366]", bg: "bg-[#E97366]/12", border: "border-[#E97366]/50", hex: "#E97366" },
-	IN_PROGRESS: { label: "In Progress", text: "text-[#4FB9C9]", bg: "bg-[#4FB9C9]/12", border: "border-[#4FB9C9]/45", hex: "#4FB9C9" },
-	COMPLETED: { label: "Completed", text: "text-muted", bg: "bg-white/[0.06]", border: "border-line", hex: "#8b8b8b" },
-	DELAYED: { label: "Delayed", text: "text-[#DE9255]", bg: "bg-[#DE9255]/12", border: "border-[#DE9255]/45", hex: "#DE9255" },
+	AI_RECOMMENDED: { label: "AI Recommended", text: "text-[#1D4ED8]", bg: "bg-[#1D4ED8]/10", border: "border-[#1D4ED8]/45", hex: "#1D4ED8" },
+	PENDING_REVIEW: { label: "Pending Review", text: "text-[#A9790B]", bg: "bg-[#A9790B]/10", border: "border-[#A9790B]/45", hex: "#A9790B" },
+	APPROVED: { label: "Approved", text: "text-[#1E7D45]", bg: "bg-[#1E7D45]/10", border: "border-[#1E7D45]/45", hex: "#1E7D45" },
+	CONFLICT: { label: "Conflict", text: "text-[#C0392B]", bg: "bg-[#C0392B]/10", border: "border-[#C0392B]/45", hex: "#C0392B" },
+	IN_PROGRESS: { label: "In Progress", text: "text-[#0E7C86]", bg: "bg-[#0E7C86]/10", border: "border-[#0E7C86]/45", hex: "#0E7C86" },
+	COMPLETED: { label: "Completed", text: "text-muted", bg: "bg-accentSoft", border: "border-line", hex: "#5B6B80" },
+	DELAYED: { label: "Delayed", text: "text-[#C2610F]", bg: "bg-[#C2610F]/10", border: "border-[#C2610F]/45", hex: "#C2610F" },
 }
 
 export const TASK_STATUS_STYLE: Record<TaskStatus, string> = {
-	Pending: "text-[#EAC26B]",
-	Scheduled: "text-[#5E9FE8]",
-	"In Progress": "text-[#4FB9C9]",
+	Pending: "text-[#A9790B]",
+	Scheduled: "text-[#1D4ED8]",
+	"In Progress": "text-[#0E7C86]",
 	Completed: "text-muted",
-	Delayed: "text-[#DE9255]",
+	Delayed: "text-[#C2610F]",
 }
 
 export const DEPARTMENT_STYLE: Record<Department, { short: string; hex: string; system: string }> = {
-	Engineering: { short: "ENG", hex: "#5E9FE8", system: "TMS" },
-	"S&T": { short: "S&T", hex: "#BF8EDA", system: "SMMS" },
-	OHE: { short: "OHE", hex: "#EAC26B", system: "TDMS" },
+	Engineering: { short: "ENG", hex: "#1D4ED8", system: "TMS" },
+	"S&T": { short: "S&T", hex: "#6B3FA0", system: "SMMS" },
+	OHE: { short: "OHE", hex: "#A9790B", system: "TDMS" },
 }
 
 export const LEVEL_STYLE: Record<Level, string> = {
-	High: "text-[#E97366]",
-	Medium: "text-[#DE9255]",
-	Low: "text-[#72BC8F]",
+	High: "text-[#C0392B]",
+	Medium: "text-[#C2610F]",
+	Low: "text-[#1E7D45]",
 }
 
 /* ------------------------------ time helpers ----------------------------- */

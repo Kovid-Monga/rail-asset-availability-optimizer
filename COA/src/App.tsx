@@ -5,7 +5,9 @@
  * the product feel like one system rather than nine separate pages.
  * ========================================================================== */
 
+import { useState } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
+import { GovBanner } from "@/components/GovBanner"
 import { Sidebar } from "@/components/Sidebar"
 import { Header } from "@/components/Header"
 import { TaskDetailDrawer } from "@/components/TaskDetailDrawer"
@@ -29,34 +31,38 @@ function Shell() {
 	const { role, selectedTaskId, selectTask } = useApp()
 	const allowed = ROLE_NAV[role]
 	const selectedTask = (tasks.data ?? []).find((t) => t.task_id === selectedTaskId) ?? null
+	const [sidebarOpen, setSidebarOpen] = useState(true)
 
 	/** Routes hidden for a role fall back to the overview. */
 	const guard = (path: string, element: JSX.Element) =>
 		allowed.includes(path) ? element : <Navigate to="/" replace />
 
 	return (
-		<div className="flex min-h-screen bg-canvas text-ink">
-			<Sidebar />
-			<div className="flex min-w-0 flex-1 flex-col">
-				<Header
-					systemStatus={dashboard.data?.system_status ?? "OPERATIONAL"}
-					lastUpdated={dashboard.data?.last_updated ?? dashboard.lastUpdated}
-				/>
-				<main className="flex-1 px-6 py-6">
-					<Routes>
-						<Route path="/" element={<Dashboard />} />
-						<Route path="/tasks" element={guard("/tasks", <MaintenanceTasks />)} />
-						<Route path="/schedule" element={guard("/schedule", <BlockSchedule />)} />
-						<Route path="/map" element={guard("/map", <NetworkMapPage />)} />
-						<Route path="/gantt" element={guard("/gantt", <GanttPlanner />)} />
-						<Route path="/recommendations" element={guard("/recommendations", <AIRecommendations />)} />
-						<Route path="/what-if" element={guard("/what-if", <WhatIfSimulation />)} />
-						<Route path="/incidents" element={guard("/incidents", <Incidents />)} />
-						<Route path="/reports" element={guard("/reports", <Reports />)} />
-						<Route path="/settings" element={<Settings />} />
-						<Route path="*" element={<Navigate to="/" replace />} />
-					</Routes>
-				</main>
+		<div className="flex min-h-screen flex-col bg-canvas text-ink">
+			<GovBanner onToggleSidebar={() => setSidebarOpen((v) => !v)} />
+			<div className="flex flex-1">
+				<Sidebar open={sidebarOpen} />
+				<div className="flex min-w-0 flex-1 flex-col">
+					<Header
+						systemStatus={dashboard.data?.system_status ?? "OPERATIONAL"}
+						lastUpdated={dashboard.data?.last_updated ?? dashboard.lastUpdated}
+					/>
+					<main className="flex-1 px-6 py-6">
+						<Routes>
+							<Route path="/" element={<Dashboard />} />
+							<Route path="/tasks" element={guard("/tasks", <MaintenanceTasks />)} />
+							<Route path="/schedule" element={guard("/schedule", <BlockSchedule />)} />
+							<Route path="/map" element={guard("/map", <NetworkMapPage />)} />
+							<Route path="/gantt" element={guard("/gantt", <GanttPlanner />)} />
+							<Route path="/recommendations" element={guard("/recommendations", <AIRecommendations />)} />
+							<Route path="/what-if" element={guard("/what-if", <WhatIfSimulation />)} />
+							<Route path="/incidents" element={guard("/incidents", <Incidents />)} />
+							<Route path="/reports" element={guard("/reports", <Reports />)} />
+							<Route path="/settings" element={<Settings />} />
+							<Route path="*" element={<Navigate to="/" replace />} />
+						</Routes>
+					</main>
+				</div>
 			</div>
 
 			<TaskDetailDrawer
