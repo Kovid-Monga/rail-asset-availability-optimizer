@@ -72,9 +72,32 @@ class MaintenanceRequestUpdate(BaseModel):
     due_date: Optional[date] = None
     status: Optional[StatusType] = None
 
+class PriorityResultResponse(BaseModel):
+    priority_id: int
+    need_id: int
+    predicted_severity: str
+    severity_score: int
+    asset_impact_score: int
+    traffic: str
+    traffic_score: int
+    due_date_score: int
+    priority_score: int
+    priority_class: str
+    created_at: datetime
+
+    @field_serializer("created_at")
+    def serialize_created_at(self, dt: datetime, _info) -> str:
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.isoformat()
+
+    class Config:
+        from_attributes = True
+
 class MaintenanceRequestResponse(MaintenanceRequestBase):
     need_id: int
     created_at: datetime
+    priority_result: Optional[PriorityResultResponse] = None
 
     @field_serializer("created_at")
     def serialize_created_at(self, dt: datetime, _info) -> str:

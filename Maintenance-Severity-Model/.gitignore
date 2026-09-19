@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# Archived models pile up quickly and are recoverable from a retrain.
+models/archive/
+
+# Real data should not be committed to a shared repo. Delete these two lines
+# if your dataset is small, non-sensitive and you want it versioned.
+data/raw/*
+!data/raw/.gitkeep
+
+# Keep models/*.joblib and reports/ tracked on purpose: the artefacts and the
+# evidence that justifies them belong together. If your models grow past a few
+# MB, move them to object storage and track only metadata.json.

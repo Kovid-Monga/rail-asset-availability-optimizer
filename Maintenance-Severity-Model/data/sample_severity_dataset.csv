@@ -1,0 +1,121 @@
+reason_description,severity
+"Rail fracture detected at km 42/3 causing immediate risk to train movement",Critical
+"Complete weld failure on up line requiring immediate traffic block",Critical
+"Track buckling observed due to extreme heat posing derailment risk",Critical
+"Signal showing false proceed aspect creating unsafe train movement condition",Critical
+"Point machine failed with points not locking in position train movement stopped",Critical
+"OHE contact wire snapped over running line power supply isolated",Critical
+"Bridge girder crack observed load carrying capacity compromised",Critical
+"Washout of track formation after heavy rainfall line unsafe for traffic",Critical
+"Axle counter giving false clear indication safety of block section affected",Critical
+"Level crossing gate failed in open position with train approaching",Critical
+"Landslide debris obstructing the running line immediate clearance required",Critical
+"Gauge widening far beyond permissible limit derailment hazard at curve",Critical
+"Broken fish plate with both bolts sheared off on main line",Critical
+"Emergency speed restriction imposed after severe track twist detected",Critical
+"Interlocking failure allowing conflicting routes to be set simultaneously",Critical
+"Rail fracture near points causing immediate suspension of train operations",Critical
+"Tunnel lining collapse partially blocking the running line",Critical
+"Traction power failure across section leaving trains stranded mid block",Critical
+"Signal cable burnt causing total blanking of signals in the station section",Critical
+"Severe misalignment of track detected requiring immediate stoppage of traffic",Critical
+"Broken rail reported by patrolman traffic suspended on down line",Critical
+"Points tongue rail cracked at the toe unsafe for train passage",Critical
+"Overhead equipment mast tilted dangerously towards the running line",Critical
+"Flash butt weld failure with visible separation under load",Critical
+"Fire detected in relay room affecting signalling of the entire yard",Critical
+"Bridge bearing displaced causing unsafe superstructure condition",Critical
+"Hanging sleepers over long stretch with loose packing derailment risk high",Critical
+"Catch siding points found unlocked posing serious safety hazard",Critical
+"Track circuit failure with wrong side condition observed",Critical
+"Culvert scouring observed under track after heavy rain formation unsafe",Critical
+"Repeated point machine failure causing frequent delays to passenger trains",Major
+"Signal lamp fused affecting train movement in the block section",Major
+"Temporary speed restriction imposed due to deteriorated track geometry",Major
+"Track circuit showing intermittent failure disrupting normal operations",Major
+"OHE dropper broken causing pantograph entanglement risk and train delays",Major
+"Multiple sleepers found cracked over a stretch needing early replacement",Major
+"Ballast deficiency observed over long stretch affecting track stability",Major
+"Water seepage inside tunnel affecting track condition and permitted speed",Major
+"Axle counter reset required repeatedly causing detention of trains",Major
+"Block instrument failure requiring paper line clear working since morning",Major
+"LED signal unit failure at intermediate block signal location",Major
+"Gauge variation beyond limit requiring early attention on the curve",Major
+"Rail wear beyond permissible limit at check rail portion of turnout",Major
+"Point machine not responding intermittently leading to route setting delay",Major
+"Panel interlocking relay malfunction causing repeated route failure",Major
+"Approach track circuit failure resulting in signal not clearing for trains",Major
+"Level crossing boom barrier motor failure operated manually since morning",Major
+"Cracked weld noticed under observation frequent monitoring required",Major
+"Track drainage blocked causing water logging and ballast fouling",Major
+"Traction return conductor loose connection causing voltage fluctuation",Major
+"Vertical wear on switch rail requiring early renewal of the assembly",Major
+"Cable fault causing intermittent failure of shunt signals in yard",Major
+"Repeated failure of station master panel indication affecting operations",Major
+"Slack gauge detected on curve requiring attention in the next block",Major
+"Rail joints found with loose bolts across several joints in the section",Major
+"Signal post ladder broken hampering maintenance access at the location",Major
+"Pantograph damage reported due to OHE height variation in the section",Major
+"Track machine deployment required for tamping due to poor riding index",Major
+"Wrong side failure risk reported in point detection contact assembly",Major
+"Relay room running on standby generator since two days supply unstable",Major
+"Loose fittings identified during routine inspection of the section",Moderate
+"Few elastic rail clips missing at scattered locations in the block",Moderate
+"Minor ballast profile correction required in the yard lines",Moderate
+"Oil leakage observed in point machine gear box small quantity",Moderate
+"Indication lamp on operating panel found dim needs replacement",Moderate
+"Cable route marker missing at three locations in the section",Moderate
+"Paint peeling on signal post requiring touch up during next schedule",Moderate
+"Partially choked side drain to be cleaned before the monsoon",Moderate
+"Rail joint gap slightly more than permissible requires adjustment",Moderate
+"Vegetation growth near track affecting visibility of the signal",Moderate
+"Sleeper spacing irregular at few locations requires correction",Moderate
+"Loose bolts noticed on level crossing check rail assembly",Moderate
+"Small leakage in air compressor pipeline of point machine",Moderate
+"Fencing damaged near station limits needs repair work",Moderate
+"Signal lamp glass found dirty reducing aspect visibility at night",Moderate
+"Battery terminals corroded in relay room needs cleaning and greasing",Moderate
+"Kilometre post damaged and needs to be refixed at correct location",Moderate
+"Minor settlement of approach slab at the level crossing",Moderate
+"Ballast fouling observed at few locations requires screening",Moderate
+"Earthing strip found loose at signal location box",Moderate
+"Rail creep observed within limits needs adjustment during next block",Moderate
+"Walkway slabs displaced near platform end requires resetting",Moderate
+"Location box door hinge broken requires replacement",Moderate
+"Gauge tie plate loose at a few joints in the yard line",Moderate
+"Cable trench cover missing at two spots in the yard",Moderate
+"Warning board faded and requires repainting before monsoon",Moderate
+"Rust on fish plates needs cleaning and greasing at joints",Moderate
+"Point machine cover bolts missing needs refitting",Moderate
+"Platform coping edge chipped at one location requires repair",Moderate
+"Water pipeline leakage near service building to be attended",Moderate
+"Scheduled preventive lubrication of points and crossings",Minor
+"Monthly routine inspection of signalling gears completed as per schedule",Minor
+"Periodic greasing of level crossing gate mechanism",Minor
+"Annual painting of signal posts as per maintenance calendar",Minor
+"Routine tightening of fittings during scheduled block",Minor
+"Quarterly calibration of track gauge measuring instruments",Minor
+"Periodic overhauling of point machine as per prescribed schedule",Minor
+"Routine cleaning of relay room and equipment dusting",Minor
+"Scheduled vegetation clearance along the cess as per plan",Minor
+"Periodic testing of signal circuits as per maintenance manual",Minor
+"Routine visual inspection of OHE by patrolling staff",Minor
+"Scheduled lubrication of gate lodge locking arrangement",Minor
+"Annual checking of earthing resistance values at locations",Minor
+"Routine record updating for the track maintenance register",Minor
+"Scheduled servicing of battery bank in the relay room",Minor
+"Periodic oiling of switch rails and slide chairs",Minor
+"Routine inspection of culverts during the dry season",Minor
+"Scheduled replacement of consumables in the maintenance depot",Minor
+"Periodic greasing of rail joints and fish plates",Minor
+"Routine checking of level crossing telephone working condition",Minor
+"Scheduled cleaning of drains as part of pre monsoon works",Minor
+"Annual overhaul of hand trolley and safety equipment",Minor
+"Routine tool box talk and safety briefing record updation",Minor
+"Periodic measurement of rail temperature as per schedule",Minor
+"Scheduled painting of kilometre stones and boards",Minor
+"Routine lubrication of gate boom hinges at level crossing",Minor
+"Periodic inspection of station building fixtures",Minor
+"Scheduled testing of emergency lighting system at station",Minor
+"Routine greasing of turnout components during weekly block",Minor
+"Periodic dusting and cleaning of signal location boxes",Minor

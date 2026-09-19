@@ -1,0 +1,13 @@
+holdout classification report — generated 20260917_233013
+
+              precision    recall  f1-score   support
+
+      Normal      1.000     1.000     1.000        29
+    Moderate      1.000     1.000     1.000       478
+      Urgent      1.000     1.000     1.000       418
+    Critical      1.000     1.000     1.000        75
+
+    accuracy                          1.000      1000
+   macro avg      1.000     1.000     1.000      1000
+weighted avg      1.000     1.000     1.000      1000
+

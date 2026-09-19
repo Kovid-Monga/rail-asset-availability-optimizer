@@ -1,0 +1,13 @@
+exhaustive_all_combinations classification report — generated 20260917_233014
+
+              precision    recall  f1-score   support
+
+      Normal      1.000     1.000     1.000         4
+    Moderate      1.000     1.000     1.000        70
+      Urgent      1.000     1.000     1.000        80
+    Critical      1.000     1.000     1.000        26
+
+    accuracy                          1.000       180
+   macro avg      1.000     1.000     1.000       180
+weighted avg      1.000     1.000     1.000       180
+

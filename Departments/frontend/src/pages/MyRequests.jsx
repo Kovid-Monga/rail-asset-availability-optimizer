@@ -117,7 +117,7 @@ export default function MyRequests({ department, onViewDetails, onNavigateNew })
                         </span>
                       ) : '—'}
                     </td>
-                    <td>{req.duration_min} min</td>
+                    <td>{req.duration_min ? `${(req.duration_min / 60) % 1 === 0 ? req.duration_min / 60 : (req.duration_min / 60).toFixed(1)} hrs` : '—'}</td>
                     <td>{req.due_date}</td>
                     <td><StatusBadge status={req.status} /></td>
                     <td>{formatDate(req.created_at)}</td>

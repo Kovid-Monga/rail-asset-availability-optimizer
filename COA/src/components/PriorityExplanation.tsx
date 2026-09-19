@@ -24,7 +24,7 @@ export function PriorityExplanation({ explanation }: { explanation: Explanation 
 					</span>
 					<span className="text-[13px] text-muted">/ 100</span>
 				</div>
-				<PriorityBadge priority={explanation.category} size="lg" />
+				<PriorityBadge priority={explanation.category} score={explanation.score} size="lg" />
 			</div>
 
 			<ul className="mt-4 space-y-2.5">

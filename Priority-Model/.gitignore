@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# Logs are runtime output, not source. Keep the folder, drop the contents.
+logs/*
+!logs/.gitkeep
+
+# Archived models are recoverable from a retrain.
+models/archive/
+
+# Real data should not land in a shared repo.
+data/raw/*
+!data/raw/.gitkeep
+
+# The generated dataset is reproducible from the rules — regenerate with
+# `python -m src.dataset --generate` rather than versioning it.
+data/priority_training_data.csv
+
+# models/*.joblib and reports/ stay tracked on purpose: the artefact and the
+# evidence justifying it belong together.

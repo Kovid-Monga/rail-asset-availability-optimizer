@@ -7,8 +7,12 @@ export default defineConfig({
 	resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
 	server: {
 		port: 5173,
-		// If your backend runs locally and you hit CORS, uncomment this proxy and
-		// set VITE_API_BASE_URL="" so requests go to /api/... on the same origin.
-		// proxy: { "/api": { target: "http://localhost:8000", changeOrigin: true } },
+		allowedHosts: true,
+		proxy: {
+			"/requests": "http://127.0.0.1:8000",
+			"/blocks": "http://127.0.0.1:8000",
+			"/overview": "http://127.0.0.1:8000",
+			"/ai": "http://127.0.0.1:8000",
+		},
 	},
 })

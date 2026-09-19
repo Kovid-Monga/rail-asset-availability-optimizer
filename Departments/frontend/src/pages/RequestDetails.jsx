@@ -20,7 +20,7 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
     reason_code: '',
     reason_description: '',
     asset_impact: 'Medium',
-    duration_min: '',
+    duration_hours: '',
     due_date: '',
   });
 
@@ -39,7 +39,7 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
         reason_code: data.reason_code || codes[0].code,
         reason_description: data.reason_description || '',
         asset_impact: data.asset_impact || 'Medium',
-        duration_min: data.duration_min || '',
+        duration_hours: data.duration_min ? String((data.duration_min / 60) % 1 === 0 ? data.duration_min / 60 : (data.duration_min / 60).toFixed(1)) : '',
         due_date: data.due_date || '',
       });
     } catch (err) {
@@ -84,9 +84,9 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
       setError('Block End is required.');
       return;
     }
-    const durationNum = parseInt(formData.duration_min, 10);
-    if (!durationNum || durationNum <= 0) {
-      setError('Duration must be a positive number.');
+    const durationHours = parseFloat(formData.duration_hours);
+    if (!durationHours || durationHours <= 0 || isNaN(durationHours)) {
+      setError('Duration must be a positive number greater than 0 hours.');
       return;
     }
     if (!formData.due_date) {
@@ -104,7 +104,7 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
         reason_code: formData.reason_code || null,
         reason_description: formData.reason_description.trim() || null,
         asset_impact: formData.asset_impact || null,
-        duration_min: durationNum,
+        duration_min: Math.round(durationHours * 60),
         due_date: formData.due_date,
       };
 
@@ -334,14 +334,15 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
 
               <div className="form-group">
                 <label className="form-label">
-                  Duration (minutes) <span className="required">*</span>
+                  Duration (hours) <span className="required">*</span>
                 </label>
                 <input
-                  name="duration_min"
+                  name="duration_hours"
                   type="number"
-                  min="1"
+                  step="any"
+                  min="0.1"
                   className="form-input"
-                  value={formData.duration_min}
+                  value={formData.duration_hours}
                   onChange={handleEditChange}
                   required
                 />
@@ -456,7 +457,9 @@ export default function RequestDetails({ needId, onBack, onDeleteSuccess }) {
 
             <div className="detail-item">
               <span className="detail-label">Duration</span>
-              <span className="detail-value">{request.duration_min} minutes</span>
+              <span className="detail-value">
+                {request.duration_min ? `${(request.duration_min / 60) % 1 === 0 ? request.duration_min / 60 : (request.duration_min / 60).toFixed(1)} hrs` : '—'}
+              </span>
             </div>
 
             <div className="detail-item">

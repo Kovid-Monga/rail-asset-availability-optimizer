@@ -301,6 +301,20 @@ export interface AsyncState<T> {
 
 /* ------------------------- backend integration --------------------------- */
 
+export interface BackendPriorityResult {
+	priority_id: number
+	need_id: number
+	predicted_severity: ReasonSeverity
+	severity_score: number
+	asset_impact_score: number
+	traffic: Level
+	traffic_score: number
+	due_date_score: number
+	priority_score: number
+	priority_class: PriorityCategory
+	created_at?: string
+}
+
 export interface BackendMaintenanceRequest {
 	need_id: number
 	department: string
@@ -315,6 +329,7 @@ export interface BackendMaintenanceRequest {
 	due_date: string
 	status: string
 	created_at?: string
+	priority_result?: BackendPriorityResult | null
 }
 
 export interface BackendBlockSchedule {

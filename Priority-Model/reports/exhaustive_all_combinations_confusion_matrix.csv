@@ -1,0 +1,5 @@
+true,Normal,Moderate,Urgent,Critical
+Normal,4,0,0,0
+Moderate,0,70,0,0
+Urgent,0,0,80,0
+Critical,0,0,0,26

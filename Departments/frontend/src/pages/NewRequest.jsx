@@ -33,7 +33,7 @@ export default function NewRequest({ department, onSuccess, onCancel }) {
     reason_code: currentReasonCodes[0].code,
     reason_description: '',
     asset_impact: 'Medium',
-    duration_min: '',
+    duration_hours: '',
     due_date: '',
   });
 
@@ -61,9 +61,9 @@ export default function NewRequest({ department, onSuccess, onCancel }) {
     if (!formData.block_end.trim()) {
       return 'Block End is required.';
     }
-    const durationNum = parseInt(formData.duration_min, 10);
+    const durationNum = parseFloat(formData.duration_hours);
     if (!durationNum || durationNum <= 0 || isNaN(durationNum)) {
-      return 'Duration must be a positive number greater than 0.';
+      return 'Duration must be a positive number greater than 0 hours.';
     }
     if (!formData.due_date) {
       return 'Due Date is required.';
@@ -93,7 +93,7 @@ export default function NewRequest({ department, onSuccess, onCancel }) {
         reason_code: formData.reason_code || null,
         reason_description: formData.reason_description.trim() || null,
         asset_impact: formData.asset_impact || null,
-        duration_min: parseInt(formData.duration_min, 10),
+        duration_min: Math.round(parseFloat(formData.duration_hours) * 60),
         due_date: formData.due_date,
         status: statusToSet,
       };
@@ -245,19 +245,20 @@ export default function NewRequest({ department, onSuccess, onCancel }) {
               </select>
             </div>
 
-            {/* Duration (min) */}
+            {/* Duration (hours) */}
             <div className="form-group">
-              <label className="form-label" htmlFor="duration_min">
-                Duration (minutes) <span className="required">*</span>
+              <label className="form-label" htmlFor="duration_hours">
+                Duration (hours) <span className="required">*</span>
               </label>
               <input
-                id="duration_min"
-                name="duration_min"
+                id="duration_hours"
+                name="duration_hours"
                 type="number"
-                min="1"
+                step="any"
+                min="0.1"
                 className="form-input"
-                placeholder="e.g. 120"
-                value={formData.duration_min}
+                placeholder="e.g. 2 or 1.5"
+                value={formData.duration_hours}
                 onChange={handleChange}
                 required
               />

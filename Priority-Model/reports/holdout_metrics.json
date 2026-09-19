@@ -1,0 +1,43 @@
+{
+  "accuracy": 1.0,
+  "precision_weighted": 1.0,
+  "recall_weighted": 1.0,
+  "f1_weighted": 1.0,
+  "precision_macro": 1.0,
+  "recall_macro": 1.0,
+  "f1_macro": 1.0,
+  "n_samples": 1000,
+  "per_class": {
+    "Normal": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 29
+    },
+    "Moderate": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 478
+    },
+    "Urgent": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 418
+    },
+    "Critical": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 75
+    }
+  },
+  "rule_agreement": {
+    "agreement_rate": 1.0,
+    "n_disagreements": 0,
+    "examples": []
+  },
+  "model_name": "decision_tree",
+  "trained_at": "20260917_233013"
+}

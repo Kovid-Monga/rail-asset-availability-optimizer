@@ -1,0 +1,75 @@
+{
+  "max_absolute_error": 2.842170943040401e-14,
+  "r_squared": 1.0,
+  "weights_recovered_exactly": true,
+  "recovered_weights": {
+    "asset_impact": {
+      "High": {
+        "expected_relative": 20.0,
+        "recovered_relative": 20.0
+      },
+      "Medium": {
+        "expected_relative": 10.0,
+        "recovered_relative": 10.0
+      },
+      "Low": {
+        "expected_relative": 0.0,
+        "recovered_relative": 0.0
+      }
+    },
+    "reason_severity": {
+      "Critical": {
+        "expected_relative": 20.0,
+        "recovered_relative": 20.0
+      },
+      "Major": {
+        "expected_relative": 13.0,
+        "recovered_relative": 13.0
+      },
+      "Moderate": {
+        "expected_relative": 7.0,
+        "recovered_relative": 7.0
+      },
+      "Minor": {
+        "expected_relative": 0.0,
+        "recovered_relative": 0.0
+      }
+    },
+    "traffic": {
+      "High": {
+        "expected_relative": 20.0,
+        "recovered_relative": 20.0
+      },
+      "Medium": {
+        "expected_relative": 10.0,
+        "recovered_relative": 10.0
+      },
+      "Low": {
+        "expected_relative": 0.0,
+        "recovered_relative": 0.0
+      }
+    },
+    "due_date_bucket": {
+      "Overdue or Today": {
+        "expected_relative": 15.0,
+        "recovered_relative": 15.0
+      },
+      "1-2 days": {
+        "expected_relative": 12.0,
+        "recovered_relative": 12.0
+      },
+      "3-7 days": {
+        "expected_relative": 8.0,
+        "recovered_relative": 8.0
+      },
+      "8-14 days": {
+        "expected_relative": 4.0,
+        "recovered_relative": 4.0
+      },
+      "More than 14 days": {
+        "expected_relative": 0.0,
+        "recovered_relative": 0.0
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+# Core -------------------------------------------------------------------------
+# Lower bounds rather than exact pins: this component sits inside a larger
+# service and must not force a downgrade on it. Pin exactly (==) in your
+# deployment image.
+
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+joblib>=1.3
+matplotlib>=3.7          # confusion-matrix PNGs only
+
+# Testing ----------------------------------------------------------------------
+# Optional. The test files are plain functions with asserts, so `pytest tests/`
+# works if it is installed and `python tests/run_all.py` works if it is not.
+pytest>=7.0
+
+# Stage-1 severity model -------------------------------------------------------
+# Not a pip dependency. It is a sibling project located at runtime by
+# src/severity_client.py. Point at it with:
+#   export PRIORITY_SEVERITY_MODEL_PATH=/path/to/maintenance-severity-model
+# Its own requirements (nltk, xgboost, ...) install from its requirements.txt.
+
+# Not needed -------------------------------------------------------------------
+# No web framework here on purpose. The API layer is a separate deliverable that
+# imports predict_priority; keeping FastAPI or Flask out of this package means
+# the scoring logic can be used from a batch job, a scheduler or a notebook
+# without dragging a web server along.

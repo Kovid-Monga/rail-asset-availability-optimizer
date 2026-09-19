@@ -1,0 +1,120 @@
+{
+  "model_name": "logistic_regression",
+  "calibrated": false,
+  "trained_at": "20260917_220337",
+  "dataset": "data\\raw\\maintenance_remarks.csv",
+  "n_rows": 726,
+  "n_train": 580,
+  "n_holdout": 146,
+  "classes": [
+    "Critical",
+    "Major",
+    "Minor",
+    "Moderate"
+  ],
+  "severity_scores": {
+    "Critical": 25,
+    "Major": 18,
+    "Moderate": 12,
+    "Minor": 5
+  },
+  "class_distribution": {
+    "Minor": 375,
+    "Critical": 206,
+    "Moderate": 116,
+    "Major": 29
+  },
+  "n_features": 1130,
+  "tfidf_params": {
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 1,
+    "max_df": 0.9,
+    "sublinear_tf": true,
+    "max_features": 20000,
+    "strip_accents": "unicode"
+  },
+  "selection_metric": "f1_weighted",
+  "model_comparison": {
+    "logistic_regression": {
+      "cv_folds": 5,
+      "mean_f1_weighted": 1.0,
+      "std_f1_weighted": 0.0,
+      "fold_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "random_forest": {
+      "cv_folds": 5,
+      "mean_f1_weighted": 1.0,
+      "std_f1_weighted": 0.0,
+      "fold_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "xgboost": {
+      "cv_folds": 5,
+      "mean_f1_weighted": 0.9895848348475811,
+      "std_f1_weighted": 0.006555760687462604,
+      "fold_scores": [
+        0.9827586206896551,
+        0.9914536106219676,
+        0.9914074224646112,
+        1.0,
+        0.9823045204616713
+      ]
+    }
+  },
+  "holdout_metrics": {
+    "accuracy": 1.0,
+    "f1_weighted": 1.0,
+    "f1_macro": 1.0,
+    "n_samples": 146,
+    "per_class": {
+      "Critical": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 42
+      },
+      "Major": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 6
+      },
+      "Minor": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 75
+      },
+      "Moderate": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 23
+      }
+    },
+    "model_name": "logistic_regression",
+    "trained_at": "20260917_220337"
+  },
+  "archived_previous_to": "C:\\Academics\\vs code\\Projects\\ML\\Maintenance-Severity-Model\\models\\archive\\20260917_220337",
+  "versions": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "scikit_learn": "1.9.0",
+    "numpy": "2.4.4",
+    "xgboost_available": true
+  }
+}

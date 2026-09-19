@@ -1,0 +1,250 @@
+|--- asset_impact_Low <= 0.50
+|   |--- traffic_High <= 0.50
+|   |   |--- traffic_Medium <= 0.50
+|   |   |   |--- asset_impact_High <= 0.50
+|   |   |   |   |--- reason_severity_Major <= 0.50
+|   |   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |   |--- due_date_bucket_More than 14 days <= 0.50
+|   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |--- due_date_bucket_More than 14 days >  0.50
+|   |   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |--- reason_severity_Major >  0.50
+|   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |--- due_date_bucket_1-2 days <= 0.50
+|   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |   |--- due_date_bucket_1-2 days >  0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |--- class: Urgent
+|   |   |   |--- asset_impact_High >  0.50
+|   |   |   |   |--- due_date_bucket_More than 14 days <= 0.50
+|   |   |   |   |   |--- reason_severity_Minor <= 0.50
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |   |--- reason_severity_Moderate <= 0.50
+|   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |--- reason_severity_Moderate >  0.50
+|   |   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |--- reason_severity_Minor >  0.50
+|   |   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |--- due_date_bucket_More than 14 days >  0.50
+|   |   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |   |--- class: Urgent
+|   |   |--- traffic_Medium >  0.50
+|   |   |   |--- due_date_bucket_More than 14 days <= 0.50
+|   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |--- reason_severity_Major <= 0.50
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |   |--- reason_severity_Minor <= 0.50
+|   |   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |--- reason_severity_Minor >  0.50
+|   |   |   |   |   |   |   |   |--- asset_impact_High <= 0.50
+|   |   |   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |   |--- asset_impact_High >  0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |   |--- asset_impact_High <= 0.50
+|   |   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |   |   |--- asset_impact_High >  0.50
+|   |   |   |   |   |   |   |   |--- reason_severity_Minor <= 0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |   |--- reason_severity_Minor >  0.50
+|   |   |   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |--- reason_severity_Major >  0.50
+|   |   |   |   |   |   |--- asset_impact_High <= 0.50
+|   |   |   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |--- asset_impact_High >  0.50
+|   |   |   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |   |   |--- due_date_bucket_3-7 days <= 0.50
+|   |   |   |   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |   |   |   |--- due_date_bucket_3-7 days >  0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |--- asset_impact_Medium <= 0.50
+|   |   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |   |--- asset_impact_Medium >  0.50
+|   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |   |   |--- due_date_bucket_1-2 days <= 0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |   |--- due_date_bucket_1-2 days >  0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |--- class: Urgent
+|   |   |   |--- due_date_bucket_More than 14 days >  0.50
+|   |   |   |   |--- asset_impact_Medium <= 0.50
+|   |   |   |   |   |--- reason_severity_Minor <= 0.50
+|   |   |   |   |   |   |--- reason_severity_Moderate <= 0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |--- reason_severity_Moderate >  0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |--- reason_severity_Minor >  0.50
+|   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |--- asset_impact_Medium >  0.50
+|   |   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |   |--- reason_severity_Moderate <= 0.50
+|   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |   |--- reason_severity_Moderate >  0.50
+|   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |   |--- class: Urgent
+|   |--- traffic_High >  0.50
+|   |   |--- asset_impact_High <= 0.50
+|   |   |   |--- reason_severity_Moderate <= 0.50
+|   |   |   |   |--- reason_severity_Minor <= 0.50
+|   |   |   |   |   |--- due_date_bucket_More than 14 days <= 0.50
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |   |--- due_date_bucket_3-7 days <= 0.50
+|   |   |   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |   |   |--- due_date_bucket_3-7 days >  0.50
+|   |   |   |   |   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |--- due_date_bucket_More than 14 days >  0.50
+|   |   |   |   |   |   |--- reason_severity_Major <= 0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |--- reason_severity_Major >  0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |--- reason_severity_Minor >  0.50
+|   |   |   |   |   |--- due_date_bucket_More than 14 days <= 0.50
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |--- due_date_bucket_More than 14 days >  0.50
+|   |   |   |   |   |   |--- class: Moderate
+|   |   |   |--- reason_severity_Moderate >  0.50
+|   |   |   |   |--- class: Urgent
+|   |   |--- asset_impact_High >  0.50
+|   |   |   |--- due_date_bucket_More than 14 days <= 0.50
+|   |   |   |   |--- reason_severity_Minor <= 0.50
+|   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |--- reason_severity_Moderate <= 0.50
+|   |   |   |   |   |   |   |--- reason_severity_Major <= 0.50
+|   |   |   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |   |   |--- reason_severity_Major >  0.50
+|   |   |   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |   |--- reason_severity_Moderate >  0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |--- reason_severity_Minor >  0.50
+|   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |--- class: Critical
+|   |   |   |--- due_date_bucket_More than 14 days >  0.50
+|   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |--- class: Urgent
+|   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |--- class: Critical
+|--- asset_impact_Low >  0.50
+|   |--- traffic_Low <= 0.50
+|   |   |--- traffic_High <= 0.50
+|   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |--- reason_severity_Major <= 0.50
+|   |   |   |   |   |--- class: Moderate
+|   |   |   |   |--- reason_severity_Major >  0.50
+|   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |--- due_date_bucket_1-2 days <= 0.50
+|   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |   |--- due_date_bucket_1-2 days >  0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |--- class: Urgent
+|   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |--- due_date_bucket_More than 14 days <= 0.50
+|   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |--- due_date_bucket_More than 14 days >  0.50
+|   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |--- class: Moderate
+|   |   |--- traffic_High >  0.50
+|   |   |   |--- due_date_bucket_More than 14 days <= 0.50
+|   |   |   |   |--- reason_severity_Minor <= 0.50
+|   |   |   |   |   |--- due_date_bucket_8-14 days <= 0.50
+|   |   |   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |   |   |--- due_date_bucket_1-2 days <= 0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |   |--- due_date_bucket_1-2 days >  0.50
+|   |   |   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |   |   |--- class: Critical
+|   |   |   |   |   |--- due_date_bucket_8-14 days >  0.50
+|   |   |   |   |   |   |--- reason_severity_Moderate <= 0.50
+|   |   |   |   |   |   |   |--- class: Urgent
+|   |   |   |   |   |   |--- reason_severity_Moderate >  0.50
+|   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |--- reason_severity_Minor >  0.50
+|   |   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |   |--- class: Urgent
+|   |   |   |--- due_date_bucket_More than 14 days >  0.50
+|   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |--- class: Moderate
+|   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |--- class: Urgent
+|   |--- traffic_Low >  0.50
+|   |   |--- reason_severity_Major <= 0.50
+|   |   |   |--- due_date_bucket_1-2 days <= 0.50
+|   |   |   |   |--- due_date_bucket_Overdue or Today <= 0.50
+|   |   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |   |--- reason_severity_Moderate <= 0.50
+|   |   |   |   |   |   |   |--- class: Normal
+|   |   |   |   |   |   |--- reason_severity_Moderate >  0.50
+|   |   |   |   |   |   |   |--- due_date_bucket_More than 14 days <= 0.50
+|   |   |   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |   |   |--- due_date_bucket_More than 14 days >  0.50
+|   |   |   |   |   |   |   |   |--- class: Normal
+|   |   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |--- due_date_bucket_Overdue or Today >  0.50
+|   |   |   |   |   |--- reason_severity_Critical <= 0.50
+|   |   |   |   |   |   |--- class: Moderate
+|   |   |   |   |   |--- reason_severity_Critical >  0.50
+|   |   |   |   |   |   |--- class: Urgent
+|   |   |   |--- due_date_bucket_1-2 days >  0.50
+|   |   |   |   |--- class: Moderate
+|   |   |--- reason_severity_Major >  0.50
+|   |   |   |--- class: Moderate

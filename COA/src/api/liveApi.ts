@@ -29,6 +29,47 @@ export function mapBackendRequestToTask(req: BackendMaintenanceRequest): Mainten
 		TDMS: "OHE",
 	}
 
+	const pr = req.priority_result
+	const priority = pr ? pr.priority_class : "Normal"
+	const priority_score = pr ? pr.priority_score : 0
+	const traffic = pr ? pr.traffic : ((req.asset_impact as any) || "Medium")
+
+	const priority_explanation = pr
+		? {
+				score: pr.priority_score,
+				category: pr.priority_class,
+				derived_reason_severity: pr.predicted_severity,
+				model_version: "Priority Model v1.0",
+				reasoning: `Evaluated by Priority Model: Reason Severity (${pr.predicted_severity}: ${pr.severity_score} pts), Asset Impact (${req.asset_impact || "Medium"}: ${pr.asset_impact_score} pts), Traffic Impact (${pr.traffic}: ${pr.traffic_score} pts), and Due Date Urgency (${pr.due_date_score} pts).`,
+				factors: [
+					{
+						label: "Asset Impact",
+						score: pr.asset_impact_score,
+						max: 30,
+						value: req.asset_impact || "Medium",
+					},
+					{
+						label: "Reason Severity",
+						score: pr.severity_score,
+						max: 25,
+						value: pr.predicted_severity,
+					},
+					{
+						label: "Traffic Impact",
+						score: pr.traffic_score,
+						max: 25,
+						value: pr.traffic,
+					},
+					{
+						label: "Due Date Urgency",
+						score: pr.due_date_score,
+						max: 20,
+						value: req.due_date,
+					},
+				],
+			}
+		: undefined
+
 	return {
 		task_id: `MT-${req.need_id}`,
 		source_system: (req.department as any) || "TMS",
@@ -40,12 +81,12 @@ export function mapBackendRequestToTask(req: BackendMaintenanceRequest): Mainten
 		reason_description: req.reason_description || "Maintenance request",
 		asset_impact: (req.asset_impact as any) || "Medium",
 		due_date: req.due_date,
-		traffic: "Medium",
+		traffic,
 		duration_min: req.duration_min,
 		status: req.status === "SUBMITTED" ? "Pending" : "Scheduled",
-		priority: "Normal", // Priority model under construction — no fake score!
-		priority_score: 0,
-		priority_explanation: undefined, // No fake reasoning
+		priority,
+		priority_score,
+		priority_explanation,
 		compatibility: undefined,
 	}
 }

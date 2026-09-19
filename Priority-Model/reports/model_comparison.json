@@ -1,0 +1,38 @@
+{
+  "decision_tree": {
+    "cv_folds": 5,
+    "mean_f1_weighted": 1.0,
+    "std_f1_weighted": 0.0,
+    "fold_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "logistic_regression": {
+    "cv_folds": 5,
+    "mean_f1_weighted": 0.9975117606406505,
+    "std_f1_weighted": 0.002353847992881337,
+    "fold_scores": [
+      0.9938066149536737,
+      1.0,
+      0.9975022263986054,
+      0.996249961850973,
+      1.0
+    ]
+  },
+  "random_forest": {
+    "cv_folds": 5,
+    "mean_f1_weighted": 1.0,
+    "std_f1_weighted": 0.0,
+    "fold_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  }
+}

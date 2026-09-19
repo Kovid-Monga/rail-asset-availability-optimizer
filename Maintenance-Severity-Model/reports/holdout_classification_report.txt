@@ -1,0 +1,13 @@
+holdout classification report — generated 20260917_220337
+
+              precision    recall  f1-score   support
+
+    Critical      1.000     1.000     1.000        42
+       Major      1.000     1.000     1.000         6
+       Minor      1.000     1.000     1.000        75
+    Moderate      1.000     1.000     1.000        23
+
+    accuracy                          1.000       146
+   macro avg      1.000     1.000     1.000       146
+weighted avg      1.000     1.000     1.000       146
+

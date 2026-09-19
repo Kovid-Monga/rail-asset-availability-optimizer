@@ -1,0 +1,181 @@
+asset_impact,reason_severity,traffic,due_date_bucket,asset_impact_score,severity_score,traffic_score,due_date_score,priority_score,priority_class
+High,Critical,High,Overdue or Today,30,25,25,20,100,Critical
+High,Critical,High,1-2 days,30,25,25,17,97,Critical
+High,Critical,High,3-7 days,30,25,25,13,93,Critical
+High,Critical,High,8-14 days,30,25,25,9,89,Critical
+High,Critical,High,More than 14 days,30,25,25,5,85,Critical
+High,Critical,Medium,Overdue or Today,30,25,15,20,90,Critical
+High,Critical,Medium,1-2 days,30,25,15,17,87,Critical
+High,Critical,Medium,3-7 days,30,25,15,13,83,Critical
+High,Critical,Medium,8-14 days,30,25,15,9,79,Urgent
+High,Critical,Medium,More than 14 days,30,25,15,5,75,Urgent
+High,Critical,Low,Overdue or Today,30,25,5,20,80,Critical
+High,Critical,Low,1-2 days,30,25,5,17,77,Urgent
+High,Critical,Low,3-7 days,30,25,5,13,73,Urgent
+High,Critical,Low,8-14 days,30,25,5,9,69,Urgent
+High,Critical,Low,More than 14 days,30,25,5,5,65,Urgent
+High,Major,High,Overdue or Today,30,18,25,20,93,Critical
+High,Major,High,1-2 days,30,18,25,17,90,Critical
+High,Major,High,3-7 days,30,18,25,13,86,Critical
+High,Major,High,8-14 days,30,18,25,9,82,Critical
+High,Major,High,More than 14 days,30,18,25,5,78,Urgent
+High,Major,Medium,Overdue or Today,30,18,15,20,83,Critical
+High,Major,Medium,1-2 days,30,18,15,17,80,Critical
+High,Major,Medium,3-7 days,30,18,15,13,76,Urgent
+High,Major,Medium,8-14 days,30,18,15,9,72,Urgent
+High,Major,Medium,More than 14 days,30,18,15,5,68,Urgent
+High,Major,Low,Overdue or Today,30,18,5,20,73,Urgent
+High,Major,Low,1-2 days,30,18,5,17,70,Urgent
+High,Major,Low,3-7 days,30,18,5,13,66,Urgent
+High,Major,Low,8-14 days,30,18,5,9,62,Urgent
+High,Major,Low,More than 14 days,30,18,5,5,58,Moderate
+High,Moderate,High,Overdue or Today,30,12,25,20,87,Critical
+High,Moderate,High,1-2 days,30,12,25,17,84,Critical
+High,Moderate,High,3-7 days,30,12,25,13,80,Critical
+High,Moderate,High,8-14 days,30,12,25,9,76,Urgent
+High,Moderate,High,More than 14 days,30,12,25,5,72,Urgent
+High,Moderate,Medium,Overdue or Today,30,12,15,20,77,Urgent
+High,Moderate,Medium,1-2 days,30,12,15,17,74,Urgent
+High,Moderate,Medium,3-7 days,30,12,15,13,70,Urgent
+High,Moderate,Medium,8-14 days,30,12,15,9,66,Urgent
+High,Moderate,Medium,More than 14 days,30,12,15,5,62,Urgent
+High,Moderate,Low,Overdue or Today,30,12,5,20,67,Urgent
+High,Moderate,Low,1-2 days,30,12,5,17,64,Urgent
+High,Moderate,Low,3-7 days,30,12,5,13,60,Urgent
+High,Moderate,Low,8-14 days,30,12,5,9,56,Moderate
+High,Moderate,Low,More than 14 days,30,12,5,5,52,Moderate
+High,Minor,High,Overdue or Today,30,5,25,20,80,Critical
+High,Minor,High,1-2 days,30,5,25,17,77,Urgent
+High,Minor,High,3-7 days,30,5,25,13,73,Urgent
+High,Minor,High,8-14 days,30,5,25,9,69,Urgent
+High,Minor,High,More than 14 days,30,5,25,5,65,Urgent
+High,Minor,Medium,Overdue or Today,30,5,15,20,70,Urgent
+High,Minor,Medium,1-2 days,30,5,15,17,67,Urgent
+High,Minor,Medium,3-7 days,30,5,15,13,63,Urgent
+High,Minor,Medium,8-14 days,30,5,15,9,59,Moderate
+High,Minor,Medium,More than 14 days,30,5,15,5,55,Moderate
+High,Minor,Low,Overdue or Today,30,5,5,20,60,Urgent
+High,Minor,Low,1-2 days,30,5,5,17,57,Moderate
+High,Minor,Low,3-7 days,30,5,5,13,53,Moderate
+High,Minor,Low,8-14 days,30,5,5,9,49,Moderate
+High,Minor,Low,More than 14 days,30,5,5,5,45,Moderate
+Medium,Critical,High,Overdue or Today,20,25,25,20,90,Critical
+Medium,Critical,High,1-2 days,20,25,25,17,87,Critical
+Medium,Critical,High,3-7 days,20,25,25,13,83,Critical
+Medium,Critical,High,8-14 days,20,25,25,9,79,Urgent
+Medium,Critical,High,More than 14 days,20,25,25,5,75,Urgent
+Medium,Critical,Medium,Overdue or Today,20,25,15,20,80,Critical
+Medium,Critical,Medium,1-2 days,20,25,15,17,77,Urgent
+Medium,Critical,Medium,3-7 days,20,25,15,13,73,Urgent
+Medium,Critical,Medium,8-14 days,20,25,15,9,69,Urgent
+Medium,Critical,Medium,More than 14 days,20,25,15,5,65,Urgent
+Medium,Critical,Low,Overdue or Today,20,25,5,20,70,Urgent
+Medium,Critical,Low,1-2 days,20,25,5,17,67,Urgent
+Medium,Critical,Low,3-7 days,20,25,5,13,63,Urgent
+Medium,Critical,Low,8-14 days,20,25,5,9,59,Moderate
+Medium,Critical,Low,More than 14 days,20,25,5,5,55,Moderate
+Medium,Major,High,Overdue or Today,20,18,25,20,83,Critical
+Medium,Major,High,1-2 days,20,18,25,17,80,Critical
+Medium,Major,High,3-7 days,20,18,25,13,76,Urgent
+Medium,Major,High,8-14 days,20,18,25,9,72,Urgent
+Medium,Major,High,More than 14 days,20,18,25,5,68,Urgent
+Medium,Major,Medium,Overdue or Today,20,18,15,20,73,Urgent
+Medium,Major,Medium,1-2 days,20,18,15,17,70,Urgent
+Medium,Major,Medium,3-7 days,20,18,15,13,66,Urgent
+Medium,Major,Medium,8-14 days,20,18,15,9,62,Urgent
+Medium,Major,Medium,More than 14 days,20,18,15,5,58,Moderate
+Medium,Major,Low,Overdue or Today,20,18,5,20,63,Urgent
+Medium,Major,Low,1-2 days,20,18,5,17,60,Urgent
+Medium,Major,Low,3-7 days,20,18,5,13,56,Moderate
+Medium,Major,Low,8-14 days,20,18,5,9,52,Moderate
+Medium,Major,Low,More than 14 days,20,18,5,5,48,Moderate
+Medium,Moderate,High,Overdue or Today,20,12,25,20,77,Urgent
+Medium,Moderate,High,1-2 days,20,12,25,17,74,Urgent
+Medium,Moderate,High,3-7 days,20,12,25,13,70,Urgent
+Medium,Moderate,High,8-14 days,20,12,25,9,66,Urgent
+Medium,Moderate,High,More than 14 days,20,12,25,5,62,Urgent
+Medium,Moderate,Medium,Overdue or Today,20,12,15,20,67,Urgent
+Medium,Moderate,Medium,1-2 days,20,12,15,17,64,Urgent
+Medium,Moderate,Medium,3-7 days,20,12,15,13,60,Urgent
+Medium,Moderate,Medium,8-14 days,20,12,15,9,56,Moderate
+Medium,Moderate,Medium,More than 14 days,20,12,15,5,52,Moderate
+Medium,Moderate,Low,Overdue or Today,20,12,5,20,57,Moderate
+Medium,Moderate,Low,1-2 days,20,12,5,17,54,Moderate
+Medium,Moderate,Low,3-7 days,20,12,5,13,50,Moderate
+Medium,Moderate,Low,8-14 days,20,12,5,9,46,Moderate
+Medium,Moderate,Low,More than 14 days,20,12,5,5,42,Moderate
+Medium,Minor,High,Overdue or Today,20,5,25,20,70,Urgent
+Medium,Minor,High,1-2 days,20,5,25,17,67,Urgent
+Medium,Minor,High,3-7 days,20,5,25,13,63,Urgent
+Medium,Minor,High,8-14 days,20,5,25,9,59,Moderate
+Medium,Minor,High,More than 14 days,20,5,25,5,55,Moderate
+Medium,Minor,Medium,Overdue or Today,20,5,15,20,60,Urgent
+Medium,Minor,Medium,1-2 days,20,5,15,17,57,Moderate
+Medium,Minor,Medium,3-7 days,20,5,15,13,53,Moderate
+Medium,Minor,Medium,8-14 days,20,5,15,9,49,Moderate
+Medium,Minor,Medium,More than 14 days,20,5,15,5,45,Moderate
+Medium,Minor,Low,Overdue or Today,20,5,5,20,50,Moderate
+Medium,Minor,Low,1-2 days,20,5,5,17,47,Moderate
+Medium,Minor,Low,3-7 days,20,5,5,13,43,Moderate
+Medium,Minor,Low,8-14 days,20,5,5,9,39,Moderate
+Medium,Minor,Low,More than 14 days,20,5,5,5,35,Moderate
+Low,Critical,High,Overdue or Today,10,25,25,20,80,Critical
+Low,Critical,High,1-2 days,10,25,25,17,77,Urgent
+Low,Critical,High,3-7 days,10,25,25,13,73,Urgent
+Low,Critical,High,8-14 days,10,25,25,9,69,Urgent
+Low,Critical,High,More than 14 days,10,25,25,5,65,Urgent
+Low,Critical,Medium,Overdue or Today,10,25,15,20,70,Urgent
+Low,Critical,Medium,1-2 days,10,25,15,17,67,Urgent
+Low,Critical,Medium,3-7 days,10,25,15,13,63,Urgent
+Low,Critical,Medium,8-14 days,10,25,15,9,59,Moderate
+Low,Critical,Medium,More than 14 days,10,25,15,5,55,Moderate
+Low,Critical,Low,Overdue or Today,10,25,5,20,60,Urgent
+Low,Critical,Low,1-2 days,10,25,5,17,57,Moderate
+Low,Critical,Low,3-7 days,10,25,5,13,53,Moderate
+Low,Critical,Low,8-14 days,10,25,5,9,49,Moderate
+Low,Critical,Low,More than 14 days,10,25,5,5,45,Moderate
+Low,Major,High,Overdue or Today,10,18,25,20,73,Urgent
+Low,Major,High,1-2 days,10,18,25,17,70,Urgent
+Low,Major,High,3-7 days,10,18,25,13,66,Urgent
+Low,Major,High,8-14 days,10,18,25,9,62,Urgent
+Low,Major,High,More than 14 days,10,18,25,5,58,Moderate
+Low,Major,Medium,Overdue or Today,10,18,15,20,63,Urgent
+Low,Major,Medium,1-2 days,10,18,15,17,60,Urgent
+Low,Major,Medium,3-7 days,10,18,15,13,56,Moderate
+Low,Major,Medium,8-14 days,10,18,15,9,52,Moderate
+Low,Major,Medium,More than 14 days,10,18,15,5,48,Moderate
+Low,Major,Low,Overdue or Today,10,18,5,20,53,Moderate
+Low,Major,Low,1-2 days,10,18,5,17,50,Moderate
+Low,Major,Low,3-7 days,10,18,5,13,46,Moderate
+Low,Major,Low,8-14 days,10,18,5,9,42,Moderate
+Low,Major,Low,More than 14 days,10,18,5,5,38,Moderate
+Low,Moderate,High,Overdue or Today,10,12,25,20,67,Urgent
+Low,Moderate,High,1-2 days,10,12,25,17,64,Urgent
+Low,Moderate,High,3-7 days,10,12,25,13,60,Urgent
+Low,Moderate,High,8-14 days,10,12,25,9,56,Moderate
+Low,Moderate,High,More than 14 days,10,12,25,5,52,Moderate
+Low,Moderate,Medium,Overdue or Today,10,12,15,20,57,Moderate
+Low,Moderate,Medium,1-2 days,10,12,15,17,54,Moderate
+Low,Moderate,Medium,3-7 days,10,12,15,13,50,Moderate
+Low,Moderate,Medium,8-14 days,10,12,15,9,46,Moderate
+Low,Moderate,Medium,More than 14 days,10,12,15,5,42,Moderate
+Low,Moderate,Low,Overdue or Today,10,12,5,20,47,Moderate
+Low,Moderate,Low,1-2 days,10,12,5,17,44,Moderate
+Low,Moderate,Low,3-7 days,10,12,5,13,40,Moderate
+Low,Moderate,Low,8-14 days,10,12,5,9,36,Moderate
+Low,Moderate,Low,More than 14 days,10,12,5,5,32,Normal
+Low,Minor,High,Overdue or Today,10,5,25,20,60,Urgent
+Low,Minor,High,1-2 days,10,5,25,17,57,Moderate
+Low,Minor,High,3-7 days,10,5,25,13,53,Moderate
+Low,Minor,High,8-14 days,10,5,25,9,49,Moderate
+Low,Minor,High,More than 14 days,10,5,25,5,45,Moderate
+Low,Minor,Medium,Overdue or Today,10,5,15,20,50,Moderate
+Low,Minor,Medium,1-2 days,10,5,15,17,47,Moderate
+Low,Minor,Medium,3-7 days,10,5,15,13,43,Moderate
+Low,Minor,Medium,8-14 days,10,5,15,9,39,Moderate
+Low,Minor,Medium,More than 14 days,10,5,15,5,35,Moderate
+Low,Minor,Low,Overdue or Today,10,5,5,20,40,Moderate
+Low,Minor,Low,1-2 days,10,5,5,17,37,Moderate
+Low,Minor,Low,3-7 days,10,5,5,13,33,Normal
+Low,Minor,Low,8-14 days,10,5,5,9,29,Normal
+Low,Minor,Low,More than 14 days,10,5,5,5,25,Normal

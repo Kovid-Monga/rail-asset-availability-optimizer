@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import { api } from "@/api"
 import type { BackendBlockSchedule, BackendOverviewStats, MaintenanceTask } from "@/types"
+import { PriorityBadge } from "@/components/PriorityBadge"
 import { cx } from "@/utils/display"
 
 interface ScheduleBlockItem {
@@ -701,9 +702,7 @@ export function Dashboard() {
 												{item.reason_description}
 											</span>
 										</div>
-										<span className="rounded-full px-2 py-0.5 text-[11px] font-semibold shrink-0 bg-slate-100 text-slate-700 border border-slate-200">
-											Pending AI Priority
-										</span>
+										<PriorityBadge priority={item.priority} score={item.priority_score} />
 									</div>
 								))
 							)}
@@ -711,7 +710,9 @@ export function Dashboard() {
 					</div>
 
 					<div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-						<span className="text-[12px] text-[#5A6D80]">Priority scoring model in development</span>
+						<span className="text-[12px] text-[#5A6D80]">
+							{tasks.filter((t) => t.priority_score > 0).length} evaluated by Priority Model
+						</span>
 						<Link
 							to="/tasks"
 							className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1B4E8C] hover:text-[#0F2A5C] transition-colors"

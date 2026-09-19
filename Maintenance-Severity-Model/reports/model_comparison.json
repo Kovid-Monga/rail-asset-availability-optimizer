@@ -1,0 +1,38 @@
+{
+  "logistic_regression": {
+    "cv_folds": 5,
+    "mean_f1_weighted": 1.0,
+    "std_f1_weighted": 0.0,
+    "fold_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "random_forest": {
+    "cv_folds": 5,
+    "mean_f1_weighted": 1.0,
+    "std_f1_weighted": 0.0,
+    "fold_scores": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "xgboost": {
+    "cv_folds": 5,
+    "mean_f1_weighted": 0.9895848348475811,
+    "std_f1_weighted": 0.006555760687462604,
+    "fold_scores": [
+      0.9827586206896551,
+      0.9914536106219676,
+      0.9914074224646112,
+      1.0,
+      0.9823045204616713
+    ]
+  }
+}

@@ -1,5 +1,13 @@
 import os
+import sys
+from pathlib import Path
 from contextlib import asynccontextmanager
+
+# Ensure backend directory is in sys.path when executed directly
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,6 +15,7 @@ from app.database.connection import engine, Base
 # Import models so Base.metadata knows about them
 import app.models.request
 import app.models.block
+import app.models.priority
 
 from app.routes.requests import router as requests_router
 from app.routes.blocks import router as blocks_router
@@ -18,6 +27,13 @@ async def lifespan(app: FastAPI):
     # Ensure tables exist on startup
     try:
         Base.metadata.create_all(bind=engine)
+        try:
+            from app.services.priority_service import PriorityService
+            from app.database.connection import SessionLocal
+            with SessionLocal() as db:
+                PriorityService.backfill_pending_requests(db)
+        except Exception as exc:
+            print(f"Priority backfill notice: {exc}")
     except Exception as exc:
         print(f"Database initialization notice: {exc}")
         print("Please ensure PostgreSQL is running and credentials in .env are correct.")
@@ -30,7 +46,7 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Configure CORS strictly for the active local frontend ports
+# Configure CORS strictly for active local frontend ports and ngrok tunnels
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -39,6 +55,7 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ],
+    allow_origin_regex=r"^https:\/\/.*\.ngrok(-free)?\.(app|dev)$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -65,4 +82,4 @@ if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
     host = os.getenv("HOST", "127.0.0.1")
-    uvicorn.run("app.main.app", host=host, port=port, reload=True)
+    uvicorn.run("app.main:app", host=host, port=port, reload=True)

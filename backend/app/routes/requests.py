@@ -1,5 +1,5 @@
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, BackgroundTasks
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 
@@ -9,8 +9,10 @@ from app.schemas.request import (
     MaintenanceRequestCreate,
     MaintenanceRequestUpdate,
     MaintenanceRequestResponse,
+    PriorityResultResponse,
     DepartmentStats,
 )
+from app.services.priority_service import PriorityService
 
 router = APIRouter(prefix="/requests", tags=["Maintenance Requests"])
 
@@ -41,6 +43,10 @@ def get_requests(
 
     # Order by newest created_at / need_id
     requests = query.order_by(desc(MaintenanceRequest.need_id)).limit(limit).all()
+    for r in requests:
+        if r.status == "SUBMITTED" and not r.priority_result:
+            PriorityService.run_priority_analysis(r.need_id, db)
+            db.refresh(r)
     return requests
 
 @router.get("/stats", response_model=DepartmentStats)
@@ -82,11 +88,18 @@ def get_request_by_id(need_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Maintenance request with ID {need_id} not found."
         )
+    if req.status == "SUBMITTED" and not req.priority_result:
+        PriorityService.run_priority_analysis(need_id, db)
+        db.refresh(req)
     return req
 
 @router.post("", response_model=MaintenanceRequestResponse, status_code=status.HTTP_201_CREATED)
-def create_request(payload: MaintenanceRequestCreate, db: Session = Depends(get_db)):
-    """Create a new maintenance request (DRAFT or SUBMITTED)."""
+def create_request(
+    payload: MaintenanceRequestCreate,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
+    """Create a new maintenance request (DRAFT or SUBMITTED). Automatically runs priority analysis if SUBMITTED."""
     new_req = MaintenanceRequest(
         department=payload.department.upper(),
         block_start=payload.block_start.strip(),
@@ -103,6 +116,11 @@ def create_request(payload: MaintenanceRequestCreate, db: Session = Depends(get_
     db.add(new_req)
     db.commit()
     db.refresh(new_req)
+
+    # Automatically trigger priority analysis if created directly with status SUBMITTED
+    if new_req.status == "SUBMITTED":
+        background_tasks.add_task(PriorityService.trigger_background_priority_analysis, new_req.need_id)
+
     return new_req
 
 @router.put("/{need_id}", response_model=MaintenanceRequestResponse)
@@ -141,8 +159,12 @@ def update_request(
     return req
 
 @router.post("/{need_id}/submit", response_model=MaintenanceRequestResponse)
-def submit_request(need_id: int, db: Session = Depends(get_db)):
-    """Submit a draft request, transitioning its status to SUBMITTED."""
+def submit_request(
+    need_id: int,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
+    """Submit a draft request, transitioning its status to SUBMITTED and triggering automatic priority analysis."""
     req = db.query(MaintenanceRequest).filter(MaintenanceRequest.need_id == need_id).first()
     if not req:
         raise HTTPException(
@@ -153,7 +175,27 @@ def submit_request(need_id: int, db: Session = Depends(get_db)):
     req.status = "SUBMITTED"
     db.commit()
     db.refresh(req)
+
+    # Automatically trigger priority analysis in the background
+    background_tasks.add_task(PriorityService.trigger_background_priority_analysis, need_id)
+
     return req
+
+@router.get("/{need_id}/priority", response_model=PriorityResultResponse)
+def get_request_priority(need_id: int, db: Session = Depends(get_db)):
+    """Fetch the priority analysis result associated with a maintenance request."""
+    req = db.query(MaintenanceRequest).filter(MaintenanceRequest.need_id == need_id).first()
+    if not req:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Maintenance request with ID {need_id} not found."
+        )
+    if not req.priority_result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Priority analysis not found or pending for request #{need_id}."
+        )
+    return req.priority_result
 
 @router.delete("/{need_id}", status_code=status.HTTP_200_OK)
 def delete_request(need_id: int, db: Session = Depends(get_db)):

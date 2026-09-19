@@ -1,5 +1,6 @@
 from datetime import datetime, timezone, date
 from sqlalchemy import Column, Integer, String, Text, Date, DateTime, func
+from sqlalchemy.orm import relationship
 from app.database.connection import Base
 
 class MaintenanceRequest(Base):
@@ -23,3 +24,6 @@ class MaintenanceRequest(Base):
         server_default=func.now(),
         nullable=False
     )
+
+    priority_result = relationship("PriorityResult", back_populates="request", uselist=False, cascade="all, delete-orphan")
+

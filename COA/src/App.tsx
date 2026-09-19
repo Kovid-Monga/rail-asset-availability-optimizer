@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { TopNav } from "@/components/TopNav"
 import { Sidebar } from "@/components/Sidebar"
@@ -12,12 +12,40 @@ import { AIRecommendations } from "@/pages/AIRecommendations"
 import { Reports } from "@/pages/Reports"
 import { Settings } from "@/pages/Settings"
 
+import { api } from "@/api"
+import type { MaintenanceTask } from "@/types"
+
 function Shell() {
 	const tasks = useTasks()
 	const { role, selectedTaskId, selectTask } = useApp()
 	const allowed = ROLE_NAV[role] ?? []
-	const selectedTask = (tasks.data ?? []).find((t) => t.task_id === selectedTaskId) ?? null
+	const [activeTask, setActiveTask] = useState<MaintenanceTask | null>(null)
 	const [sidebarOpen, setSidebarOpen] = useState(true)
+
+	useEffect(() => {
+		if (!selectedTaskId) {
+			setActiveTask(null)
+			return
+		}
+
+		// Look up from currently loaded tasks first for instantaneous response
+		const existing = (tasks.data ?? []).find((t) => t.task_id === selectedTaskId)
+		if (existing) {
+			setActiveTask(existing)
+		}
+
+		// Always fetch authoritative task details by ID from backend
+		api.getTask(selectedTaskId)
+			.then((task) => {
+				setActiveTask(task)
+				if (!tasks.data?.some((t) => t.task_id === selectedTaskId)) {
+					tasks.refetch()
+				}
+			})
+			.catch((err) => {
+				console.error(`Failed to fetch task details for ${selectedTaskId}:`, err)
+			})
+	}, [selectedTaskId, tasks.data])
 
 	/** Routes hidden for a role fall back to the overview. */
 	const guard = (path: string, element: JSX.Element) =>
@@ -50,7 +78,7 @@ function Shell() {
 
 			{/* Task Drawer */}
 			<TaskDetailDrawer
-				task={selectedTask}
+				task={activeTask}
 				tasks={tasks.data ?? []}
 				onClose={() => selectTask(null)}
 				onSelectTask={selectTask}

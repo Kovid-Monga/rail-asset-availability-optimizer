@@ -174,7 +174,7 @@ export default function Dashboard({ department, onViewDetails, onNavigateNew }) 
                         </span>
                       ) : '—'}
                     </td>
-                    <td>{req.duration_min} mins</td>
+                    <td>{req.duration_min ? `${(req.duration_min / 60) % 1 === 0 ? req.duration_min / 60 : (req.duration_min / 60).toFixed(1)} hrs` : '—'}</td>
                     <td>{req.due_date}</td>
                     <td><StatusBadge status={req.status} /></td>
                   </tr>

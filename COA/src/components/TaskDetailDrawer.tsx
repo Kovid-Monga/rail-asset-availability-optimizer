@@ -28,10 +28,25 @@ export function TaskDetailDrawer({
 
 	if (!task) return null
 
+	const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+		const backdrop = e.currentTarget
+		backdrop.style.display = "none"
+		const target = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null
+		backdrop.style.display = ""
+
+		const interactive = target?.closest<HTMLElement>("button, a, [role='button']")
+		if (interactive) {
+			interactive.click()
+			return
+		}
+
+		onClose()
+	}
+
 	return (
 		<>
 			<div
-				onClick={onClose}
+				onClick={handleBackdropClick}
 				className="fixed inset-0 z-40 bg-black/45 backdrop-blur-[1px]"
 				aria-hidden
 			/>
@@ -86,7 +101,17 @@ export function TaskDetailDrawer({
 							<div className="h-px bg-line" />
 							<PriorityExplanation explanation={task.priority_explanation} />
 						</>
-					) : null}
+					) : (
+						<>
+							<div className="h-px bg-line" />
+							<div className="rounded-lg border border-slate-200 bg-slate-50 p-3.5 text-[12.5px] text-slate-600">
+								<p className="label-xs mb-1 font-medium text-slate-700">AI Priority Assessment</p>
+								<p>
+									Classification is pending or the station corridor could not be resolved by Northern Railway traffic calculator.
+								</p>
+							</div>
+						</>
+					)}
 
 					{task.compatibility ? (
 						<>
